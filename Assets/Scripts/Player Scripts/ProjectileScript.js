@@ -26,9 +26,11 @@ function Update () {
 
 function OnCollisionEnter(info: Collision){
 	Debug.Log("Colided");
-	if(info.gameObject.name == target.name){
-		Network.Destroy(this.networkView.viewID); //We need this so it is properly destroyed after harming them on all clients.
-		info.gameObject.networkView.RPC("takeDamage", RPCMode.AllBuffered, damage); // /Sends the message to all clients that this player is taking damage!
+	if(networkView.isMine){
+		if(info.gameObject.name == target.name){
+			Network.Destroy(this.networkView.viewID); //We need this so it is properly destroyed after harming them on all clients.
+			info.gameObject.networkView.RPC("takeDamage", RPCMode.AllBuffered, damage); // /Sends the message to all clients that this player is taking damage!
+		}
 	}
 }
 /*function OnTriggerEnter(info: Collider){
