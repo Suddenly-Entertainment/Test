@@ -73,7 +73,7 @@ function onNetworkLoadedLevel(level : String){
 		//P.transform.tag = "Player";
 	}
 }
-Network.OnPlayerDisconnected(player: NetworkPlayer){
+function OnPlayerDisconnected(player: NetworkPlayer){
 		Debug.Log("Clean up after player " +  player);
 		Network.RemoveRPCs(player);
 		Network.DestroyPlayerObjects(player);
