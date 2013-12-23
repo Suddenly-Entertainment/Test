@@ -132,7 +132,7 @@ function autoattack(target : Collider){
 	var hit2: RaycastHit;
 	if(Time.time > nextAtk){
 		var thing = Network.Instantiate(Arrow, Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation, 0);
-		
+		var viewID = Network.AllocateViewID();
 		/*var uniqueNum = Random.value *100;
 		var thingName = "Arrow" + uniqueNum;
 		thing.name = thingName;
@@ -140,7 +140,7 @@ function autoattack(target : Collider){
 		AutoAttack.target = target;
 		AutoAttack.firedBy = this.name;
 		Debug.Log("Arrow Fired: "+uniqueNum);*/
-		this.networkView.RPC("createAtk", RPCMode.AllBuffered, thing.name, target.name);
+		this.networkView.RPC("createAtk", RPCMode.AllBuffered, thing.name, target.name, viewID);
 		
 		nextAtk = Time.time + AtkSpeed;
 	}
@@ -197,12 +197,16 @@ function takeDamage(hp: float){
 }
 
 @RPC
-function createAtk(thingName: String, targetName: String){
+function createAtk(thingName: String, targetName: String, viewID: NetworkViewID){
 		//Debug.Log(thing); Debug.Log(target);
-		var uniqueNum = Random.value *100;
+		var uniqueNum = ""+viewID;
 		//var thingName = "Arrow" + uniqueNum;
 		var thing = GameObject.Find(thingName);//.GetComponent(ProjectileScript);
 		thing.name = "Arrow" + uniqueNum;
+		
+		var nView = thing.GetComponent(NetworkView);
+		nView.viewID = viewID;
+		
 		var AutoAttack = thing.GetComponent(ProjectileScript);
 		AutoAttack.target = GameObject.Find(targetName).collider;
 		AutoAttack.firedBy = this.name;
