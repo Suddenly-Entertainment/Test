@@ -2,7 +2,7 @@
 
 var speed : int = 100;
 var damage : float = 50;
-var target : Collider;
+var target : Collider = null;
 var firedBy : String;
 var doneSet : boolean = false;
 
@@ -14,7 +14,7 @@ function Start () {
 }
 
 function Update () {
-	if(doneSet){
+	if(doneSet && target != null){
 		transform.LookAt(target.transform);
 		// The step size is equal to speed times frame time.
 		var step = speed * Time.deltaTime;
