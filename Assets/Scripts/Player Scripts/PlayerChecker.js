@@ -12,11 +12,12 @@ var seeker: Seeker;
 var endReached: boolean;
 
 var currentHealth: double = 100;
-var maxHealth: double = 100;
-var healthRegen: float = 2.5;
-var AtkSpeed: float = 1;
+var maxHealth: double = 1000;
+var healthRegen: float = 10;
+var AtkSpeed: float = 2.5;
 var curPos: Vector3;
 var isMine: boolean;
+var isDead: boolean;
 
 function Awake(){
 
@@ -57,22 +58,24 @@ function OnPathComplete(p : Pathfinding.Path){
 
 function Update () {
 	if(isMine){
+		if(!isDead){
 	        var controller : CharacterController = GetComponent(CharacterController);
-        // Rotate around y - axis
-        transform.Rotate(0, Input.GetAxis ("Horizontal") * rotateSpeed, 0);
-        
-        curPos = transform.position;
-        // Move forward / backward
-        var forward : Vector3 = transform.TransformDirection(Vector3.forward);
-        var curSpeed : float = (speed * Input.GetAxis ("Vertical"))* Time.fixedDeltaTime;
-        controller.SimpleMove(forward * curSpeed);
-        /*if(currentHealth < maxHealth){
-        	currentHealth += healthRegen * Time.fixedDeltaTime;
-        }else if(currentHealth > maxHealth){
-        	currentHealth = maxHealth;
-        }*/
-        
-        //networkView.RPC("gainHealth", RPCMode.AllBuffered, healthRegen * Time.fixedDeltaTime);
+        	// Rotate around y - axis
+        	transform.Rotate(0, Input.GetAxis ("Horizontal") * rotateSpeed, 0);
+        	
+        	curPos = transform.position;
+        	// Move forward / backward
+        	var forward : Vector3 = transform.TransformDirection(Vector3.forward);
+        	var curSpeed : float = (speed * Input.GetAxis ("Vertical"))* Time.fixedDeltaTime;
+        	controller.SimpleMove(forward * curSpeed);
+        	/*if(currentHealth < maxHealth){
+        		currentHealth += healthRegen * Time.fixedDeltaTime;
+        	}else if(currentHealth > maxHealth){
+        		currentHealth = maxHealth;
+        	}*/
+       	 
+        	//networkView.RPC("gainHealth", RPCMode.AllBuffered, healthRegen * Time.fixedDeltaTime);
+    	}
     }
 }
 
@@ -194,6 +197,9 @@ function gainHealth(hp: float){
 @RPC
 function takeDamage(hp: float){
 	currentHealth -= hp;
+	if(currentHealth <= 0){
+		networkView.RPC("Die", RPCMode.All);
+	}
 }
 
 @RPC
@@ -217,5 +223,15 @@ function createAtk(thingName: String, targetName: String, viewID: NetworkViewID)
 		AutoAttack.doneSet = true;
 		Debug.Log("Arrow Fired: "+uniqueNum);
 
+}
+
+@RPC
+function Die(){
+	isDead = true; //So that he can't move
+	var CapCo = this.GetComponent(CapsuleCollider);
+	CapCo.enabled = false; //So that people and objects can go through him
+	yield WaitForSeconds(10); //Test death timer
+	transform.position = Vector3(1,1,1);
+	CapCo.enabled = true;
 }
 
