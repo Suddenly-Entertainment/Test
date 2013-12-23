@@ -1,6 +1,6 @@
 #pragma strict
 
-var speed : int = 100;
+var speed : int = 10;
 var damage : float = 50;
 var target : Collider = null;
 var firedBy : String;
@@ -28,8 +28,10 @@ function OnCollisionEnter(info: Collision){
 	Debug.Log("Colided");
 	if(networkView.isMine){
 		if(info.gameObject.name == target.name){
-			Network.Destroy(this.networkView.viewID); //We need this so it is properly destroyed after harming them on all clients.
-			info.gameObject.networkView.RPC("takeDamage", RPCMode.AllBuffered, damage); // /Sends the message to all clients that this player is taking damage!
+			var viewID = this.networkView.viewID;
+			Network.RemoveRPCs(viewID);
+			Network.Destroy(viewID); //We need this so it is properly destroyed after harming them on all clients.
+			info.gameObject.networkView.RPC("takeDamage", RPCMode.All, damage); // /Sends the message to all clients that this player is taking damage!
 		}
 	}
 }
