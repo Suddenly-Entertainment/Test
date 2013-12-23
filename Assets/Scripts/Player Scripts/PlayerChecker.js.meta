@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 93903133ef6fe4846aa3278aa93d9743
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - PlayerCamera: {instanceID: 0}
+  - Arrow: {instanceID: 0}
+  - controller: {instanceID: 0}
+  - seeker: {instanceID: 0}
+  - hpBarImg: {fileID: 2800000, guid: 7f596572da618e74da5a54e541c28605, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

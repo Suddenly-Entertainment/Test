@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Player Scripts\ProjectileScript.js">
+    <Files>
+      <File FileName="Assets\Scripts\Player Scripts\ProjectileScript.js" Line="11" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\CameraControls.js" Line="65" Column="6" />
+      <File FileName="Assets\Scripts\Networking\LevelLoader.js" Line="73" Column="5" />
+      <File FileName="Assets\Scripts\Menu\MainMenu.js" Line="17" Column="12" />
+      <File FileName="Assets\Scripts\Player Scripts\PlayerChecker.js" Line="185" Column="5" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
