@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: 7999f766e6a25914084aca8adb846991
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - MenuBackgroundTexture: {fileID: 2800000, guid: 655e74bd4b27c234385a66acfc0355de,
+      type: 3}
+  - netLoadobj: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

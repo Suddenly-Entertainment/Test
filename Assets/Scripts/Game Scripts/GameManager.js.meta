@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 0112496400f6b3a4badc6c71a280f9cf
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - MinionObj: {fileID: 100000, guid: 1733e6c6abf1e9542b8f1b9f70636d94, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

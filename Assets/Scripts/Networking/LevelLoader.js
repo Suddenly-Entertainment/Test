@@ -5,6 +5,7 @@ var PlayerObj: GameObject;
 
 var PlayerCount : int = 0;
 var playerObjs: GameObject[] = new GameObject[30];
+var PlayerName;
 
 function Awake ()
 {
@@ -102,6 +103,7 @@ function onNetworkLoadedLevel(level : String){
 		var B = Random.value;
 		//P.tag = "Player";
 		P.networkView.RPC("SetupPlayerColor", RPCMode.AllBuffered, R, G, B);
+		P.networkView.RPC("SetupPlayer", RPCMode.AllBuffered, PlayerName);
 		networkView.RPC("AddPlayerObj", RPCMode.AllBuffered, P.name);
 	}
 }
@@ -121,7 +123,7 @@ function AddPlayerObj(playerName: String){
 	playerObjs[PlayerCount-1] = PlayerObject;
 	var PC = PlayerObject.GetComponent(PlayerChecker);
 	PC.Player = PlayerCount;
-	PC.Team = PlayerCount % 2 == 0 ? 2 : 1;
+	PlayerObject.GetComponent(GenericCreature).Team = PlayerCount % 2 == 0 ? 2 : 1;
 	
 }
 @script RequireComponent(NetworkView)

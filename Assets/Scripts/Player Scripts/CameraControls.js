@@ -1,5 +1,6 @@
 #pragma strict
 
+var GenCre: GenericCreature;
 var PlayerCheck: PlayerChecker;
 var isoPos: Vector3;
 var isoRot: Quaternion;
@@ -48,8 +49,8 @@ function ShootRay() {
         	//}
         }*/
         if (PlayerCheck) {
-           PlayerCheck.MoveTo(hit.point);
-           Debug.Log(hit.point);
+           PlayerCheck.Pathing.PathTo(hit.point);
+           //Debug.Log(hit.point);
         }
     }
 }
@@ -60,8 +61,8 @@ function CheckForAutoAttack(){
     	Debug.Log(hit.collider.tag); Debug.Log(hit.collider.name);
     	var tag = hit.collider.tag;
     	if((tag == "Player" || tag == "Minion" || tag == "Monster" || tag == "Tower" || tag == "Nexus") && hit.collider.name != PlayerCheck.collider.name){
-    		Debug.Log(hit.collider.name);
-    		PlayerCheck.autoattack(hit.collider);
+    		Debug.LogWarning(hit.collider.name);
+    		GenCre.BasicAttack(hit.collider);
     	}
     }
 }
@@ -92,5 +93,15 @@ function OnGUI(){
 						Debug.Log(transform.position);
 			Debug.Log(transform.rotation);
 		}
+	}
+	var GM = GameObject.Find("GameManager");
+	var Minion: GameObject;
+	if(GUI.Button(Rect(15,160, 100, 20), "Enemy Minion")){	
+		Minion = Network.Instantiate(GM.GetComponent(GameManager).MinionObj, Vector3(15, 15, 15), Quaternion.identity, 1);
+		GM.networkView.RPC("SpawnMinion", RPCMode.All, Network.AllocateViewID(), Minion.name, GenCre.Team == 1 ? 2 : 1);
+	}
+	if(GUI.Button(Rect(15,130, 100, 20), "Team Minion")){
+		Minion = Network.Instantiate(GM.GetComponent(GameManager).MinionObj, Vector3(15, 15, 15), Quaternion.identity, 1);
+		GM.networkView.RPC("SpawnMinion", RPCMode.All, Network.AllocateViewID(), Minion.name, GenCre.Team);
 	}
 }
