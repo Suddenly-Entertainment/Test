@@ -6,25 +6,32 @@ var isoPos: Vector3;
 var isoRot: Quaternion;
 var thirdPPos: Vector3;
 var isIso: boolean = true;
-
+var lockedCamera: boolean = false;
 function Start () {
 	transform.Rotate(45,0,0);
 }
 
 function Update () {
 	if(isIso){
+		var movementDirection = Vector3.zero;
+		var MovementSpeed = 1;
 		if(Input.mousePosition.x >= camera.pixelWidth-200 && !(Input.mousePosition.x > camera.pixelWidth)){
-			transform.Translate(Vector3(1,0,0));
-			transform.LookAt(PlayerCheck.transform);
+			movementDirection = Vector3.right * MovementSpeed;
+			//transform.LookAt(PlayerCheck.transform);
 		}else if(Input.mousePosition.x <= 200 && !(Input.mousePosition.x <= 0)){
-			transform.Translate(Vector3(-1,0,0));
-			transform.LookAt(PlayerCheck.transform);
+			 movementDirection = Vector3.left * MovementSpeed;
+			//transform.LookAt(PlayerCheck.transform);
 		}
 		if(Input.mousePosition.y >= camera.pixelHeight-100 && !(Input.mousePosition.y > camera.pixelHeight)){
-			transform.Translate(Vector3(0,1,0));
-			transform.LookAt(PlayerCheck.transform);
+			 movementDirection = (Vector3.forward/2)+(Vector3.up/2) * MovementSpeed;
+			//transform.LookAt(PlayerCheck.transform);
 		}else if(Input.mousePosition.y <= 100 && !(Input.mousePosition.y < 0)){
-			transform.Translate(Vector3(0,-1,0));
+			movementDirection = (Vector3.back/2)+(Vector3.down/2) * MovementSpeed;
+			//transform.LookAt(PlayerCheck.transform);
+		}
+		
+		transform.localPosition += transform.localRotation * movementDirection;
+		if(lockedCamera){
 			transform.LookAt(PlayerCheck.transform);
 		}
 	}
@@ -94,6 +101,7 @@ function OnGUI(){
 			Debug.Log(transform.rotation);
 		}
 	}
+	lockedCamera = GUI.Toggle(Rect(125,100,100,20), lockedCamera, "Locked camera?");
 	var GM = GameObject.Find("GameManager");
 	var Minion: GameObject;
 	if(GUI.Button(Rect(15,160, 100, 20), "Enemy Minion")){	
