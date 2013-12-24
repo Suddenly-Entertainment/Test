@@ -38,6 +38,7 @@ var Mat : Material;
 function Awake(){
 	GenCre = GetComponent(GenericCreature);
 }
+
 function Start () {
 	CapCo = this.GetComponent(CapsuleCollider);
 	Pathing = GetComponent(SimplePathing);

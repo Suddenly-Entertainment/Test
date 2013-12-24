@@ -55,7 +55,6 @@ function BasicAttack(target : Collider){
 		return;
 	}
 	if(Time.time > nextAtk){
-		Debug.LogWarning("It's a basic attack from Generic Creature");
 		var thing = Network.Instantiate(BasicAttackObj, Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation, 0);
 		//var viewID = Network.AllocateViewID();
 		//Debug.LogWarning(viewID);
@@ -68,7 +67,7 @@ function BasicAttack(target : Collider){
 		Debug.Log("Arrow Fired: "+uniqueNum);*/
 		networkView.RPC("createAtk", RPCMode.All, thing.name, target.name);//, viewID);
 		
-		nextAtk = Time.time + AtkSpeed;
+		nextAtk = Time.time + (1/AtkSpeed);
 	}
 }
 
@@ -142,7 +141,7 @@ function OnGUI(){
 			GUI.Box(Rect(HPBarPos.x ,HPBarPos.y,hpBarSize,20), ""); //A empty container box
 			GUI.Box(Rect(HPBarPos.x,HPBarPos.y,curHPBarSize,20), isMine ? hpBarImgPlayer : MainGC.Team == Team ? hpBarImgAlly : hpBarImgEnemy); //This is the hp bar, which conviently also changes depending on wither it is you, ally, or enemy.
 			GUI.Label(Rect(screenPos.x-(hpBarSize/4),Screen.height-screenPos.y, 100, 20), currentHealth+"/"+maxHealth); //This tells you the actual health
-			if(Name)GUI.Box(Rect(screenPos.x-(hpBarSize/2),Screen.height-screenPos.y-20, 100, 20), Name, MenuSkin.box);
+			if(Name)GUI.Box(Rect(screenPos.x-(hpBarSize/2),Screen.height-screenPos.y-20, 100, 20), Name, MenuSkin.box); //The anem above the player
 			//GUI.Label(Rect(screenPos.x-(hpBarSize/4),Screen.height-screenPos.y-20, 100, 20), Name);
 		}
 	//}

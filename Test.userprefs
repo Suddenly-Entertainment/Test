@@ -1,17 +1,17 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Player Scripts\CameraControls.js">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Game Scripts\GenericCreature.js">
     <Files>
-      <File FileName="Assets\Scripts\Menu\MainMenu.js" Line="64" Column="33" />
+      <File FileName="Assets\Scripts\Game Scripts\GenericCreature.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Menu\MainMenu.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Minion Scripts\MinionManager.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\SimplePathing.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Game Scripts\GenericCreature.js" Line="141" Column="10" />
-      <File FileName="Assets\Scripts\Player Scripts\PlayerChecker.js" Line="44" Column="4" />
-      <File FileName="Assets\Scripts\Player Scripts\CameraControls.js" Line="29" Column="54" />
+      <File FileName="Assets\Scripts\Game Scripts\GenericCreature.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\PlayerChecker.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\CameraControls.js" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Game Scripts\GameManager.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Networking\LevelLoader.js" Line="8" Column="16" />
-      <File FileName="Assets\Scripts\Player Scripts\ProjectileScript.js" Line="31" Column="33" />
-      <File FileName="Assets\Scripts\Menu\MainMenu.js" Line="64" Column="33" />
+      <File FileName="Assets\Scripts\Networking\LevelLoader.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\ProjectileScript.js" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
