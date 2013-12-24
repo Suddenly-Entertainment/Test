@@ -26,7 +26,7 @@ function Update () {
 
 function OnCollisionEnter(info: Collision){
 	Debug.Log("Colided");
-	if(networkView.isMine){
+	if(Network.peerType == NetworkPeerType.Server){
 		if(info.gameObject.name == target.name){
 			var viewID = this.networkView.viewID;
 			Network.RemoveRPCs(viewID);

@@ -19,8 +19,11 @@ var curPos: Vector3;
 var isMine: boolean;
 var isDead: boolean;
 
-var CapCo: CapsuleCollider; 
+var Team: int = 0;
+var Player: int = 0;
 
+var CapCo: CapsuleCollider;
+var Mat : Material;
 
 function Awake(){
 
@@ -28,6 +31,8 @@ function Awake(){
 function Start () {
 	isMine = networkView.isMine;
 	CapCo = this.GetComponent(CapsuleCollider);
+	this.tag = "Player";
+	
 	if(isMine){ //These are the things that we do only if this is your player object
 		Debug.Log("This Object Belongs to you and you can control it");
 		
@@ -43,6 +48,8 @@ function Start () {
 		PCam.GetComponent(CameraControls).PlayerCheck = this;
 		PlayerCamera = PCam;
 		//testThing.transform.parent = this.transform;
+	}else{
+		PlayerCamera = Camera.main.gameObject;
 	}
 	var viewId = networkView.viewID.ToString().Substring(12); 
 	name = "Player" + viewId;
@@ -183,11 +190,13 @@ var HPBarPosW: Vector3;
 //var HPBarPosS: Vector3;
 var InterruptHPB: boolean = false;
 
+
 function OnGUI(){
 	//if(isMine){
 		//var hpBarStyle = new GUIStyle();
 		//var offSets: Vector3 = PlayerCamera.camera.ScreenToWorldPoint(Vector3(-(hpBarSize/2), -40, 0));
-		HPBarPosW = transform.position + Vector3(0, -(CapCo.height/2) -0.5, 0);
+		var MainPC = PlayerCamera.GetComponent(CameraControls).PlayerCheck;
+		HPBarPosW = transform.position - Vector3(0, -(CapCo.height/2) -0.5, 0);
 		var screenPos : Vector3 = Camera.main.WorldToScreenPoint(HPBarPosW);
 		//HPBarPosS = screenPos;
 		//Debug.Log(screenPos);
@@ -199,12 +208,14 @@ function OnGUI(){
 		//GUI.Label(Rect(Screen.width/2-25,Screen.height-20, 50, 20), currentHealth+"/"+maxHealth);
 		if(!InterruptHPB){
 			HPBarPos.x = screenPos.x -(hpBarSize/2);
-			HPBarPos.y = screenPos.y;//-40;
+			HPBarPos.y = Screen.height-screenPos.y;//-40;
 			HPBarPos.z = screenPos.z;
 		}
-		GUI.Box(Rect(HPBarPos.x ,HPBarPos.y,hpBarSize,20), "");
-		GUI.Box(Rect(HPBarPos.x,HPBarPos.y,curHPBarSize,20), isMine ? hpBarImgPlayer : hpBarImgEnemy);
-		GUI.Label(Rect(screenPos.x-(hpBarSize/4),screenPos.y, 100, 20), currentHealth+"/"+maxHealth);
+		if(HPBarPos.z >= 0){
+			GUI.Box(Rect(HPBarPos.x ,HPBarPos.y,hpBarSize,20), "");
+			GUI.Box(Rect(HPBarPos.x,HPBarPos.y,curHPBarSize,20), isMine ? hpBarImgPlayer : MainPC.Team == Team ? hpBarImgAlly : hpBarImgEnemy);
+			GUI.Label(Rect(screenPos.x-(hpBarSize/4),Screen.height-screenPos.y, 100, 20), currentHealth+"/"+maxHealth);
+		}
 	//}
 }
 
@@ -257,5 +268,11 @@ function Die(){
 	yield WaitForSeconds(10); //Test death timer
 	transform.position = Vector3(1,1,1);
 	CapCo.enabled = true;
+}
+
+@RPC
+function SetupPlayerColor(R: float, G: float, B:float){
+	renderer.material = new Material(Mat);
+	renderer.material.color = new Color(R, G, B);
 }
 

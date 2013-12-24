@@ -21,7 +21,7 @@ function OnGUI(){
 	port = GUI.TextField(Rect(46,130,84,20), port);
 	
 	if(GUI.Button(Rect(20,40,80,20), "Host Server")){
-		Network.InitializeServer(32, parseInt(port), false);
+		Network.InitializeServer(30, parseInt(port), false);
 		//Instantiate(netLoadobj);
 	}
 	

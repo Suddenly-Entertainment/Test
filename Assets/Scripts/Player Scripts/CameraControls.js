@@ -58,7 +58,8 @@ function CheckForAutoAttack(){
     var hit : RaycastHit;
     if(Physics.Raycast(ray, hit, Mathf.Infinity)) {
     	Debug.Log(hit.collider.tag); Debug.Log(hit.collider.name);
-    	if(hit.collider.tag == "Player" && hit.collider.name != PlayerCheck.collider.name){
+    	var tag = hit.collider.tag;
+    	if((tag == "Player" || tag == "Minion" || tag == "Monster" || tag == "Tower" || tag == "Nexus") && hit.collider.name != PlayerCheck.collider.name){
     		Debug.Log(hit.collider.name);
     		PlayerCheck.autoattack(hit.collider);
     	}
@@ -66,7 +67,7 @@ function CheckForAutoAttack(){
 }
 
 function OnGUI(){
-	if(GUI.Button(Rect(15,100,30,20), "Switch Camera")){
+	if(GUI.Button(Rect(15,100,100,20), "Switch Camera")){
 		if(isIso){
 			isIso = false;
 			
