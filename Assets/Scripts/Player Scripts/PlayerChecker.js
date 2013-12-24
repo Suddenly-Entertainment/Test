@@ -5,26 +5,30 @@ var Arrow: GameObject;
 var targetPosition: Vector3;
 var controller: CharacterController;
 var path: Pathfinding.Path;
-var speed: float = 100000;
+var speed: float = 1000;
 var nextWaypointDistance: float = 3;
 var currentWaypoint: int = 0;
 var seeker: Seeker;
-var endReached: boolean;
+var endReached: boolean = false;
 
-var currentHealth: double = 100;
+var currentHealth: double = 1000;
 var maxHealth: double = 1000;
-var healthRegen: float = 10;
+var healthRegen: float = 10; //Per Second
 var AtkSpeed: float = 2.5;
 var curPos: Vector3;
 var isMine: boolean;
 var isDead: boolean;
+
+var CapCo: CapsuleCollider; 
+
 
 function Awake(){
 
 }
 function Start () {
 	isMine = networkView.isMine;
-	if(isMine){
+	CapCo = this.GetComponent(CapsuleCollider);
+	if(isMine){ //These are the things that we do only if this is your player object
 		Debug.Log("This Object Belongs to you and you can control it");
 		
 		Debug.Log(this.GetComponent(CharacterMotor).canControl);
@@ -32,10 +36,12 @@ function Start () {
 		Debug.Log(this.GetComponent(CharacterMotor).canControl);
 		
 		var PCam = Instantiate(PlayerCamera, Vector3(this.transform.position.x,this.transform.position.y + 100,this.transform.position.z), this.transform.rotation);
-		PCam.name = "PlayerCamera"+networkView.viewID;
-		var testThing = GameObject.Find(PCam.name);
-		testThing.GetComponent(CameraControls).PlayerCheck = this;
-		PlayerCamera = testThing;
+		PCam.name = "PlayerCamera";//+networkView.viewID;
+		PCam.tag = "MainCamera"; //For the GUIs to be properly rendered above the head
+		//var testThing = GameObject.Find(PCam.name);
+		//testThing.GetComponent(CameraControls).PlayerCheck = this;
+		PCam.GetComponent(CameraControls).PlayerCheck = this;
+		PlayerCamera = PCam;
 		//testThing.transform.parent = this.transform;
 	}
 	var viewId = networkView.viewID.ToString().Substring(12); 
@@ -168,18 +174,38 @@ function OnTriggerEnter(info: Collider){
 }
 
 private var hpBarSize: int = 100;
-var hpBarImg: Texture2D;
+var hpBarImgPlayer: Texture2D;
+var hpBarImgEnemy: Texture2D;
+var hpBarImgAlly: Texture2D;
+
+var HPBarPos: Vector3;
+var HPBarPosW: Vector3;
+//var HPBarPosS: Vector3;
+var InterruptHPB: boolean = false;
 
 function OnGUI(){
-	if(isMine){
+	//if(isMine){
 		//var hpBarStyle = new GUIStyle();
+		//var offSets: Vector3 = PlayerCamera.camera.ScreenToWorldPoint(Vector3(-(hpBarSize/2), -40, 0));
+		HPBarPosW = transform.position + Vector3(0, -(CapCo.height/2) -0.5, 0);
+		var screenPos : Vector3 = Camera.main.WorldToScreenPoint(HPBarPosW);
+		//HPBarPosS = screenPos;
+		//Debug.Log(screenPos);
 		var percHP = currentHealth / maxHealth;
 		var curHPBarSize = parseInt(100*percHP);
 		//Debug.Log(curHPBarSize);
-		GUI.Box(Rect(Screen.width/2-(hpBarSize/2),Screen.height-20,hpBarSize,20), "");
-		GUI.Box(Rect(Screen.width/2-(hpBarSize/2),Screen.height-20,curHPBarSize,20), hpBarImg);
-		GUI.Label(Rect(Screen.width/2-25,Screen.height-20, 50, 20), currentHealth+"/"+maxHealth);
-	}
+		//GUI.Box(Rect(Screen.width/2-(hpBarSize/2),Screen.height-20,hpBarSize,20), "");
+		//GUI.Box(Rect(Screen.width/2-(hpBarSize/2),Screen.height-20,curHPBarSize,20), hpBarImg);
+		//GUI.Label(Rect(Screen.width/2-25,Screen.height-20, 50, 20), currentHealth+"/"+maxHealth);
+		if(!InterruptHPB){
+			HPBarPos.x = screenPos.x -(hpBarSize/2);
+			HPBarPos.y = screenPos.y;//-40;
+			HPBarPos.z = screenPos.z;
+		}
+		GUI.Box(Rect(HPBarPos.x ,HPBarPos.y,hpBarSize,20), "");
+		GUI.Box(Rect(HPBarPos.x,HPBarPos.y,curHPBarSize,20), isMine ? hpBarImgPlayer : hpBarImgEnemy);
+		GUI.Label(Rect(screenPos.x-(hpBarSize/4),screenPos.y, 100, 20), currentHealth+"/"+maxHealth);
+	//}
 }
 
 @RPC
@@ -224,11 +250,9 @@ function createAtk(thingName: String, targetName: String, viewID: NetworkViewID)
 		Debug.Log("Arrow Fired: "+uniqueNum);
 
 }
-
 @RPC
 function Die(){
 	isDead = true; //So that he can't move
-	var CapCo = this.GetComponent(CapsuleCollider);
 	CapCo.enabled = false; //So that people and objects can go through him
 	yield WaitForSeconds(10); //Test death timer
 	transform.position = Vector3(1,1,1);

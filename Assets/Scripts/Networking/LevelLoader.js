@@ -14,7 +14,7 @@ function Awake ()
 function OnGUI ()
 {
 	
-	if (Network.peerType != NetworkPeerType.Disconnected)
+	if (Network.peerType == NetworkPeerType.Server)
 	{
 		GUILayout.BeginArea(Rect(0, Screen.height - 30, Screen.width, 30));
 		GUILayout.BeginHorizontal();
@@ -31,7 +31,7 @@ function OnGUI ()
 		GUILayout.FlexibleSpace();
 		GUILayout.EndHorizontal();
 		GUILayout.EndArea();
-	}
+	}else if(Network.peerType == NetworkPeerType
 }
 
 @RPC
