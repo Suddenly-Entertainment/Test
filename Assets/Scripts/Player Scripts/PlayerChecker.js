@@ -31,17 +31,17 @@ var isDead: boolean;
 
 var Team: int = 0;*/
 var Player: int = 0;
-
+var NetPlayer: NetworkPlayer;
 var CapCo: CapsuleCollider;
-var Mat : Material;
+//var Mat : Material;
 
 function Awake(){
-	GenCre = GetComponent(GenericCreature);
+	//GenCre = GetComponent(GenericCreature);
 }
 
 function Start () {
-	CapCo = this.GetComponent(CapsuleCollider);
-	Pathing = GetComponent(SimplePathing);
+	//CapCo = this.GetComponent(CapsuleCollider);
+	//Pathing = GetComponent(SimplePathing);
 	//GenCre = GetComponent(GenericCreature);
 	GenCre.DeathFunc = DeathImplement;
 	GenCre.BasicAttackObj = Arrow;
@@ -69,8 +69,8 @@ function Start () {
 		PlayerCamera = Camera.main.gameObject;
 	}
 	//var viewId = networkView.viewID.ToString().Substring(12); 
-	name = "Player " + Player;
-	controller = GetComponent(CharacterController);
+	//name = "Player";
+	//controller = GetComponent(CharacterController);
 //	seeker = GetComponent(Seeker);
 //	seeker.StartPath(transform.position, targetPosition, OnPathComplete);
 
@@ -87,6 +87,7 @@ function Start () {
 
 
 function Update () {
+	//if(Player != 0)name = "Player "+Player;
 	if(GenCre.isMine){
 		if(!GenCre.isDead){
 	        //var controller : CharacterController = GetComponent(CharacterController);
@@ -104,16 +105,23 @@ function Update () {
         		currentHealth = maxHealth;
         	}*/
        	 
-        	networkView.RPC("gainHealth", RPCMode.All, GenCre.healthRegen * Time.fixedDeltaTime);
+        	//networkView.RPC("gainHealth", RPCMode.All, GenCre.healthRegen * Time.fixedDeltaTime);
     	}
     }
 }
 
 function DeathImplement(){
 	CapCo.enabled = false; //So that people and objects can go through him
-	yield WaitForSeconds(10); //Test death timer
+	var endTime = Time.time+10;
+	var cntr = 0;
+	while(Time.time < endTime){
+		if(cntr >= 100){Debug.Log("A tick on the old century frame"); cntr = 0; }
+		yield;
+		cntr++;
+	}
 	transform.position = Vector3(1,1,1);
 	CapCo.enabled = true;
+	GenCre.isDead = false;
 }
 
 /*function FixedUpdate () {
@@ -294,13 +302,17 @@ function OnTriggerEnter(info: Collider){
 //	CapCo.enabled = true;
 //}
 
+
+
 @RPC
 function SetupPlayerColor(R: float, G: float, B:float){
-	renderer.material = new Material(Mat);
-	renderer.material.color = new Color(R, G, B);
+	var newMat = new Material(GenCre.Mat);
+	newMat.color = new Color(R, G, B);
+	renderer.material = newMat;
+	GenCre.Mat = newMat;
 }
 @RPC
 function SetupPlayer(PlayerName: String){
-	GenCre.Name = PlayerName;
+	GenCre.Name = PlayerName ? PlayerName : "Player without a name!";
 }
 

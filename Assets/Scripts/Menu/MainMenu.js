@@ -66,6 +66,7 @@ function OnGUI(){
 		}
 	
 		if(GUILayout.Button("Join Server")){
+			netLoadobj.PlayerName = Name;
 			Network.Connect(ip, parseInt(port));
 		}
 		GUILayout.FlexibleSpace();

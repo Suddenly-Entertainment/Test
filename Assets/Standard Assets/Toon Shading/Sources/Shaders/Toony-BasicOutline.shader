@@ -1,4 +1,4 @@
-Shader "Toon/Basic Outline" {
+Shader "Own/Diffuse Outline" {
 	Properties {
 		_Color ("Main Color", Color) = (.5,.5,.5,1)
 		_OutlineColor ("Outline Color", Color) = (0,0,0,1)

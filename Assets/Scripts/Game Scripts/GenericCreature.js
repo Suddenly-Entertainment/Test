@@ -13,10 +13,12 @@ var PlayerCamera : GameObject;
 
 var MenuSkin: GUISkin;
 
-var currentHealth: double = 1000;
-var maxHealth: double = 1000;
+var currentHealth: float = 1000;
+var maxHealth: float = 1000;
 var healthRegen: float = 10;
 var speed: float;
+
+var Mat : Material;
 
 var AtkSpeed: float = 2.5;
 var nextAtk: float = 0;
@@ -35,6 +37,12 @@ var InterruptHPB: boolean = false;
 var Name = "";
 
 var Team: int = 0;
+var NetworkViews: NetworkView[] = new NetworkView[10];
+
+var showingOutline: boolean = false;
+var OutlineShader : Shader = Shader.Find("Toon/Basic");
+var NoOutlineShader : Shader = Shader.Find("Toon/Basic Outline");
+
 function Awake(){
 	isMine = networkView.isMine;
 }
@@ -42,11 +50,23 @@ function Start () {
 	Pathing = GetComponent(SimplePathing);
 	PlayerCamera = Camera.main.gameObject;
 	speed = Pathing.speed;
+	var Holder = GetComponents(NetworkView);
+	var cntr = 0;
+	for(var i in Holder){
+		if(cntr > 9) break;
+		NetworkViews[cntr] = i;
+		cntr++;
+	}
 	//isMine = networkView.isMine;
 }
 
 function Update () {
-
+	if(isMine){
+		gainHealth(healthRegen * Time.fixedDeltaTime);
+		if(currentHealth <= 0 && !isDead){
+			networkView.RPC("Die", RPCMode.All);
+		}
+	}
 }
 
 function BasicAttack(target : Collider){
@@ -55,8 +75,8 @@ function BasicAttack(target : Collider){
 		return;
 	}
 	if(Time.time > nextAtk){
-		var thing = Network.Instantiate(BasicAttackObj, Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation, 0);
-		//var viewID = Network.AllocateViewID();
+		//var thing = Network.Instantiate(BasicAttackObj, Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation, 0);
+		var viewID = Network.AllocateViewID();
 		//Debug.LogWarning(viewID);
 		/*var uniqueNum = Random.value *100;
 		var thingName = "Arrow" + uniqueNum;
@@ -65,12 +85,29 @@ function BasicAttack(target : Collider){
 		AutoAttack.target = target;
 		AutoAttack.firedBy = this.name;
 		Debug.Log("Arrow Fired: "+uniqueNum);*/
-		networkView.RPC("createAtk", RPCMode.All, thing.name, target.name);//, viewID);
+		networkView.RPC("createAtk", RPCMode.AllBuffered, viewID, target.name);//, viewID);
 		
 		nextAtk = Time.time + (1/AtkSpeed);
 	}
 }
+function OnSerializeNetworkView(stream: BitStream, info: NetworkMessageInfo){
+	/*if(stream.isWriting){
+		stream.Serialize(currentHealth);
 
+	} else {
+	
+	}*/
+	
+	//Debug.LogError("It's not an error!  It's working!");
+	//var curHealth = currentHealth;
+	stream.Serialize(currentHealth);
+	var pos = transform.position;
+	stream.Serialize(pos);
+	transform.position = pos;
+	
+
+	//stream.Serialize(Name);
+}
 @RPC
 function gainHealth(hp: float){
 	if(currentHealth + hp <= maxHealth){
@@ -92,35 +129,40 @@ function takeDamage(hp: float){
 }
 
 @RPC
-function createAtk(thingName: String, targetName: String){//, viewID: NetworkViewID){
+function createAtk(viewID: NetworkViewID, targetName: String){//, viewID: NetworkViewID){
 		//Debug.Log(thing); Debug.Log(target);
-		var thing = GameObject.Find(thingName);
-		thing.GetComponent(ProjectileScript).target = GameObject.Find(targetName).collider;
-		//AutoAttack.target = GameObject.Find(targetName).collider;
+		var target = GameObject.Find(targetName).collider;
 		
-		//var uniqueNum = ""+thing.networkView.viewID;
-		//var thingName = "Arrow" + uniqueNum;
+		var basicAttack = Instantiate(BasicAttackObj, transform.position, Quaternion.identity);
+		var AutoAttack = basicAttack.GetComponent(ProjectileScript);//.target = GameObject.Find(targetName).collider;
+		AutoAttack.target = target;
+		
+		//var uniqueNum = ""+viewID.ToString().Substring(12);
+		var thingName = "Arrow " + viewID.ToString().Substring(12);
 		//.GetComponent(ProjectileScript);
-		//thing.name = "Arrow" + uniqueNum;
+		basicAttack.name = thingName;
 		
-		//var nView = thing.GetComponent(NetworkView);
-		//nView.viewID = viewID;
-		
+		var nView = basicAttack.GetComponent(NetworkView);
+		nView.viewID = viewID;
+		AutoAttack.viewID = viewID;
 
 		
-		//AutoAttack.firedBy = this.name;
-		/*AutoAttack*/thing.GetComponent(ProjectileScript).doneSet = true;
+		AutoAttack.firedBy = this.name;
+
+		AutoAttack.GetComponent(ProjectileScript).doneSet = true;
 		//Debug.Log("Arrow Fired: "+uniqueNum);
 
 }
 @RPC
 function Die(){
 	isDead = true; //Tells anything that cares that this object is currently dead
+	Debug.Log(DeathFunc);
 	if(DeathFunc){
 		DeathFunc(); //A function set by some other script to tell what happens now.
 	}else Debug.LogWarning("Supposedly we died, but there is no function to handle the death!  It's still set as dead if anyone asks");
 }
 
+var hpBar: Texture2D;
 
 function OnGUI(){
 	if(!objHeight){
@@ -130,7 +172,11 @@ function OnGUI(){
 		HPBarPosW = transform.position - Vector3(0, -((objHeight ? objHeight : 2)/2) -0.5, 0); //This is the world position of the health bar that we will convert into screen cordinates so we can keep the hp bars right above their heads
 		var screenPos : Vector3 = Camera.main.WorldToScreenPoint(HPBarPosW); //Convert it to where it should be on the screen
 		var percHP = currentHealth / maxHealth;
-		var curHPBarSize = parseInt(100*percHP);
+		
+		if(!hpBar)hpBar = isMine ? hpBarImgPlayer : MainGC.Team == Team ? hpBarImgAlly : hpBarImgEnemy;
+		//hpBar.Resize(parseInt(hpBar.width*percHP),hpBar.height);
+		//hpBar.Apply();
+		var curHPBarSize = parseInt(hpBarSize*percHP);
 
 		if(!InterruptHPB){ //This allows us to modify the position from the inspector
 			HPBarPos.x = screenPos.x -(hpBarSize/2); //Centering it
@@ -139,10 +185,19 @@ function OnGUI(){
 		}
 		if(HPBarPos.z >= 0){
 			GUI.Box(Rect(HPBarPos.x ,HPBarPos.y,hpBarSize,20), ""); //A empty container box
-			GUI.Box(Rect(HPBarPos.x,HPBarPos.y,curHPBarSize,20), isMine ? hpBarImgPlayer : MainGC.Team == Team ? hpBarImgAlly : hpBarImgEnemy); //This is the hp bar, which conviently also changes depending on wither it is you, ally, or enemy.
+			GUI.Box(Rect(HPBarPos.x,HPBarPos.y,curHPBarSize,20), hpBar); //This is the hp bar, which conviently also changes depending on wither it is you, ally, or enemy.
 			GUI.Label(Rect(screenPos.x-(hpBarSize/4),Screen.height-screenPos.y, 100, 20), currentHealth+"/"+maxHealth); //This tells you the actual health
 			if(Name)GUI.Box(Rect(screenPos.x-(hpBarSize/2),Screen.height-screenPos.y-20, 100, 20), Name, MenuSkin.box); //The anem above the player
 			//GUI.Label(Rect(screenPos.x-(hpBarSize/4),Screen.height-screenPos.y-20, 100, 20), Name);
 		}
 	//}
+}
+
+function toggleOutline(bool: boolean){
+	if(showingOutline == bool)return;
+	showingOutline = bool;
+	var newMat = new Material(Mat);
+	newMat.shader = showingOutline ? NoOutlineShader : OutlineShader;
+	renderer.material = newMat;
+	Mat = newMat;
 }

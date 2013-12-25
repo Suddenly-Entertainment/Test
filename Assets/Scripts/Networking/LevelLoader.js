@@ -1,4 +1,8 @@
-var supportedNetworkLevels : String[] = [ "TownHub" ];
+#pragma strict
+import System;
+import System.Reflection;
+
+var supportedNetworkLevels : String[] = [ "TownHub", "Monopoly" ];
 var disconnectedLevel : String = "SceneMainMenu";
 private var lastLevelPrefix = 0;
 var PlayerObj: GameObject;
@@ -7,12 +11,29 @@ var PlayerCount : int = 0;
 var playerObjs: GameObject[] = new GameObject[30];
 var PlayerName;
 
+var networkID: String = "";
+
 function Awake ()
 {
     // Network level loading is done in a separate channel.
     DontDestroyOnLoad(this);
     networkView.group = 1;
     Application.LoadLevel(disconnectedLevel);
+        var t : Type = NetworkPlayer;
+       for (var mi : MethodInfo in t.GetMethods()) {
+    
+        var s : System.String = System.String.Format("{0} {1} (", mi.ReturnType, mi.Name);
+        var pars : ParameterInfo[] = mi.GetParameters();
+    
+        for (var j : int = 0; j < pars.Length; j++) {
+            s = String.Concat(s, String.Format("{0}{1}", pars[j].ParameterType,
+                (j == pars.Length-1) ? "" : ", "));
+        }
+        s = String.Concat(s, ")");
+        Debug.Log(s);
+    }
+    //Network.SetSendingEnabled(0, false);
+    //Network.isMessageQueueRunning = false;
 }
 
 function OnGUI ()
@@ -38,6 +59,7 @@ function OnGUI ()
 				networkView.RPC( "LoadLevel", RPCMode.AllBuffered, level, lastLevelPrefix + 1);
 			}
 		}
+		
 
 		GUILayout.FlexibleSpace(); //Makes it flexible
 		GUILayout.EndHorizontal();
@@ -51,7 +73,7 @@ function OnGUI ()
 		if(GUILayout.Button("Disconnect")){
 			Network.Disconnect();
 		}
-		
+		networkID = GUILayout.TextField(networkID);
 		GUILayout.FlexibleSpace();
 		GUILayout.EndHorizontal();
 		GUILayout.EndArea();
@@ -97,14 +119,14 @@ function onNetworkLoadedLevel(level : String){
 	if(level == "TownHub"){
 		PlayerCount++;
 		var P = Network.Instantiate(PlayerObj, Vector3(10,10,10), Quaternion.identity, 2);
-		
-		var R = Random.value;
-		var G = Random.value;
-		var B = Random.value;
+		//P.name = "Player "+Network.player.guid;
+		var R = UnityEngine.Random.value;
+		var G = UnityEngine.Random.value;
+		var B = UnityEngine.Random.value;
 		//P.tag = "Player";
 		P.networkView.RPC("SetupPlayerColor", RPCMode.AllBuffered, R, G, B);
 		P.networkView.RPC("SetupPlayer", RPCMode.AllBuffered, PlayerName);
-		networkView.RPC("AddPlayerObj", RPCMode.AllBuffered, P.name);
+		networkView.RPC("AddPlayerObj", RPCMode.AllBuffered, P.name, Network.player);
 	}
 }
 function OnPlayerConnected(player: NetworkPlayer){
@@ -118,11 +140,21 @@ function OnPlayerDisconnected(player: NetworkPlayer){
 		Network.DestroyPlayerObjects(player);
 }
 @RPC
-function AddPlayerObj(playerName: String){
-	var PlayerObject = GameObject.Find(playerName);
+function AddPlayerObj(Pname: String, player: NetworkPlayer){
+	var PlayerObject = GameObject.Find(Pname);
+	if(!PlayerObject){
+		PlayerObject = GameObject.Find("Player "+player.guid);
+		if(!PlayerObject){
+			Debug.LogError("We srs cannot find this player we tried (" + Pname + ") And (Player " + player.guid + ").");
+			Network.Disconnect();
+		}
+	}
+	PlayerObject.name = "Player "+player.guid;
 	playerObjs[PlayerCount-1] = PlayerObject;
 	var PC = PlayerObject.GetComponent(PlayerChecker);
+	Debug.LogError(PC);
 	PC.Player = PlayerCount;
+	PC.NetPlayer = player;
 	PlayerObject.GetComponent(GenericCreature).Team = PlayerCount % 2 == 0 ? 2 : 1;
 	
 }
