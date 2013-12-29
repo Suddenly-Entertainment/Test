@@ -1,22 +1,29 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Game Scripts\GenericCreature.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Minion Scripts\MinionManager.js">
     <Files>
-      <File FileName="Assets\Scripts\Game Scripts\GenericCreature.js" Line="172" Column="42" />
-      <File FileName="Assets\Scripts\Menu\MainMenu.js" Line="53" Column="28" />
-      <File FileName="Assets\Scripts\SimplePathing.js" Line="65" Column="2" />
-      <File FileName="Assets\Scripts\Player Scripts\PlayerChecker.js" Line="117" Column="2" />
-      <File FileName="Assets\Scripts\Player Scripts\CameraControls.js" Line="164" Column="3" />
-      <File FileName="Assets\Scripts\Networking\LevelLoader.js" Line="149" Column="25" />
-      <File FileName="Assets\Scripts\Player Scripts\ProjectileScript.js" Line="72" Column="26" />
-      <File FileName="Assets\Scripts\Monopoly\MaxTextureModifier.js" Line="20" Column="4" />
-      <File FileName="Assets\Scripts\Game Scripts\BasicAttackManager.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Game Scripts\GameManager.js" Line="17" Column="2" />
-      <File FileName="Assets\Scripts\Player Scripts\Options.js" Line="11" Column="2" />
+      <File FileName="Assets\Scripts\Game Scripts\UnitBase.cs" Line="281" Column="17" />
+      <File FileName="Assets\Scripts\Player Scripts\PlayerChecker.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Networking\LevelLoader.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Minion Scripts\MinionManager.js" Line="2" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\CameraControls.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\ProjectileScript.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\SimplePathing.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\Player.cs" Line="44" Column="3" />
+      <File FileName="Assets\Scripts\Player Scripts\ProjectileBase.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\CameraControls.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\Options.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player Scripts\Options.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Game Scripts\GameManager.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Game Scripts\GameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Networking\LevelLoader.cs" Line="38" Column="21" />
+      <File FileName="Assets\Scripts\Menu\MainMenu.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Scripts\Game Scripts\GenericCreature.js" line="194" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
