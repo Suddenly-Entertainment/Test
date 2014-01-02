@@ -96,7 +96,9 @@ public class MainMenu : MonoBehaviour {
 		ip = "76.84.167.144";
 		port = "27015";
 		Name = "BowWacker";
-		Debug.LogWarning (Vector3.Angle(new Vector3(100,2.5f,80), new Vector3(420,2.5f,400)));
+		Debug.LogWarning (Vector3.Distance(new Vector3(20,2.5f,450), new Vector3(450,2.5f,20)));
+		Debug.LogWarning (Vector3.Distance(new Vector3(260,2.5f,240), new Vector3(240,2.5f,260)));
+		Debug.LogWarning (Vector3.Distance (new Vector3(225,2.5f,245), new Vector3(255,2.5f,275)));
 	}
 	
 	// Update is called once per frame
