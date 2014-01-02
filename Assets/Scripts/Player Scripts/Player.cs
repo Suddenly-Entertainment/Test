@@ -40,8 +40,8 @@ public class Player : UnitBase {
 		}
 		base.Start();
 
-		objHeight = CapCo.height;
-		objWidth = CapCo.radius*2;
+		objHeight = 2;
+		objWidth = .5f*2;
 
 		this.tag = "Player";
 		
@@ -51,6 +51,7 @@ public class Player : UnitBase {
 	// Update is called once per frame
 	public override void Update () {
 		base.Update();
+		Debug.Log (controller.center);
 		if(isMine){
 			if(!isDead){
 				//var controller : CharacterController = GetComponent(CharacterController);

@@ -6,10 +6,11 @@ using System.Collections;
 [RequireComponent (typeof (NetworkView))]
 
 public class LevelLoader : MonoBehaviour {
+	public GameManager GM;	
 	public string[] supportedNetworkLevels;
 	public string disconnectedLevel;
 	private int lastLevelPrefix ;
-	public GameObject PlayerObj;
+
 	
 	public int PlayerCount;
 	public GameObject[] playerObjs;
@@ -20,7 +21,7 @@ public class LevelLoader : MonoBehaviour {
 	public void initVarsToDefaultValue(){
 		supportedNetworkLevels = new string[2];
 		supportedNetworkLevels[0] = "TownHub";
-		supportedNetworkLevels[1] = "Monopoly";
+		supportedNetworkLevels[1] = "ClassicMap";
 
 		disconnectedLevel = "SceneMainMenu";
 		lastLevelPrefix = 0;
@@ -35,20 +36,21 @@ public class LevelLoader : MonoBehaviour {
 	    // Network level loading is done in a separate channel.
 	    DontDestroyOnLoad(this);
 	    networkView.group = 1;
-	    Application.LoadLevel(disconnectedLevel);
-//	        var t : Type = NetworkPlayer;
-//	       for (var mi : MethodInfo in t.GetMethods()) {
-//	    
-//	        var s : System.String = System.String.Format("{0} {1} (", mi.ReturnType, mi.Name);
-//	        var pars : ParameterInfo[] = mi.GetParameters();
-//	    
-//	        for (var j : int = 0; j < pars.Length; j++) {
-//	            s = String.Concat(s, String.Format("{0}{1}", pars[j].ParameterType,
-//	                (j == pars.Length-1) ? "" : ", "));
-//	        }
-//	        s = String.Concat(s, ")");
-//	        Debug.Log(s);
-//	    }
+	    //Application.LoadLevel(disconnectedLevel);
+	    
+		Type t = typeof(Terrain);
+		foreach(MethodInfo mi in t.GetMethods()) {
+	    
+			        System.String s = System.String.Format("{0} {1} (", mi.ReturnType, mi.Name);
+			        ParameterInfo[] pars = mi.GetParameters();
+	    
+			        for (int j = 0; j < pars.Length; j++) {
+	            s = String.Concat(s, String.Format("{0}{1}", pars[j].ParameterType,
+	                (j == pars.Length-1) ? "" : ", "));
+	        }
+	        s = String.Concat(s, ")");
+	        Debug.Log(s);
+	    }
 	    //Network.SetSendingEnabled(0, false);
 	    //Network.isMessageQueueRunning = false;
 	}
@@ -130,7 +132,7 @@ public class LevelLoader : MonoBehaviour {
 		Network.isMessageQueueRunning = true;
 		// Now the level has been loaded and we can start sending out data to clients
 		Network.SetSendingEnabled(0, true);
-		onNetworkLoadedLevel(level);
+		GM.onNetworkLoadedLevel(level, PlayerName);
 		
 		foreach(GameObject go in FindObjectsOfType(typeof(GameObject)))
 			go.SendMessage("OnNetworkLoadedLevel", SendMessageOptions.DontRequireReceiver);	
@@ -141,21 +143,7 @@ public class LevelLoader : MonoBehaviour {
 		Application.LoadLevel(disconnectedLevel);
 	}
 
-	public void onNetworkLoadedLevel(string level){
-		if(level == "TownHub"){
-			Debug.Log(level);
-			PlayerCount++;
-			GameObject P = (Network.Instantiate(PlayerObj, new Vector3(10,10,10), Quaternion.identity, 2) as GameObject);
-			//P.name = "Player "+Network.player.guid;
-			float R = UnityEngine.Random.value;
-			float G = UnityEngine.Random.value;
-			float B = UnityEngine.Random.value;
-			//P.tag = "Player";
-			P.networkView.RPC("SetupPlayerColor", RPCMode.AllBuffered, R, G, B);
-			P.networkView.RPC("SetupPlayer", RPCMode.AllBuffered, PlayerName);
-			networkView.RPC("AddPlayerObj", RPCMode.AllBuffered, P.name, Network.player);
-		}
-	}
+
 	public void OnPlayerConnected(NetworkPlayer player ){
 		Debug.Log("Player " +  player);
 		PlayerCount++;

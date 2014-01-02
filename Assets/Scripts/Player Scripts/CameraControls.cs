@@ -80,7 +80,7 @@ public class CameraControls : MonoBehaviour {
 		RaycastHit hit;
 		RaycastHit hit2;
 	 	
-	    if(Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+	    if(Physics.Raycast(ray, out hit, Mathf.Infinity, 1<<8)) {
 	        // moveScript  UnitMoveable = unit.GetComponent("UnitMoveable");
 	        /*if(hit.collider.name == "Player1"){
 	        	//if(Physics.Raycast(PlayerScript.transform.position, hit.point - PlayerScript.transform.position, hit2, Mathf.Infinity)){

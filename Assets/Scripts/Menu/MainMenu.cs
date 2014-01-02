@@ -92,10 +92,11 @@ public class MainMenu : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		netLoadobj = (GameObject.Find("networkLevelLoader").GetComponent(typeof(LevelLoader)) as LevelLoader);
+		netLoadobj = GameObject.Find ("GameManager").GetComponent<LevelLoader>();
 		ip = "76.84.167.144";
 		port = "27015";
 		Name = "BowWacker";
+		Debug.LogWarning (Vector3.Angle(new Vector3(100,2.5f,80), new Vector3(420,2.5f,400)));
 	}
 	
 	// Update is called once per frame

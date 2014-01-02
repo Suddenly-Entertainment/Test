@@ -1,28 +1,23 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Minion Scripts\MinionManager.js">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Game Scripts\UnitBase.cs">
     <Files>
-      <File FileName="Assets\Scripts\Game Scripts\UnitBase.cs" Line="281" Column="17" />
-      <File FileName="Assets\Scripts\Player Scripts\PlayerChecker.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Networking\LevelLoader.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Minion Scripts\MinionManager.js" Line="2" Column="1" />
-      <File FileName="Assets\Scripts\Player Scripts\CameraControls.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player Scripts\ProjectileScript.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\SimplePathing.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player Scripts\Player.cs" Line="44" Column="3" />
-      <File FileName="Assets\Scripts\Player Scripts\ProjectileBase.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player Scripts\CameraControls.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player Scripts\Options.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player Scripts\Options.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Game Scripts\GameManager.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Game Scripts\GameManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Networking\LevelLoader.cs" Line="38" Column="21" />
+      <File FileName="Assets\Scripts\Map\ClassicMapSettings.cs" Line="59" Column="66" />
+      <File FileName="Assets\Scripts\Networking\LevelLoader.cs" Line="135" Column="1" />
+      <File FileName="Assets\Scripts\Game Scripts\GameManager.cs" Line="82" Column="57" />
+      <File FileName="Assets\Scripts\RespawnScript.cs" Line="22" Column="22" />
       <File FileName="Assets\Scripts\Menu\MainMenu.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Game Scripts\UnitBase.cs" Line="285" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Scripts\Game Scripts\GenericCreature.js" line="194" />
+      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Scripts\Game Scripts\GameManager.cs" line="61" />
+      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Scripts\Game Scripts\GameManager.cs" line="20" />
+      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Scripts\Game Scripts\GameManager.cs" line="22" />
+      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Scripts\Game Scripts\GameManager.cs" line="67" />
+      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Scripts\Game Scripts\GameManager.cs" line="86" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
