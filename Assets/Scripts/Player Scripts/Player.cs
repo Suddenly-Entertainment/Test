@@ -9,6 +9,8 @@ public class Player : UnitBase {
 	public int PlayerNum;
 	public NetworkPlayer NetPlayer;
 	public CapsuleCollider CapCo;
+
+	public float deathTime; //In seconds.
 	
 
 	//A function to initialize values;
@@ -24,7 +26,7 @@ public class Player : UnitBase {
 		if(isMine){ //These are the things that we do only if this is your player object
 			Debug.Log("This Object Belongs to you and you can control it");
 			
-			(GetComponent(typeof(CharacterMotor)) as CharacterMotor).SetControllable(true);
+			GetComponent<CharacterMotor>().SetControllable(true);
 			
 			GameObject PCam = (Instantiate(PlayerCamera, new Vector3(this.transform.position.x,this.transform.position.y + 100,this.transform.position.z), this.transform.rotation) as GameObject);
 			PCam.name = "PlayerCamera";//+networkView.viewID;
@@ -51,7 +53,7 @@ public class Player : UnitBase {
 	// Update is called once per frame
 	public override void Update () {
 		base.Update();
-		Debug.Log (controller.center);
+		//Debug.Log (controller.center);
 		if(isMine){
 			if(!isDead){
 				//var controller : CharacterController = GetComponent(CharacterController);
@@ -75,21 +77,30 @@ public class Player : UnitBase {
 	}
 
 	[RPC]
-	public override IEnumerator Die(){
-		CapCo.enabled = false; //So that people and objects can go through him
-		float endTime = Time.time+10;
-		int cntr = 0;
-		while(Time.time < endTime){
-			if(cntr >= 100){Debug.Log("A tick on the old century frame"); cntr = 0; }
-			yield return new WaitForFixedUpdate();
-			cntr++;
-		}
-		transform.position = new Vector3(1,1,1);
-		CapCo.enabled = true;
-		isDead = false;
+	public override void Die(){
+		isDead = true;
+		curHealth = 0;
+		deathTime = GMObj.GetComponent<ClassicMapSettings>().GetDeathTime(level);
+		nextRespawnTime = Time.time + deathTime;
+		GetComponent<CharacterMotor>().SetControllable(false);
+		collider.enabled = false; //So that people and objects can go through him
+
+		//transform.position = new Vector3(-1,-10,-1);
+		//.enabled = true;
+		//isDead = false;
 	}
 	
-	
+	[RPC]
+	public override void Respawn(){
+		isDead = false;
+		curHealth = curMaxHealth;
+		curResource = curMaxResource;
+		nextRespawnTime = -1;
+		transform.position = GMObj.GetComponent<ClassicMapSettings>().FindSpawnPos(Team);
+		GetComponent<CharacterMotor>().SetControllable(false);
+		collider.enabled = true;
+
+	}
 	
 	[RPC]
 	public void SetupPlayerColor(float R, float G, float B){

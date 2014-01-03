@@ -1,14 +1,16 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Menu\MainMenu.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Player Scripts\Player.cs">
     <Files>
-      <File FileName="Assets\Scripts\Menu\MainMenu.cs" Line="96" Column="24" />
-      <File FileName="Assets\Scripts\Map\ClassicMapSettings.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Networking\LevelLoader.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Game Scripts\GameManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\RespawnScript.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Menu\MainMenu.cs" Line="99" Column="1" />
-      <File FileName="Assets\Scripts\Game Scripts\UnitBase.cs" Line="281" Column="27" />
+      <File FileName="Assets\Scripts\Menu\MainMenu.cs" Line="138" Column="48" />
+      <File FileName="Assets\Scripts\Map\ClassicMapSettings.cs" Line="120" Column="72" />
+      <File FileName="Assets\Scripts\Networking\LevelLoader.cs" Line="173" Column="61" />
+      <File FileName="Assets\Scripts\Game Scripts\GameManager.cs" Line="108" Column="24" />
+      <File FileName="Assets\Scripts\Units\Structures\Nexus\NexusDefault.cs" Line="13" Column="17" />
+      <File FileName="Assets\Scripts\Units\Base  Scripts\UnitBase.cs" Line="230" Column="33" />
+      <File FileName="Assets\Scripts\Player Scripts\Player.cs" Line="56" Column="6" />
+      <File FileName="Assets\Scripts\Units\Minions\MinionManager.cs" Line="29" Column="4" />
+      <File FileName="Assets\Scripts\Player Scripts\CameraControls.cs" Line="163" Column="156" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

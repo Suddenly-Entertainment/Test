@@ -6,11 +6,19 @@ public class ClassicMapSettings : MonoBehaviour {
 
 	public GameObject Map = null;
 
+	public Transform oMap = null;
+	public Transform Ground = null;
+	public Transform MapWalls = null;
+	public Transform MapBoundries = null;
+
+
 	public Terrain terrainScript;
 
 	public Transform[] childTs;
 
 	public Transform[] Boundries;
+	public Vector3[] boundsPos = new Vector3[5];
+	public Vector3[] boundsScale = new Vector3[5];
 
 	public Color[] TeamColors;
 
@@ -25,6 +33,7 @@ public class ClassicMapSettings : MonoBehaviour {
 	public float Width = 2000;
 	public float Height = 600;
 	public float boundaryHeight = 5;
+	public float boundaryThinkness = 0.25f;
 	public float Length = 2000;
 
 	public bool useDiffBaseSizes = false; //Do you want to use different sizes for each base?
@@ -54,37 +63,64 @@ public class ClassicMapSettings : MonoBehaviour {
 				Application.Quit();
 				//Map = GameObject.Find("Map");
 			}else{
-				GameObject oMap = GameObject.Find ("Map");
-				terrainScript = oMap.GetComponentInChildren<Terrain>();
+				oMap = GameObject.Find ("Map").transform;
+				Ground = oMap.Find ("Ground");
+				MapWalls = oMap.Find ("Map Walls");
+				MapBoundries = MapWalls.Find("Map Boundries");
+
+				terrainScript = Ground.GetComponent<Terrain>();
 
 				childTs = new Transform[Map.transform.childCount];
 
-				Transform MB = oMap.transform.Find("Map Walls/Map Boundries");
-				float bPH = boundaryHeight/2;
-				for(int i = 0; i < MB.childCount; i++){
-					Transform B = MB.GetChild(i);
-					switch(i){
-					case 0:
-						B.localPosition = new Vector3(Width/2, bPH,-0.125f);
-						B.localScale = new Vector3(Width, boundaryHeight, 0.25f);
-						break;
-					case 1:
-						B.localPosition = new Vector3(-0.125f, bPH,  Length/2);
-						B.localScale = new Vector3(0.25f, boundaryHeight, Length);
-						break;
-					case 2:
-						break;
-					case 3:
-						B.localPosition = new Vector3(Width+0.125f, bPH, Length/2);
-						B.localScale = new Vector3(0.25f, boundaryHeight, Length);
-						break;
-					case 4:
-						B.localPosition = new Vector3(Width/2, bPH, Length+0.125f);
-						B.localScale = new Vector3(Width, boundaryHeight, 0.25f);
-						break;
+
+				if(boundsPos.Length > 0){
+					/*float bPH = boundaryHeight/2;
+					float BoundsThickPos = boundaryThinkness/2;
+					for(int i = 0; i < MapBoundries.childCount; i++){
+						Transform B = MB.GetChild(i);
+						Vector3 Position = new Vector3(Width/2, bPH, -BoundsThickPos);
+						Vector3 Scale = new Vector3(Width, boundaryHeight, boundaryThinkness);
+
+						switch(i){
+						case 0:
+							//This one is the default values;
+							break;
+						case 1:
+							//Position = new Vector3(-BoundsThickPos, bPH,  Length/2);
+							Position.x = Position.z;
+							Position.z = Length/2;
+
+							Scale.x = Scale.z;
+							Scale.z = Length;
+							//B.localScale = new Vector3(boundaryThinkness, boundaryHeight, Length);
+							break;
+						case 2:
+							break;
+						case 3:
+							B.localPosition = new Vector3(Width+BoundsThickPos, bPH, Length/2);
+							B.localScale = new Vector3(boundaryThinkness, boundaryHeight, Length);
+							Position.x
+								Position.z
+							break;
+						case 4:
+							B.localPosition = new Vector3(Width/2, bPH, Length+BoundsThickPos);
+							B.localScale = new Vector3(Width, boundaryHeight, boundaryThinkness);
+							break;
+						}
+
+						B.localPosition = Position;
+						B.localScale = Scale;
+					}*/
+					for(int i = 0; i < Mathf.Min (MapBoundries.childCount, boundsPos.Length); i++){
+						Debug.Log(i);
+						MapBoundries.GetChild(i).localPosition = boundsPos[i];
 					}
 				}
-
+				if(boundsScale.Length > 0){
+					for(int i = 0; i < Mathf.Min (MapBoundries.childCount, boundsScale.Length); i++){
+						MapBoundries.GetChild(i).localScale = boundsScale[i];
+					}
+				}
 
 				for(int i2 = 0; i2 < Map.transform.childCount; i2++){
 					childTs[i2] = Map.transform.GetChild(i2);
@@ -126,6 +162,7 @@ public class ClassicMapSettings : MonoBehaviour {
 		return PlayerO;
 	}
 
+
 	public Vector3 FindSpawnPos(TEAMS playerTeam){
 		Vector3 SpawnPos = new Vector3(Width/2, 2.5f, Length/2);
 		if(playerTeam == TEAMS.BLUE){
@@ -142,5 +179,11 @@ public class ClassicMapSettings : MonoBehaviour {
 			}
 		}
 		return SpawnPos;
+	}
+
+	public float GetDeathTime(int Level){
+		//TODO: Implement this function.
+		Debug.LogWarning ("GetDeathTime is not fully implemented yet!  It currently just returns 10.");
+		return 10; 
 	}
 }

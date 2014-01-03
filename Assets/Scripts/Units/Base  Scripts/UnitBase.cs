@@ -54,7 +54,7 @@ public class UnitBase : MonoBehaviour {
 	
 	//Misc.  Stats
 	public int level;
-	
+	public float goldOnDeath;
 	
 	/*------------*/
 	
@@ -63,10 +63,11 @@ public class UnitBase : MonoBehaviour {
 	
 	public GUISkin MenuSkin;
 	
-	
+
 	
 	public Material Mat;
 	
+	public float nextRespawnTime;
 	
 	public float nextAtk;
 	
@@ -83,7 +84,7 @@ public class UnitBase : MonoBehaviour {
 	public bool InterruptHPB;
 	public string Name;
 	
-	public int Team;
+	public TEAMS Team;
 	public NetworkView[] NetworkViews;
 	
 	public bool showingOutline;
@@ -91,8 +92,13 @@ public class UnitBase : MonoBehaviour {
 	public Shader NoOutlineShader;
 	
 
+	public GameObject GMObj;
+	public GameManager GM;
 	//A function to initialize values;
 	public virtual void initVarsToDefaultValue(){
+		GMObj = GameObject.Find ("GameManager");
+		GM = GMObj.GetComponent<GameManager>();
+
 		objHeight = 0f;
 		objWidth = 0f;
 		/*-- Stats! --*/
@@ -127,11 +133,13 @@ public class UnitBase : MonoBehaviour {
 		
 		//Misc.  Stats
 		 level = 1;
-		
+		goldOnDeath = 50;
 		
 		/*------------*/
-		
-		 nextAtk  = 0;
+
+		nextRespawnTime = -1;
+
+		nextAtk  = 0;
 
 		isDead  = false;
 		
@@ -139,7 +147,7 @@ public class UnitBase : MonoBehaviour {
 		InterruptHPB = false;
 		Name = "";
 		
-		Team  = 0;
+		Team  = TEAMS.NA;
 		NetworkViews = new NetworkView[10];
 		
 		showingOutline = false;
@@ -165,9 +173,15 @@ public class UnitBase : MonoBehaviour {
 	// Update is called once per frame
 	virtual public void Update () {
 		if(isMine){
-			gainHealth(curHealthRegen * Time.fixedDeltaTime);
-			if(curHealth <= 0 && !isDead){
-				networkView.RPC("Die", RPCMode.All);
+			if(!isDead){
+				if(curHealth <= 0){
+					networkView.RPC("Die", RPCMode.All);
+				}
+				gainHealth(curHealthRegen * Time.fixedDeltaTime);
+			}else{
+				if(nextRespawnTime != -1 && nextRespawnTime >= Time.time){
+					networkView.RPC ("Repsawn", RPCMode.Server);
+				}
 			}
 		}
 	}
@@ -177,7 +191,7 @@ public class UnitBase : MonoBehaviour {
 			Debug.LogWarning("The Creature wants to do a Basic Attack, but it has nothing to attack with!  (Did you forget to set the BasicAttackObj in the creaures script?)");
 			return;
 		}
-		if(Time.time > nextAtk){
+		if(Time.time >= nextAtk){
 			// thing = Network.Instantiate(BasicAttackObj, Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation, 0);
 			// viewID = Network.AllocateViewID();
 			//Debug.LogWarning(viewID);
@@ -213,12 +227,19 @@ public class UnitBase : MonoBehaviour {
 		stream.Serialize(ref pos);
 		transform.position = pos;
 		
-	
+		stream.Serialize (ref isDead);
 		//stream.Serialize(Name);
 	}
 
 	[RPC]
 	virtual public void gainHealth(float hp){
+		if(hp == 0)return;
+
+		if(hp < 0){
+			takeDamage (hp);
+			return;
+		}
+
 		if(curHealth + hp <= curMaxHealth){
 			curHealth += hp;
 		}else if(curHealth + hp > curMaxHealth){
@@ -231,6 +252,12 @@ public class UnitBase : MonoBehaviour {
 	
 	[RPC]
 	virtual public void takeDamage(float hp){
+		if(hp == 0)return;
+		
+		if(hp > 0){
+			gainHealth (hp);
+			return;
+		}
 		curHealth -= hp;
 		if(curHealth <= 0){
 			networkView.RPC("Die", RPCMode.All);
@@ -270,9 +297,14 @@ public class UnitBase : MonoBehaviour {
 	}
 
 	[RPC]
-	virtual public IEnumerator Die(){
+	virtual public void Die(){
 		isDead = true;
-		yield return new WaitForFixedUpdate();
+	}
+
+	[RPC]
+	virtual public void Respawn(){
+		isDead = false;
+		nextRespawnTime = -1;
 	}
 	
 	Texture2D hpBar;

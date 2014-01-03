@@ -22,12 +22,10 @@ public class MinionManager : UnitBase {
 	}
 
 	[RPC]
-	public override IEnumerator Die(){
+	public override void Die(){
 		if(Network.isServer){
 			Network.Destroy(networkView.viewID);
 			//TODO: Add the rest :P
 		}
-
-		yield return new WaitForEndOfFrame();
 	}
 }

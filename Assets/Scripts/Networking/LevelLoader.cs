@@ -170,7 +170,7 @@ public class LevelLoader : MonoBehaviour {
 		//Debug.LogError(PC);
 		PC.PlayerNum = PlayerCount;
 		PC.NetPlayer = player;
-		PC.Team = PlayerCount % 2 == 0 ? 2 : 1;
+		PC.Team = PlayerCount % 2 == 0 ? TEAMS.ORANGE : TEAMS.BLUE;
 		
 	}
 

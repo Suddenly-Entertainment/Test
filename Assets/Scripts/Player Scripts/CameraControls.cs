@@ -17,6 +17,8 @@ public class CameraControls : MonoBehaviour {
 	public bool ShowingOpts;
 	public Texture MenuBackground;
 
+	public bool MoveOnScreenEdge = false;
+
 	//A function to initialize values;
 	public void initVarsToDefaultValue(){
 		isIso = true;
@@ -42,21 +44,22 @@ public class CameraControls : MonoBehaviour {
 		if(isIso){
 			Vector3 movementDirection = Vector3.zero;
 			float MovementSpeed = 1;
-			if(Input.mousePosition.x >= camera.pixelWidth-200 && !(Input.mousePosition.x > camera.pixelWidth)){
-				movementDirection = Vector3.right * MovementSpeed;
-				//transform.LookAt(PlayerScript.transform);
-			}else if(Input.mousePosition.x <= 200 && !(Input.mousePosition.x <= 0)){
-				 movementDirection = Vector3.left * MovementSpeed;
-				//transform.LookAt(PlayerScript.transform);
+			if(MoveOnScreenEdge){
+				if(Input.mousePosition.x >= camera.pixelWidth-200 && !(Input.mousePosition.x > camera.pixelWidth)){
+					movementDirection = Vector3.right * MovementSpeed;
+					//transform.LookAt(PlayerScript.transform);
+				}else if(Input.mousePosition.x <= 200 && !(Input.mousePosition.x <= 0)){
+					 movementDirection = Vector3.left * MovementSpeed;
+					//transform.LookAt(PlayerScript.transform);
+				}
+				if(Input.mousePosition.y >= camera.pixelHeight-100 && !(Input.mousePosition.y > camera.pixelHeight)){
+					 movementDirection = ( Vector3.forward/2)+( Vector3.up/2) * MovementSpeed;
+					//transform.LookAt(PlayerScript.transform);
+				}else if(Input.mousePosition.y <= 100 && !(Input.mousePosition.y < 0)){
+					movementDirection = ( Vector3.back/2)+(Vector3.down/2) * MovementSpeed;
+					//transform.LookAt(PlayerScript.transform);
+				}
 			}
-			if(Input.mousePosition.y >= camera.pixelHeight-100 && !(Input.mousePosition.y > camera.pixelHeight)){
-				 movementDirection = ( Vector3.forward/2)+( Vector3.up/2) * MovementSpeed;
-				//transform.LookAt(PlayerScript.transform);
-			}else if(Input.mousePosition.y <= 100 && !(Input.mousePosition.y < 0)){
-				movementDirection = ( Vector3.back/2)+(Vector3.down/2) * MovementSpeed;
-				//transform.LookAt(PlayerScript.transform);
-			}
-			
 			transform.localPosition += transform.localRotation * movementDirection;
 			if(lockedCamera){
 				transform.LookAt(PlayerScript.transform);
@@ -157,6 +160,7 @@ public class CameraControls : MonoBehaviour {
 				transform.position = new Vector3(PlayerScript.transform.position.x, PlayerScript.transform.position.y + 2, PlayerScript.transform.position.z - 5);
 				//transform.localRotation = Quaternion(transform.rotation.x, PlayerScript.transform.rotation.y,PlayerScript.transform.rotation.z,PlayerScript.transform.rotation.w);
 				transform.LookAt(PlayerScript.transform);
+				PlayerScript.transform.LookAt(new Vector3(PlayerScript.transform.position.x, PlayerScript.transform.position.y, PlayerScript.transform.position.z + 5));
 				Debug.Log(transform.position);
 				//Debug.Log(transform.localRotation);
 				
@@ -171,6 +175,7 @@ public class CameraControls : MonoBehaviour {
 			}
 		}
 		lockedCamera = GUI.Toggle(new Rect(125,100,100,20), lockedCamera, "Locked camera?");
+		MoveOnScreenEdge = GUI.Toggle(new Rect(125,130,100,20), MoveOnScreenEdge, "MoveOnScreenEdge");
 		GameObject GM = GameObject.Find("GameManager");
 		GameObject Minion;
 		if(ShowingOpts){
@@ -184,11 +189,11 @@ public class CameraControls : MonoBehaviour {
 			GUILayout.EndArea();
 		}
 		if(GUI.Button(new Rect(15,160, 100, 20), "Enemy Minion")){	
-			Minion = (Network.Instantiate((GM.GetComponent(typeof(GameManager)) as GameManager).MinionObj, new Vector3(15, 15, 15), Quaternion.identity, 1) as GameObject);
-			GM.networkView.RPC("SpawnMinion", RPCMode.All, Minion.name, PlayerScript.Team == 1 ? 2 : 1);
+			Minion = (Network.Instantiate(GM.GetComponent<GameManager>().MinionObj, new Vector3(15, 15, 15), Quaternion.identity, 1) as GameObject);
+			GM.networkView.RPC("SpawnMinion", RPCMode.All, Minion.name, PlayerScript.Team == TEAMS.BLUE ? TEAMS.ORANGE : TEAMS.BLUE);
 		}
 		if(GUI.Button(new Rect(15,130, 100, 20), "Team Minion")){
-			Minion = (Network.Instantiate((GM.GetComponent(typeof(GameManager)) as GameManager).MinionObj, new Vector3(15, 15, 15), Quaternion.identity, 1) as GameObject);
+			Minion = (Network.Instantiate(GM.GetComponent<GameManager>().MinionObj, new Vector3(15, 15, 15), Quaternion.identity, 1) as GameObject);
 			GM.networkView.RPC("SpawnMinion", RPCMode.All, Minion.name, PlayerScript.Team);
 		}
 	}

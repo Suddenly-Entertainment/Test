@@ -7,7 +7,12 @@ public class MainMenu : MonoBehaviour {
 	public string Name;
 	public Texture MenuBackgroundTexture;
 	public GUISkin MenuSkin;
-	
+	public bool firstCyclePart = true;
+
+	public Vector3 cycleStartPos = Vector3.zero;
+	public Vector3 cycleEndPos = Vector3.zero;
+	public float cycleMoveSpeed = 0;
+
 	LevelLoader netLoadobj;
 	
 	void OnGUI(){
@@ -93,16 +98,43 @@ public class MainMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		netLoadobj = GameObject.Find ("GameManager").GetComponent<LevelLoader>();
+
 		ip = "76.84.167.144";
 		port = "27015";
 		Name = "BowWacker";
+
 		Debug.LogWarning (Vector3.Distance(new Vector3(20,2.5f,450), new Vector3(450,2.5f,20)));
 		Debug.LogWarning (Vector3.Distance(new Vector3(260,2.5f,240), new Vector3(240,2.5f,260)));
 		Debug.LogWarning (Vector3.Distance (new Vector3(225,2.5f,245), new Vector3(255,2.5f,275)));
+
+
+		if(cycleMoveSpeed == 0)cycleMoveSpeed = 100;
+		if(cycleStartPos == Vector3.zero)cycleStartPos = transform.position;
+		if(cycleEndPos == Vector3.zero){
+			cycleEndPos = transform.position;
+			cycleEndPos.z = 500 - cycleEndPos.z;
+		}
+
+		transform.position = cycleStartPos;
+		transform.LookAt(new Vector3(250, 0, 250));
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+	}
+	void FixedUpdate(){
+		/*float speed = cycleMoveSpeed * Time.fixedDeltaTime;
+		if(firstCyclePart && transform.position == cycleEndPos){
+			firstCyclePart = false;
+		}else if(!firstCyclePart && transform.position == cycleStartPos){
+			firstCyclePart = true;
+		}
+		if(firstCyclePart){
+			transform.position = Vector3.MoveTowards(transform.position, cycleEndPos, speed);
+		}else{
+			transform.position = Vector3.MoveTowards(transform.position, cycleStartPos, speed);
+		}
+		transform.LookAt(new Vector3(250, 0, 250));*/
 	}
 }

@@ -89,10 +89,10 @@ public class GameManager : MonoBehaviour {
 			return false;
 	}
 	[RPC]
-	public void SpawnMinion(string MinionName, int Team){
+	public void SpawnMinion(string MinionName, TEAMS Team){
 		GameObject Minion = GameObject.Find(MinionName);
 		//Minion.networkView.viewID = viewID;
-		(Minion.GetComponent(typeof(UnitBase)) as UnitBase).Team = Team;
+		Minion.GetComponent<UnitBase>().Team = Team;
 	}
 	
 	[RPC]
@@ -100,6 +100,12 @@ public class GameManager : MonoBehaviour {
 		Destroy(GameObject.Find(objName));
 		
 		networkView.RPC("ClientFinished", RPCMode.Server, objName);
+	}
+
+	[RPC]
+	public void MatchEnd(TEAMS Winner){
+		Debug.LogError ("The rest of this function has not been implemented yet!");
+		//TODO: Code this in.
 	}
 	//clientsFinished = 0;
 	/*[RPC]
