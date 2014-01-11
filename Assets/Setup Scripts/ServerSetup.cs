@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using fastJSON;
 
 namespace SuddenlyEntertainment{
 	/// <summary>
@@ -8,11 +9,11 @@ namespace SuddenlyEntertainment{
 	/// </summary>
 	public class ServerSetup : MonoBehaviour {
 
-		public GameObject PlayerObj;
+		public GameObject PlayerObj; //This is hte one you will instantiate on the client
 
 		// Use this for initialization
 		void Start () {
-
+			PlayerObj = MainManager.GM.GetComponent<GameManager>().PlayerObj;
 		}
 
 		// Update is called once per frame
@@ -35,39 +36,41 @@ namespace SuddenlyEntertainment{
 		}
 
 		[RPC]
-		public void InitializeClient(NetworkPlayer Player, string Nickname, int Team){
-			ClientSetupInfo PlayerInfo = new ClientSetupInfo(Nickname, Team);
+		public void InitializeClient(NetworkPlayer Player, string Serial){
+
+			ClientSetupInfo PlayerInfo = JSON.Instance.ToObject<ClientSetupInfo>(Serial);
 
 
 			MainManager.PlayerDict.Add(Player, PlayerInfo);
 			MainManager.uninitializedPlayers.Remove (Player);
-			UpdateOtherClientPlayerInfo(Player, Nickname, Team);
+			UpdateOtherClientPlayerInfo(Player, Serial);
 
 			SetupClientPlayerInfo(Player);
 
 			networkView.RPC ("InitializationFinished", Player);
 		}
 		[RPC]
-		public void AddPlayerInfo(NetworkPlayer player, string Nickname, int Team){}
+		public void AddPlayerInfo(NetworkPlayer player, string a){}
 		[RPC]
 		public void InitializationFinished(){}
 
 		public void SetupClientPlayerInfo(NetworkPlayer Client){
 
 			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
-				Dictionary<string, object> Prep = clientInfo.Value.NetPrep();
+				string Serial = JSON.Instance.ToJSON(clientInfo.Value);
+
 				
-				networkView.RPC("AddPlayerInfo", Client, clientInfo.Key, (string)Prep["Nickname"], (int)Prep["Team"]);
+				networkView.RPC("AddPlayerInfo", Client, clientInfo.Key, Serial);
 			}
 
 		
 		}
 
-		public void UpdateOtherClientPlayerInfo(NetworkPlayer Client, string Nickname, int Team){
+		public void UpdateOtherClientPlayerInfo(NetworkPlayer Client, string Serial){
 
 			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
 				if(clientInfo.Key != Client)
-				networkView.RPC("AddPlayerInfo", clientInfo.Key, Client, Nickname, Team);
+				networkView.RPC("AddPlayerInfo", clientInfo.Key, Client, Serial);
 			}
 
 		}
@@ -78,9 +81,7 @@ namespace SuddenlyEntertainment{
 			// Now the level has been loaded and we can start sending out data to clients
 			Network.SetSendingEnabled(0, true);
 
-			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
-				networkView.RPC ("loadGame", RPCMode.OthersBuffered);
-			}
+			networkView.RPC ("loadGame", RPCMode.OthersBuffered);
 		}
 
 		[RPC]
@@ -95,17 +96,23 @@ namespace SuddenlyEntertainment{
 		public void SendGameInitializationData(){
 			int cntr = 1;
 			List<GameObject> PlayerObjs = new List<GameObject>();
+			//GameObject PlayerObj2 = (Instantiate(PlayerObj) as GameObject);
+			//PlayerObj2.GetComponent<PlayerObjSetup>().OwnerClient = clientInfo.Key;
+			//PlayerObj2.AddComponent<PlayerScriptClient>();
+			//PlayerObj2.networkView.observed = PlayerObj.GetComponent<PlayerScriptClient>();
 
 			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
-				PlayerObj.GetComponent<PlayerObjSetup>().OwnerClient = clientInfo.Key;
+				Debug.Log (JSON.Instance.Beautify(JSON.Instance.ToJSON(clientInfo)));
 				UnityEngine.Object playerobj = Network.Instantiate(PlayerObj, new Vector3(0, 1, 0) + (basePos*cntr), Quaternion.identity, 0);
+				(playerobj as GameObject).AddComponent<PlayerScriptServer>();
 				PlayerObjs.Add((playerobj as GameObject));
 
 				networkView.RPC ("CreateCamera", clientInfo.Key);
 			}
+			//Destroy(PlayerObj2);
 
 			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
-				networkView.RPC ("ACTIVATEOBJ", RPCMode.All, clientInfo.Key);
+				//networkView.RPC ("ACTIVATEOBJ", RPCMode.All, clientInfo.Key);
 				networkView.RPC ("GameIsInitializedNow", clientInfo.Key);
 			}
 

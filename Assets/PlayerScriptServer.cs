@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-
 namespace SuddenlyEntertainment{
-	public class PlayerObjSetup : MonoBehaviour {
+	public class PlayerScriptServer : MonoBehaviour {
 
-		public NetworkPlayer OwnerClient;
-
-
+		public PlayerScriptClient PSC;
 		// Use this for initialization
 		void Start () {
-//			MainManager.PlayerDict[OwnerClient].PlayerObj = gameObject;
+			GetComponent<PlayerScriptClient>();
 		}
 		
 		// Update is called once per frame

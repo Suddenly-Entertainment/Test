@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿ using UnityEngine;
 using System.Collections;
 namespace SuddenlyEntertainment{
 
@@ -7,6 +7,10 @@ namespace SuddenlyEntertainment{
 	public class GameManager : MonoBehaviour {
 
 		public event NewPlayerEventHandler NewPlayer;
+
+		public GameObject PlayerCameraObj;
+
+		public GameObject PlayerObj; //Do not instatiate on the client
 
 		// This is called before Start, be careful of what you do here.  Errors abound.
 		void Awake(){
