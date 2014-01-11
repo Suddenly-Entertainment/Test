@@ -37,10 +37,14 @@ namespace SuddenlyEntertainment{
 		[RPC]
 		public void InitializeClient(NetworkPlayer Player, string Nickname, int Team){
 			ClientSetupInfo PlayerInfo = new ClientSetupInfo(Nickname, Team);
+
+
 			MainManager.PlayerDict.Add(Player, PlayerInfo);
 			MainManager.uninitializedPlayers.Remove (Player);
+			UpdateOtherClientPlayerInfo(Player, Nickname, Team);
 
 			SetupClientPlayerInfo(Player);
+
 			networkView.RPC ("InitializationFinished", Player);
 		}
 		[RPC]
@@ -52,11 +56,20 @@ namespace SuddenlyEntertainment{
 
 			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
 				Dictionary<string, object> Prep = clientInfo.Value.NetPrep();
-
+				
 				networkView.RPC("AddPlayerInfo", Client, clientInfo.Key, (string)Prep["Nickname"], (int)Prep["Team"]);
 			}
 
 		
+		}
+
+		public void UpdateOtherClientPlayerInfo(NetworkPlayer Client, string Nickname, int Team){
+
+			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
+				if(clientInfo.Key != Client)
+				networkView.RPC("AddPlayerInfo", clientInfo.Key, Client, Nickname, Team);
+			}
+
 		}
 
 		void OnLevelWasLoaded(int level){
@@ -78,13 +91,28 @@ namespace SuddenlyEntertainment{
 				SendGameInitializationData();
 			}
 		}
-
+		Vector3 basePos = new Vector3(5, 0, 5);
 		public void SendGameInitializationData(){
+			int cntr = 1;
+			List<GameObject> PlayerObjs = new List<GameObject>();
+
 			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
 				PlayerObj.GetComponent<PlayerObjSetup>().OwnerClient = clientInfo.Key;
+				UnityEngine.Object playerobj = Network.Instantiate(PlayerObj, new Vector3(0, 1, 0) + (basePos*cntr), Quaternion.identity, 0);
+				PlayerObjs.Add((playerobj as GameObject));
 
-				//Network.Instantiate(PlayerObj,
+				networkView.RPC ("CreateCamera", clientInfo.Key);
 			}
+
+			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
+				networkView.RPC ("ACTIVATEOBJ", RPCMode.All, clientInfo.Key);
+				networkView.RPC ("GameIsInitializedNow", clientInfo.Key);
+			}
+
+			MainManager.GameInitialized = true;
 		}
+
+		[RPC]
+		public void CreateCamera(){}
 	}
 }

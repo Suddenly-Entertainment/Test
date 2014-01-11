@@ -24,6 +24,8 @@ namespace SuddenlyEntertainment{
 			PlayerNames = new string[12];
 
 			clientInfo = new ClientSetupInfo();
+
+			MainManager.GM.GetComponent<GameManager>().NewPlayer += new NewPlayerEventHandler(OnNewPlayer);
 		}
 
 		// Update is called once per frame
@@ -143,6 +145,9 @@ namespace SuddenlyEntertainment{
 				ServerInfo.Port = PortTempHolder;
 			}
 		}
+		public void OnNewPlayer(object sender, NetworkPlayer player){
+
+		}
 
 		void LobbyMenu(){
 			List<string> BlueTeamNames =
@@ -153,6 +158,11 @@ namespace SuddenlyEntertainment{
 			List<string> OrangeTeamNames =
 				(from Player in MainManager.PlayerDict
 				 where Player.Value.Team == Teams.Orange
+				 select Player.Value.Nickname).ToList();
+
+			List<string> AllOtherPlayersNames =
+				(from Player in MainManager.PlayerDict
+				 where Player.Value.Team != Teams.Orange && Player.Value.Team != Teams.Blue
 				 select Player.Value.Nickname).ToList();
 
 			BlueTeamNamesA = BlueTeamNames.ToArray();
@@ -172,13 +182,24 @@ namespace SuddenlyEntertainment{
 				GUILayout.FlexibleSpace();
 			GUILayout.EndVertical();
 
+
+
 			GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
+
+			GUILayout.BeginVertical();
+				GUILayout.Label("Other Players");
+				GUILayout.BeginHorizontal();
+					foreach(string name in AllOtherPlayersNames)GUILayout.Label(name);
+					GUILayout.FlexibleSpace();
+				GUILayout.EndHorizontal();
+				GUILayout.FlexibleSpace();
+			GUILayout.EndVertical();
 
 			if(Network.isServer){
 				GUILayout.BeginHorizontal();
 					if(GUILayout.Button ("Start The Show!")){
-						//MainManager.GM.GetComponent<GameManager>().loadGame();
+						MainManager.GM.GetComponent<GameManager>().loadGame();
 					}
 				GUILayout.FlexibleSpace();
 				GUILayout.EndHorizontal();

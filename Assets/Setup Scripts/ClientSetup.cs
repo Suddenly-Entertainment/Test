@@ -7,7 +7,8 @@ namespace SuddenlyEntertainment{
 	public class ClientSetup : MonoBehaviour {
 		Dictionary<string, object> Info;
 
-
+		public GameObject PlayerCameraObj;
+		public 
 		// Use this for initialization
 		void Start () {
 
@@ -33,13 +34,17 @@ namespace SuddenlyEntertainment{
 		[RPC]
 		public void AddPlayerInfo(NetworkPlayer player, string Nickname, int Team){
 			MainManager.PlayerDict.Add(player, new ClientSetupInfo(Nickname, Team));
-
-
+			MainManager.GM.GetComponent<GameManager>().CallNewPlayer(this, player);
 		}
 
 		[RPC]
 		public void InitializationFinished(){
 			Camera.main.GetComponent<Startup>().Menu = "Lobby";
+		}
+
+		[RPC]
+		public void CreateCamera(){
+			Instantiate(PlayerCameraObj);
 		}
 	}
 }
