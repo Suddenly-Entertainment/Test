@@ -1,0 +1,20 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Setup Scripts\ServerSetup.cs">
+    <Files>
+      <File FileName="Assets\Setup Scripts\ClientSetup.cs" Line="34" Column="7" />
+      <File FileName="Assets\Setup Scripts\ServerSetup.cs" Line="84" Column="74" />
+      <File FileName="Assets\Setup Scripts\ServerInfo.cs" Line="8" Column="8" />
+      <File FileName="Assets\MainManager.cs" Line="22" Column="28" />
+      <File FileName="Assets\GameManager.cs" Line="29" Column="4" />
+      <File FileName="Assets\INetSerializable.cs" Line="16" Column="29" />
+      <File FileName="Assets\Setup Scripts\ClientSetupInfo.cs" Line="26" Column="8" />
+      <File FileName="Assets\Setup Scripts\Startup.cs" Line="181" Column="9" />
+      <File FileName="Assets\Unit Scripts\Player Scripts\PlayerObjSetup.cs" Line="17" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
