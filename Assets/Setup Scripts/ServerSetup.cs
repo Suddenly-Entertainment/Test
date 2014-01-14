@@ -103,9 +103,14 @@ namespace SuddenlyEntertainment{
 
 			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
 				Debug.Log (JSON.Instance.Beautify(JSON.Instance.ToJSON(clientInfo)));
+
 				UnityEngine.Object playerobj = Network.Instantiate(PlayerObj, new Vector3(0, 1, 0) + (basePos*cntr), Quaternion.identity, 0);
 				(playerobj as GameObject).AddComponent<PlayerScriptServer>();
 				PlayerObjs.Add((playerobj as GameObject));
+				(playerobj as GameObject).networkView.RPC ("SetPlayer", RPCMode.All, clientInfo.Key, clientInfo.Value.Nickname);
+				clientInfo.Value.PlayerObj = (playerobj as GameObject);
+
+
 
 				networkView.RPC ("CreateCamera", clientInfo.Key);
 			}
