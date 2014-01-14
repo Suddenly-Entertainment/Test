@@ -1,15 +1,17 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PlayerScriptClient.cs">
     <Files>
+      <File FileName="Assets\PlayerScriptClient.cs" Line="6" Column="1" />
       <File FileName="Assets\GameManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Setup Scripts\ClientSetup.cs" Line="1" Column="1" />
+      <File FileName="Assets\Setup Scripts\ClientSetup.cs" Line="51" Column="102" />
       <File FileName="Assets\Setup Scripts\Startup.cs" Line="10" Column="3" />
-      <File FileName="Assets\Setup Scripts\ServerSetup.cs" Line="103" Column="83" />
+      <File FileName="Assets\Setup Scripts\ServerSetup.cs" Line="110" Column="117" />
       <File FileName="Assets\MainManager.cs" Line="1" Column="1" />
       <File FileName="Assets\Hello\JSON.cs" Line="1" Column="1" />
-      <File FileName="Assets\Unit Scripts\Player Scripts\PlayerObjSetup.cs" Line="5" Column="1" />
+      <File FileName="Assets\Unit Scripts\Player Scripts\PlayerObjSetup.cs" Line="13" Column="6" />
       <File FileName="Assets\PlayerScriptClient.cs" Line="6" Column="1" />
+      <File FileName="Assets\Setup Scripts\ClientSetupInfo.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

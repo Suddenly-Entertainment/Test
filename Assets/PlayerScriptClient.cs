@@ -17,7 +17,9 @@ namespace SuddenlyEntertainment{
 
 		[RPC]
 		void ClientAxis(NetworkPlayer player, Vector3 AxisPress){
+			if(MainManager.PlayerDict[player].PlayerObj == gameObject){
 			gameObject.GetComponent<CharacterController>().SimpleMove(AxisPress * MoveSpeed);
+			}
 		}
 
 		void OnSerializeNetworkView(BitStream Stream, NetworkMessageInfo Msg){
