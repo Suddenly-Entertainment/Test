@@ -1,0 +1,113 @@
+﻿<ItemProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <Name>ITEM_WACKING_BOW</Name>
+    <Cost>360</Cost>
+    <BuildsOutOf>
+        <string />
+    </BuildsOutOf>
+    <StatChanges>
+        <_Level>
+            <Name>STAT_LEVEL</Name>
+            <Base>0</Base>
+            <PerLevel>0</PerLevel>
+            <Bonus>0</Bonus>
+        </_Level>
+        <_moveSpeed>
+            <Name>STAT_MOVE_SPEED</Name>
+            <Base>0</Base>
+            <PerLevel>0</PerLevel>
+            <Bonus>45</Bonus>
+        </_moveSpeed>
+        <_attackDamage>
+            <Name>STAT_ATTACK_DAMAGE</Name>
+            <Base>0</Base>
+            <PerLevel>0</PerLevel>
+            <Bonus>20</Bonus>
+        </_attackDamage>
+        <_attackSpeed>
+            <Name>STAT_ATTACK_SPEED</Name>
+            <Base>0</Base>
+            <PerLevel>0</PerLevel>
+            <Bonus>0.6</Bonus>
+        </_attackSpeed>
+        <_attackRange>
+            <Name>STAT_ATTACK_RANGE</Name>
+            <Base>0</Base>
+            <PerLevel>0</PerLevel>
+            <Bonus>0</Bonus>
+        </_attackRange>
+        <!--<Level>0</Level>
+        <MoveSpeed>0</MoveSpeed>
+        <B_MoveSpeed>0</B_MoveSpeed>
+        <AttackDamage>0</AttackDamage>
+        <AttackSpeed>0</AttackSpeed>
+        <AttackRange>0</AttackRange>-->
+    </StatChanges>
+    <hasStatChanges>true</hasStatChanges>
+    <hasActive>false</hasActive>
+    <hasUniqueActive>false</hasUniqueActive>
+    <hasPassive>false</hasPassive>
+    <hasUniquePassive>false</hasUniquePassive>
+    <Passives>
+        <PassiveProperties xsi:nil="true" />
+    </Passives>
+    <UniquePassives>
+        <PassiveProperties xsi:nil="true" />
+    </UniquePassives>
+    <!--<ActiveProperties>
+        <Name>TestName</Name>
+        <Cooldown>10</Cooldown>
+        <hasPassive>false</hasPassive>
+        <hasActive>true</hasActive>
+        <hasAOE>false</hasAOE>
+        <isProjectile>false</isProjectile>
+        <isStatModifier>false</isStatModifier>
+        <isToggle>true</isToggle>
+        <createsWall>false</createsWall>
+        <projectileProperties>
+            <Targeted>true</Targeted>
+            <Range>600</Range>
+            <Damage>100</Damage>
+            <collideTags>
+                <UnitType>Nonstructure</UnitType>
+            </collideTags>
+        </projectileProperties>
+        <StatChanges>
+            <_Level>
+                <Name />
+                <Base>0</Base>
+                <PerLevel>0</PerLevel>
+                <Bonus>0</Bonus>
+            </_Level>
+            <_moveSpeed>
+                <Name />
+                <Base>0</Base>
+                <PerLevel>0</PerLevel>
+                <Bonus>0</Bonus>
+            </_moveSpeed>
+            <_attackDamage>
+                <Name />
+                <Base>0</Base>
+                <PerLevel>0</PerLevel>
+                <Bonus>0</Bonus>
+            </_attackDamage>
+            <_attackSpeed>
+                <Name />
+                <Base>0</Base>
+                <PerLevel>0</PerLevel>
+                <Bonus>0</Bonus>
+            </_attackSpeed>
+            <_attackRange>
+                <Name />
+                <Base>0</Base>
+                <PerLevel>0</PerLevel>
+                <Bonus>0</Bonus>
+            </_attackRange>
+            <Level>0</Level>
+            <MoveSpeed>0</MoveSpeed>
+            <B_MoveSpeed>0</B_MoveSpeed>
+            <AttackDamage>0</AttackDamage>
+            <AttackSpeed>0</AttackSpeed>
+            <AttackRange>0</AttackRange>
+        </StatChanges>
+    </ActiveProperties>-->
+</ItemProperties>

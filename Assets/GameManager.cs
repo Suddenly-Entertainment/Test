@@ -16,6 +16,8 @@ namespace SuddenlyEntertainment{
 		void Awake(){
 			DontDestroyOnLoad(this);
 			MainManager.GM = gameObject;
+			Debug.Log (System.IO.Directory.GetCurrentDirectory());
+			XMLFileManager.SetupItems();
 		}
 		// Use this for initialization
 		void Start () {
@@ -44,7 +46,7 @@ namespace SuddenlyEntertainment{
 
 		[RPC]
 		public void ACTIVATEOBJ(NetworkPlayer Client){
-			ClientSetupInfo clientInfo = MainManager.PlayerDict[Client];
+			ClientSetupInfo clientInfo = MainManager.PlayerDict[Client.guid];
 			GameObject clientObj = clientInfo.PlayerObj;
 			clientObj.BroadcastMessage("ACTIVATE", SendMessageOptions.DontRequireReceiver);
 		}

@@ -36,7 +36,7 @@ namespace SuddenlyEntertainment{
 		}
 		[RPC]
 		public void AddPlayerInfo(NetworkPlayer player, string Serial){
-			MainManager.PlayerDict.Add(player, JSON.Instance.ToObject<ClientSetupInfo>(Serial));
+			MainManager.PlayerDict.Add(player.guid, JSON.Instance.ToObject<ClientSetupInfo>(Serial));
 			MainManager.GM.GetComponent<GameManager>().CallNewPlayer(this, player);
 		}
 
@@ -48,7 +48,7 @@ namespace SuddenlyEntertainment{
 		[RPC]
 		public void CreateCamera(){
 			GameObject Cam = (Instantiate(PlayerCameraObj) as GameObject);
-			Cam.transform.parent = GameObject.Find (MainManager.PlayerDict[Network.player].Nickname).transform;
+			Cam.transform.parent = GameObject.Find (MainManager.PlayerDict[Network.player.guid].Nickname).transform;
 		}
 		void OnLevelWasLoaded(int level){
 			// Allow receiving data again
@@ -60,5 +60,14 @@ namespace SuddenlyEntertainment{
 		}
 		[RPC]
 		public  void ClientLoadedLevel(NetworkPlayer Client){}
+
+		[RPC]
+		public void SyncPlayerDict(string Serial){
+			MainManager.PlayerDict = fastJSON.JSON.Instance.ToObject<Dictionary<string, ClientSetupInfo> >(Serial);
+		}
+		[RPC]
+		public void SyncItems(string Serial){
+			XMLFileManager.Items = fastJSON.JSON.Instance.ToObject<Dictionary<string, ItemProperties> >(Serial);
+		}
 	}
 }

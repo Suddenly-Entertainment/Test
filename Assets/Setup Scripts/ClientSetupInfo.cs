@@ -20,6 +20,12 @@ namespace SuddenlyEntertainment{
 			set;
 		}
 
+		public string Champion
+		{
+			get;
+			set;
+		}
+
 		public GameObject PlayerObj
 		{
 			get;

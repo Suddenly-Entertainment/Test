@@ -7,14 +7,16 @@ namespace SuddenlyEntertainment{
 
 		public static GameObject GM;
 		public static List<NetworkPlayer> uninitializedPlayers;
-		public static Dictionary<NetworkPlayer, ClientSetupInfo> PlayerDict;
+		public static Dictionary<string, ClientSetupInfo> PlayerDict;
+		public static Dictionary<string, NetworkPlayer> GUIDDict;
 
 		public static List<NetworkPlayer> LoadedClients;
 
 		public static bool GameInitialized;
 
 		static MainManager(){
-			PlayerDict = new Dictionary<NetworkPlayer, ClientSetupInfo>();
+			PlayerDict = new Dictionary<string, ClientSetupInfo>();
+			GUIDDict = new Dictionary<string, NetworkPlayer>();
 			uninitializedPlayers = new List<NetworkPlayer>();
 
 			LoadedClients = new List<NetworkPlayer>();

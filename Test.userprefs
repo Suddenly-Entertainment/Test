@@ -1,21 +1,22 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PlayerScriptClient.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\XMLFileManager.cs">
     <Files>
-      <File FileName="Assets\PlayerScriptClient.cs" Line="6" Column="1" />
-      <File FileName="Assets\GameManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Setup Scripts\ClientSetup.cs" Line="51" Column="102" />
-      <File FileName="Assets\Setup Scripts\Startup.cs" Line="10" Column="3" />
-      <File FileName="Assets\Setup Scripts\ServerSetup.cs" Line="110" Column="117" />
-      <File FileName="Assets\MainManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Hello\JSON.cs" Line="1" Column="1" />
-      <File FileName="Assets\Unit Scripts\Player Scripts\PlayerObjSetup.cs" Line="13" Column="6" />
-      <File FileName="Assets\PlayerScriptClient.cs" Line="6" Column="1" />
-      <File FileName="Assets\Setup Scripts\ClientSetupInfo.cs" Line="1" Column="1" />
+      <File FileName="Assets\Unit Scripts\Player Scripts\PlayerObjSetup.cs" Line="1" Column="1" />
+      <File FileName="Assets\Setup Scripts\ClientSetupInfo.cs" Line="26" Column="8" />
+      <File FileName="Assets\PropertyLoader.cs" Line="63" Column="37" />
+      <File FileName="Assets\XMLFileManager.cs" Line="11" Column="50" />
+      <File FileName="Assets\Stat Classes\ItemStats.cs" Line="1" Column="1" />
+      <File FileName="Assets\Property Classes\ItemProperties.cs" Line="1" Column="1" />
+      <File FileName="Assets\GameManager.cs" Line="6" Column="2" />
+      <File FileName="Assets\XML\Items\DefaultItem.xml" Line="9" Column="35" />
+      <File FileName="Assets\Setup Scripts\Startup.cs" Line="38" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Setup Scripts\Startup.cs" line="38" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

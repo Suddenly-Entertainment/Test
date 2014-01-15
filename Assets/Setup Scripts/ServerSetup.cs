@@ -41,7 +41,8 @@ namespace SuddenlyEntertainment{
 			ClientSetupInfo PlayerInfo = JSON.Instance.ToObject<ClientSetupInfo>(Serial);
 
 
-			MainManager.PlayerDict.Add(Player, PlayerInfo);
+			MainManager.GUIDDict.Add(Player.guid, Player);
+			MainManager.PlayerDict.Add(Player.guid, PlayerInfo);
 			MainManager.uninitializedPlayers.Remove (Player);
 			UpdateOtherClientPlayerInfo(Player, Serial);
 
@@ -50,17 +51,17 @@ namespace SuddenlyEntertainment{
 			networkView.RPC ("InitializationFinished", Player);
 		}
 		[RPC]
-		public void AddPlayerInfo(NetworkPlayer player, string a){}
+		public void AddPlayerInfo(string player, string a){}
 		[RPC]
 		public void InitializationFinished(){}
 
 		public void SetupClientPlayerInfo(NetworkPlayer Client){
 
-			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
+			foreach(KeyValuePair<string, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
 				string Serial = JSON.Instance.ToJSON(clientInfo.Value);
 
 				
-				networkView.RPC("AddPlayerInfo", Client, clientInfo.Key, Serial);
+				networkView.RPC("AddPlayerInfo", MainManager.GUIDDict[clientInfo.Key], clientInfo.Key, Serial);
 			}
 
 		
@@ -68,9 +69,9 @@ namespace SuddenlyEntertainment{
 
 		public void UpdateOtherClientPlayerInfo(NetworkPlayer Client, string Serial){
 
-			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
-				if(clientInfo.Key != Client)
-				networkView.RPC("AddPlayerInfo", clientInfo.Key, Client, Serial);
+			foreach(KeyValuePair<string, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
+				if(clientInfo.Key != Client.guid)
+				networkView.RPC("AddPlayerInfo", MainManager.GUIDDict[clientInfo.Key], Client.guid, Serial);
 			}
 
 		}
@@ -100,8 +101,9 @@ namespace SuddenlyEntertainment{
 			//PlayerObj2.GetComponent<PlayerObjSetup>().OwnerClient = clientInfo.Key;
 			//PlayerObj2.AddComponent<PlayerScriptClient>();
 			//PlayerObj2.networkView.observed = PlayerObj.GetComponent<PlayerScriptClient>();
-
-			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
+			networkView.RPC ("SyncPlayerDict", RPCMode.OthersBuffered, fastJSON.JSON.Instance.ToJSON(MainManager.PlayerDict));
+			networkView.RPC ("SyncItems", RPCMode.OthersBuffered, fastJSON.JSON.Instance.ToJSON(XMLFileManager.Items));
+			foreach(KeyValuePair<string, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
 				Debug.Log (JSON.Instance.Beautify(JSON.Instance.ToJSON(clientInfo)));
 
 				UnityEngine.Object playerobj = Network.Instantiate(PlayerObj, new Vector3(0, 1, 0) + (basePos*cntr), Quaternion.identity, 0);
@@ -112,13 +114,13 @@ namespace SuddenlyEntertainment{
 
 
 
-				networkView.RPC ("CreateCamera", clientInfo.Key);
+				networkView.RPC ("CreateCamera", MainManager.GUIDDict[clientInfo.Key]);
 			}
 			//Destroy(PlayerObj2);
 
-			foreach(KeyValuePair<NetworkPlayer, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
+			foreach(KeyValuePair<string, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
 				//networkView.RPC ("ACTIVATEOBJ", RPCMode.All, clientInfo.Key);
-				networkView.RPC ("GameIsInitializedNow", clientInfo.Key);
+				networkView.RPC ("GameIsInitializedNow", MainManager.GUIDDict[clientInfo.Key]);
 			}
 
 			MainManager.GameInitialized = true;
@@ -126,5 +128,10 @@ namespace SuddenlyEntertainment{
 
 		[RPC]
 		public void CreateCamera(){}
+
+		[RPC]
+		public void SyncPlayerDict(string Serial){}
+		[RPC]
+		public void SyncItems(string Serial){}
 	}
 }
