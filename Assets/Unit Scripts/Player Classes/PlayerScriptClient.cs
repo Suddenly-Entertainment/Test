@@ -36,7 +36,7 @@ namespace SuddenlyEntertainment{
 		}
 
 		[RPC]
-		public void BasicAttack(NetworkPlayer Attacker, NetworkPlayer Target){
+		public void BasicAttack(string Attacker, string Target){
 			if(Attacker == Target || Network.isClient)return;
 			if(Attacker.guid == OwnerClient){
 				GameObject Proj = (Network.Instantiate(Projectile, transform.position + new Vector3(0, 2, 0), Quaternion.identity, 0) as GameObject);

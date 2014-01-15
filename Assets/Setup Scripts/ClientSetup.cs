@@ -35,8 +35,8 @@ namespace SuddenlyEntertainment{
 			Debug.Log("Something for the client");
 		}
 		[RPC]
-		public void AddPlayerInfo(NetworkPlayer player, string Serial){
-			MainManager.PlayerDict.Add(player.guid, JSON.Instance.ToObject<ClientSetupInfo>(Serial));
+		public void AddPlayerInfo(string guid, string Serial){
+			MainManager.PlayerDict.Add(guid, JSON.Instance.ToObject<ClientSetupInfo>(Serial));
 			MainManager.GM.GetComponent<GameManager>().CallNewPlayer(this, player);
 		}
 

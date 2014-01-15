@@ -5,7 +5,7 @@ namespace SuddenlyEntertainment{
 	public class Inventory : MonoBehaviour {
 		public event System.EventHandler OnBuy;
 
-		Item[] Inv;
+		public Item[] Inv;
 		public int ItemCount;
 		public int InvSize;
 
