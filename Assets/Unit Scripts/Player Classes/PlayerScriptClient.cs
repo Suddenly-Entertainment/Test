@@ -22,15 +22,17 @@ namespace SuddenlyEntertainment{
 		void Update () {
 			if(Network.isClient){
 				Vector3 AxisPress = new Vector3(Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));
-				networkView.RPC ("ClientAxis", RPCMode.Server, Network.player.guid, AxisPress);
+				networkView.RPC ("ClientAxis", RPCMode.Server, Network.player.guid, AxisPress, Input.GetAxis("Rotate"));
+
 			}
 		}
 
 		[RPC]
-		void ClientAxis(string player, Vector3 AxisPress){
+		void ClientAxis(string player, Vector3 AxisPress, float rotate){
 			if(Network.isServer){
 				if(MainManager.PlayerDict[player].PlayerObj == gameObject){
 					gameObject.GetComponent<CharacterController>().SimpleMove(AxisPress * (float)Stats.MoveSpeed);
+					transform.Rotate(new Vector3(0, 5*rotate,0));
 				}
 			}
 		}
