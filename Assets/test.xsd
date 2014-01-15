@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://www.w3schools.com"
+xmlns="http://www.w3schools.com"
+elementFormDefault="qualified">
+
+<xs:element name="ItemProperties" type="itemProperties"/>
+
+</xs:element>
+
+<xs:complexType name="itemProperties">
+	<xs:sequence>
+		<xs:element name="Name" type="xs:string"/>
+		<xs:element name="Cost" type="xs:integer"/>
+		<xs:element name="hasStatChanges" type="xs:bool" default="true"/>
+		<xs:element name="hasPassive" type="xs:bool" default="false"/>
+		<xs:element name="hasUniquePassive" type="xs:bool" default="false" />
+		<xs:element name="hasActive" type="xs:bool" default="false"/>
+
+		<xs:element name="StatChanges" type="unitStats"/>
+
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="unitStats">
+	<xs:sequence>
+		<xs:element name="_Level" type="Stat"/>
+		<xs:element name="_moveSpeed" type="Stat"/>
+		<xs:element name="_attackDamage" type="Stat"/>
+		<xs:element name="_attackSpeed" type="Stat"/>
+		<xs:element name="_attackRange" type="Stat"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="championProperties">
+
+</xs:complexType>
+
+<xs:complexType name="gamemodeProperties">
+
+</xs:complexType>
+
+<xs:complexType name="abilityProperties">
+
+</xs:complexType>
+
+<xs:complexType name="passiveProperties">
+
+</xs:complexType>
+
+<xs:complexType name="Stat">
+	<xs:sequence>
+		<xs:element name="Base" type="xs:decimal" default="0"/>
+		<xs:element name="PerLevel" type="xs:decimal" default="0"/>
+		<xs:element name="Bonus" type="xs:decimal" default="0"/>
+	</xs:sequence>
+</xs:complexType>
+
+</xs:schema>

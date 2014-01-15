@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace SuddenlyEntertainment{
 	public class PlayerScriptClient : MonoBehaviour {
+
+		public event EventHandler onSpawn;
+
 		public Vector3 AxisPress;
 
 		public string OwnerClient;
@@ -72,6 +76,10 @@ namespace SuddenlyEntertainment{
 		void OnSerializeNetworkView(BitStream Stream, NetworkMessageInfo Msg){
 			Vector3 Pos = Vector3.zero;
 			Quaternion Rot = Quaternion.identity;
+
+			float CurrentHealth = 0;
+			float Gold = 0;
+			float Expierence = 0;
 			if(Stream.isReading){
 				Stream.Serialize(ref Pos);
 				transform.position = Pos;
@@ -79,11 +87,29 @@ namespace SuddenlyEntertainment{
 				Stream.Serialize(ref Rot);
 				transform.rotation = Rot;
 
+				Stream.Serialize(ref CurrentHealth);
+				Stats.CurrentHealth = CurrentHealth;
+
+				Stream.Serialize(ref Gold);
+				Stats.Gold = Gold;
+
+				Stream.Serialize(ref Expierence);
+				Stats.Expierence = Expierence;
 			}else{
 				Pos = transform.position;
 				Stream.Serialize(ref Pos);
+
 				Rot = transform.rotation;
 				Stream.Serialize(ref Rot);
+
+				CurrentHealth = (float)Stats.CurrentHealth;
+				Stream.Serialize(ref CurrentHealth);
+
+				Gold = (float)Stats.Gold;
+				Stream.Serialize(ref Gold);
+
+				Expierence = (float)Stats.Expierence;
+				Stream.Serialize(ref Expierence);
 			}
 		}
 

@@ -2,18 +2,34 @@ using System;
 
 namespace SuddenlyEntertainment
 {
+	public delegate void onLevels( object sender, int Level );
 	/// <summary>
 	/// Stores Stats for Units.
 	/// </summary>
 	[System.Serializable]
 	public class UnitStats
 	{
-
+		public event onLevels onLevel;
+		public event EventHandler onDeath;
 		public Stat _Level = new Stat();
 		public Stat _moveSpeed = new Stat();
 		public Stat _attackDamage = new Stat();
 		public Stat _attackSpeed = new Stat();
 		public Stat _attackRange = new Stat();
+
+		public Stat _maxHealth = new Stat();
+		public Stat _healthRegeneration = new Stat();
+		public double _currentHealth;
+
+		public double _Expierence;
+		public double _totalExpierence;
+		public double[] _expierenceCurve;
+		public Stat _expierenceOnDeath;
+
+		public Stat _goldOnDeath;
+
+		public double _Gold;
+		public Stat _goldGeneration;
 
 		public int Level {
 			get {
@@ -21,6 +37,8 @@ namespace SuddenlyEntertainment
 			}
 			set {
 				_Level.Bonus = (double)value;
+				if(onLevel != null)
+					onLevel(this, Level);
 			}
 		}
 
@@ -70,6 +88,101 @@ namespace SuddenlyEntertainment
 				_attackRange.Bonus = value;
 			}
 		}
+
+		public double MaxHealth {
+			get{
+				return _maxHealth.GetCurrent(Level);
+			}
+			set{
+				_maxHealth.Bonus = value;
+			}
+		}
+
+		public double CurrentHealth {
+			get{ return _currentHealth;}
+			set{
+				if(value <= 0) {
+					_currentHealth = 0;
+					if(onDeath != null)
+						onDeath(this, EventArgs.Empty);
+				}else if(value > MaxHealth) {
+					_currentHealth = MaxHealth;
+				} else {
+					_currentHealth = value;
+				}
+			}
+		}
+
+		public double Expierence {
+			get {
+				return _Expierence;
+			}
+			set {
+				if(value <= 0)return;
+				_Expierence = CheckAndSetLevel(value);
+			}
+		}
+
+		public double GoldGeneration {
+			get{
+				return _goldGeneration.GetCurrent(Level);
+			}
+			set{
+				_goldGeneration.Bonus = value;
+			}
+		}
+
+		public double GoldOnDeath {
+			get {
+				return _goldOnDeath.GetCurrent (Level);
+			}
+			set {
+				_goldOnDeath.Bonus = value;
+			}
+		}
+
+		public double ExpierenceOnDeath {
+			get {
+				return _expierenceOnDeath.GetCurrent (Level);
+			}
+			set {
+				_expierenceOnDeath.Bonus = value;
+			}
+		}
+
+		public double Gold{
+			get{
+				return _Gold;
+			}
+			set {
+				if(value < 0) {
+					return;
+				}
+				_Gold = value;
+			}
+		}
+
+		public double HealthRegeneration {
+			get {
+				return _healthRegeneration.GetCurrent (Level);
+			}
+			set {
+				_healthRegeneration = value;
+			}
+		}
+
+		private double CheckAndSetLevel(double Value){
+			double Hold = Value;
+			_totalExpierence += Value - _Expierence;
+			while(Hold - _expierenceCurve[Level] >= 0){
+				double levelDiff = Value - _expierenceCurve[Level];
+
+				Hold = levelDiff;
+				++Level;
+			}
+			return Hold;
+		}
+		
 
 		public UnitStats ()
 		{
