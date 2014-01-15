@@ -8,13 +8,14 @@ namespace SuddenlyEntertainment{
 		public string OwnerClient;
 
 		public GameObject Projectile;
-
+		public UnitStats B_Stats;
 		public UnitStats Stats;
 
 		// Use this for initialization
 		void Start () {
 			Stats = new UnitStats();
 			Stats._moveSpeed.Base = 10;
+			B_Stats = Stats;
 		}
 		
 		// Update is called once per frame

@@ -20,7 +20,7 @@ namespace SuddenlyEntertainment{
 		}
 
 		public void RecalculateStats(object sender, System.EventArgs e){
-			UnitStats stats = PSC.Stats;
+			UnitStats stats = PSC.B_Stats;
 			UnitStats ItemStatChanges = Inv.GetTotalStatChange();
 
 			PSC.Stats = stats + ItemStatChanges;
