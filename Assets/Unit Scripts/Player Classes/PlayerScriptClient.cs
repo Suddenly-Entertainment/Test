@@ -97,12 +97,12 @@ namespace SuddenlyEntertainment{
 		[RPC]
 		public void Freeze(string guid){
 			Cam.transform.parent = null;
-			gameObject.SetActive(false);
+			GetComponent<MeshRenderer>().enabled = false;
 		}
 		[RPC]
 		public void Unfreeze(string guid){
 			Cam.transform.parent = transform;
-			gameObject.SetActive(true);
+			GetComponent<MeshRenderer>().enabled = true;
 		}
 
 		[RPC]

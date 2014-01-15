@@ -30,7 +30,7 @@ namespace SuddenlyEntertainment{
 		public void Kill(){
 			isDead = true;
 			spawnTime = Time.time + 10;
-			networkView.RPC ("Freeze", RPCMode.All, PSC.OwnerClient);
+			networkView.RPC ("Freeze", RPCMode.Others, PSC.OwnerClient);
 			networkView.RPC ("SpectateOther", MainManager.GUIDDict[PSC.OwnerClient]);
 		}
 
