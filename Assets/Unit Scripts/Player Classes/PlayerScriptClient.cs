@@ -11,11 +11,14 @@ namespace SuddenlyEntertainment{
 		public UnitStats B_Stats;
 		public UnitStats Stats;
 
+		public float rotateSpeed;
+
 		// Use this for initialization
 		void Start () {
 			Stats = new UnitStats();
 			Stats._moveSpeed.Base = 10;
 			B_Stats = Stats;
+			rotateSpeed = 2.5f;
 		}
 		
 		// Update is called once per frame
@@ -31,8 +34,8 @@ namespace SuddenlyEntertainment{
 		void ClientAxis(string player, Vector3 AxisPress, float rotate){
 			if(Network.isServer){
 				if(MainManager.PlayerDict[player].PlayerObj == gameObject){
-					gameObject.GetComponent<CharacterController>().SimpleMove(AxisPress * (float)Stats.MoveSpeed);
-					transform.Rotate(new Vector3(0, 5*rotate,0));
+					gameObject.GetComponent<CharacterController>().SimpleMove(transform.TransformDirection(AxisPress * (float)Stats.MoveSpeed));
+					transform.Rotate(new Vector3(0, rotateSpeed*rotate,0));
 				}
 			}
 		}
@@ -59,13 +62,19 @@ namespace SuddenlyEntertainment{
 
 		void OnSerializeNetworkView(BitStream Stream, NetworkMessageInfo Msg){
 			Vector3 Pos = Vector3.zero;
+			Quaternion Rot = Quaternion.identity;
 			if(Stream.isReading){
 				Stream.Serialize(ref Pos);
 				transform.position = Pos;
+
+				Stream.Serialize(ref Rot);
+				transform.rotation = Rot;
+
 			}else{
 				Pos = transform.position;
 				Stream.Serialize(ref Pos);
-
+				Rot = transform.rotation;
+				Stream.Serialize(ref Rot);
 			}
 		}
 
