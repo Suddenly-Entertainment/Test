@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SuddenlyEntertainment{
 	public class PlayerScriptClient : MonoBehaviour {
@@ -11,7 +12,13 @@ namespace SuddenlyEntertainment{
 		public UnitStats B_Stats;
 		public UnitStats Stats;
 
+		public float health;
+
+		public float maxHealth;
+
 		public float rotateSpeed;
+
+		public GameObject Cam;
 
 		// Use this for initialization
 		void Start () {
@@ -19,6 +26,8 @@ namespace SuddenlyEntertainment{
 			Stats._moveSpeed.Base = 10;
 			B_Stats = Stats;
 			rotateSpeed = 2.5f;
+			health = 1000;
+			maxHealth = 1000;
 		}
 		
 		// Update is called once per frame
@@ -83,6 +92,34 @@ namespace SuddenlyEntertainment{
 			if(Network.isClient){
 				Stats = fastJSON.JSON.Instance.ToObject<UnitStats>(Serial);
 			}
+		}
+
+		[RPC]
+		public void Freeze(string guid){
+			Cam.transform.parent = null;
+			gameObject.SetActive(false);
+		}
+		[RPC]
+		public void Unfreeze(string guid){
+			Cam.transform.parent = transform;
+			gameObject.SetActive(true);
+		}
+
+		[RPC]
+		public void SpectateOther(){
+			GameObject spec = gameObject;
+			foreach(KeyValuePair< string, ClientSetupInfo > clientInfo in MainManager.PlayerDict){
+				if(clientInfo.Key != OwnerClient){
+					spec = clientInfo.Value.PlayerObj;
+				}
+			}
+			Cam.transform.position = spec.transform.position + new Vector3(-5, 2, 0);
+			Cam.transform.parent = spec.transform;
+		}
+		[RPC]
+		public void SpectateSelf(){
+			Cam.transform.position = transform.position + new Vector3(-5, 2, 0);
+			Cam.transform.parent = transform;
 		}
 	}
 }

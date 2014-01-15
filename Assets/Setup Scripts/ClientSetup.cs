@@ -49,6 +49,8 @@ namespace SuddenlyEntertainment{
 		public void CreateCamera(){
 			GameObject Cam = (Instantiate(PlayerCameraObj) as GameObject);
 			Cam.transform.parent = GameObject.Find (MainManager.PlayerDict[Network.player.guid].Nickname).transform;
+			MainManager.PlayerDict[Network.player.guid].PlayerObj.GetComponent<PlayerScriptClient>().Cam = Cam;
+
 		}
 		void OnLevelWasLoaded(int level){
 			// Allow receiving data again
