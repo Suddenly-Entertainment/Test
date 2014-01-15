@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ProjectileServer : MonoBehaviour {
-	public NetworkPlayer Target;
+	public string Target;
 	public float Speed;
 
 	// Use this for initialization
@@ -12,7 +12,7 @@ public class ProjectileServer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.position = Vector3.MoveTowards(transform.position, SuddenlyEntertainment.MainManager.PlayerDict[Target.guid].PlayerObj.transform.position, Speed);
+		transform.position = Vector3.MoveTowards(transform.position, SuddenlyEntertainment.MainManager.PlayerDict[Target].PlayerObj.transform.position, Speed);
 	}
 
 	void OnTriggerEnter(){

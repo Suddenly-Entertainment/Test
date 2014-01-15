@@ -145,7 +145,7 @@ namespace SuddenlyEntertainment{
 				ServerInfo.Port = PortTempHolder;
 			}
 		}
-		public void OnNewPlayer(object sender, NetworkPlayer player){
+		public void OnNewPlayer(object sender, string player){
 
 		}
 

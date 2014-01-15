@@ -2,7 +2,7 @@
 using System.Collections;
 namespace SuddenlyEntertainment{
 
-	public delegate void NewPlayerEventHandler(object sender, NetworkPlayer player);
+	public delegate void NewPlayerEventHandler(object sender, string player);
 
 	public class GameManager : MonoBehaviour {
 
@@ -29,7 +29,7 @@ namespace SuddenlyEntertainment{
 		
 		}
 
-		public void CallNewPlayer(object sender, NetworkPlayer player){
+		public void CallNewPlayer(object sender, string player){
 			NewPlayer(sender, player);
 		}
 
