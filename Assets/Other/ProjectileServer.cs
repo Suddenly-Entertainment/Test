@@ -5,7 +5,7 @@ public class ProjectileServer : MonoBehaviour {
 	public string Target;
 	public float Speed;
 
-		public float Damage;
+	public Damage damage;
 
 	// Use this for initialization
 	void Start () {
@@ -20,8 +20,8 @@ public class ProjectileServer : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider){
 		if(collider.tag == "Player"){
-			PlayerScriptClient PSC = collider.GetComponent<PlayerScriptClient>();
-				PSC.Stats.CurrentHealth += -Damage;
+			PlayerScriptServer PSS = collider.GetComponent<PlayerScriptServer>();
+				PSS.Attacked(damage);
 			Network.Destroy(gameObject);
 		}
 

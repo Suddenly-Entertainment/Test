@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+
 
 namespace SuddenlyEntertainment
 {
@@ -11,35 +13,47 @@ namespace SuddenlyEntertainment
 	{
 		public event onLevels onLevel;
 		public event EventHandler<OnUnitDeathEventArgs> onDeath;
-		public Stat _Level = new Stat();
-		public Stat _moveSpeed = new Stat();
-		public Stat _attackDamage = new Stat();
-		public Stat _attackSpeed = new Stat();
-		public Stat _attackRange = new Stat();
+		private Stat _Level = new Stat("Unit Level");
+		private int _maxLevel;
+		private Stat _moveSpeed = new Stat("Movement Speed");
+		private Stat _attackDamage = new Stat("Basic Attack Damage");
+		private Stat _attackSpeed = new Stat("Basic Attack Speed");
+		private Stat _attackRange = new Stat("Basic Attack Range");
 
-		public Stat _maxHealth = new Stat();
-		public Stat _healthRegeneration = new Stat();
-		public double _currentHealth;
+		private Stat _maxHealth = new Stat("Maximum Health");
+		private Stat _healthRegeneration = new Stat("Health Regeneration");
+		private double _currentHealth;
 
-		public double _Expierence;
-		public double _totalExpierence;
-		public double[] _expierenceCurve;
-		public Stat _expierenceOnDeath = new Stat();
+		private Stat _Armor = new Stat("Armor");
+		private Stat _specialResist = new Stat("Special Resist");
+
+		private Stat _armorPenFlat = new Stat("Armor Penetration Flat");
+		private Stat _armorPenPercent = new Stat("Armor Penetration Percent");
+
+		private Stat _specialResistPenFlat = new Stat("Special Resist Penetration Flat");
+		private Stat _specialResistPenPercent = new Stat("Special Resist Penetration Percent");
+
+		private double _Expierence;
+		private double _totalExpierence;
+		public  double[] ExpierenceCurve;
+		private Stat _expierenceOnDeath = new Stat("Expierence Granted On Death");
 
 
-		public Stat _goldOnDeath = new Stat();
+		private Stat _goldOnDeath = new Stat("Gold Granted On Death");
 
 
-		public double _Gold;
+		private double _Gold;
 
-		public Stat _goldGeneration = new Stat();
+		private Stat _goldGeneration = new Stat("Gold Generation");
 
 		public int Level {
 			get {
 				return (int)_Level.GetCurrent();
 			}
 			set {
+				if(value <= _maxLevel - 1)
 				_Level.Bonus = (double)value;
+
 				if(onLevel != null)
 					onLevel(this, Level);
 			}
@@ -174,14 +188,80 @@ namespace SuddenlyEntertainment
 			}
 		}
 
+		public double Armor {
+			get {
+				return _Armor.GetCurrent (Level);
+			}
+			set {
+				_Armor.Bonus = value;
+			}
+		}
+
+		public double SpecialResist {
+			get {
+				return _specialResist.GetCurrent (Level);
+			}
+			set {
+				_specialResist.Bonus = value;
+			}
+		}
+
+		public double ArmorPenFlat {
+			get {
+				return _armorPenFlat.GetCurrent (Level);
+			}
+			set {
+				_armorPenFlat.Bonus = value;
+			}
+		}
+
+		public double ArmorPenPercent {
+			get {
+				return _armorPenPercent.GetCurrent (Level);
+			}
+			set {
+				_armorPenPercent.Bonus = value;
+			}
+		}
+
+		public double SpecialResistPenFlat {
+			get {
+				return _specialResistPenFlat.GetCurrent (Level);
+			}
+			set {
+				_specialResistPenFlat.Bonus = value;
+			}
+		}
+
+		public double SpecialResistPenPercent {
+			get {
+				return _specialResistPenPercent.GetCurrent (Level);
+			}
+			set {
+				_specialResistPenPercent.Bonus = value;
+			}
+		}
+
+		public int MaxLevel {
+			get{ return _maxLevel; }
+			set{ _maxLevel = value;}
+		}
+
+
 		private double CheckAndSetLevel(double Value){
+			if(Level == MaxLevel)return 0;
 			double Hold = Value;
 			_totalExpierence += Value - _Expierence;
+
 			while(Hold - _expierenceCurve[Level] >= 0){
 				double levelDiff = Value - _expierenceCurve[Level];
 
 				Hold = levelDiff;
 				++Level;
+				if(Level == MaxLevel){
+					Hold = 0;
+					break;
+				}
 			}
 			return Hold;
 		}
@@ -194,9 +274,33 @@ namespace SuddenlyEntertainment
 
 			_Expierence = 0;
 			_totalExpierence = 0;
-			_expierenceCurve = new double[]{20,40,60,80,100,200,300,400,500,600,800,1000,1200,1400,1600,2000,2400,2800};
+			ExpierenceCurve = new double[]{0, 280,380,480,580,680,780,880,980,1080,1180,1280,1380,1480,1580,1680,1780,1880};
 			_expierenceOnDeath.Base = 200;
 			_goldOnDeath.Base = 200;
+
+			//
+			_maxLevel = 18;
+			_Level.Base = 1;
+			_moveSpeed.Base = 20;
+			_attackDamage.Base = 80;
+			_attackDamage.PerLevel = 10;
+			_maxHealth.Base = 500;
+			_maxHealth.PerLevel = 50;
+			_healthRegeneration.Base = 2.4;
+			_healthRegeneration.PerLevel = .3;
+			_currentHealth = _maxHealth.GetCurrent();
+
+			_Armor.Base = 30;
+			_Armor.PerLevel = 3;
+
+			_specialResist.Base = 15;
+			_specialResist.PerLevel = 1;
+
+			_Gold = 0;
+
+			_goldGeneration.Base = 1.6;
+
+
 		}
 		public string GetString(){
 			string Result = "";

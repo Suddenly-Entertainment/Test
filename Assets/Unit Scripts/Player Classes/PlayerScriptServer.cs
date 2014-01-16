@@ -36,24 +36,23 @@ namespace SuddenlyEntertainment{
 		public void OnDeath(object sender, OnUnitDeathEventArgs e){
 			PSC.isDead = true;
 			spawnTime = Time.time + 10;
-			ColliderManager CM = transform.GetComponentInChildren<ColliderManager>();
 			var Args = new OnUnitDeathEventArgs();
 
 			Args.Level = PSC.Stats.Level;
-			Args.expierenceGained = PSC.Stats.ExpierenceOnDeath;
+			Args.expierenceGained = CalcExpGivenOnDeath(PSC.Stats.Level);//PSC.Stats.ExpierenceOnDeath;
 			Args.goldGained = PSC.Stats.GoldOnDeath;
 			Args.UnitName = MainManager.PlayerDict[PSC.OwnerClient].Nickname;
 
-			foreach(Collider c in CM.Colliders){
-				if(c.tag == "Player" && collider != c){
-					PlayerScriptServer PSS = c.GetComponent<PlayerScriptServer>();
-					PSS.UnitDiedNearby(this, Args);
-
+			var Colliders = Physics.OverlapSphere(transform.position, 20);
+			foreach(var col in Colliders){
+				if(col.tag == "Player"){
+					col.GetComponent<PlayerScriptServer>().UnitDiedNearby(this, Args);
 				}
 			}
 		}
-
-
+		public double CalcExpGivenOnDeath(int Level){
+			return PSC.Stats.ExpierenceCurve[Level] * 0.75;
+		}
 
 		public void OnSpawn(object sender, System.EventArgs e){
 			PSC.Stats.CurrentHealth = PSC.Stats.MaxHealth;
@@ -72,6 +71,44 @@ namespace SuddenlyEntertainment{
 				onUnitDieNearby(Obj, e);
 		}
 
+		public void Attacked ( Damage damage )
+		{
+			float armorAfterPen, specialResistAfterPen;
+			float PhysicalDamage = 0;
+			float SpecialDamage = 0;
+			if(damage.PhysicalDamage != 0) {
+				armorAfterPen = (float)PSC.Stats.Armor;
+
+				armorAfterPen -= armorAfterPen * damage.ArmorPenPercent;
+				armorAfterPen -= damage.ArmorPenFlat;
+				if(armorAfterPen < 0)
+					armorAfterPen = 0;
+				PhysicalDamage = PhysicalDamageAfterArmor (armorAfterPen, damage.PhysicalDamage);
+			}
+			if(damage.SpecialDamage != 0){
+				specialResistAfterPen = (float)PSC.Stats.SpecialResist;
+
+				specialResistAfterPen -= specialResistAfterPen * damage.SpecialResistPenPercent;
+				specialResistAfterPen -= damage.SpecialResistPenFlat;
+				if(specialResistAfterPen < 0)
+					specialResistAfterPen = 0;
+
+				SpecialDamage = SpecialDamageAfterSpecialResist(specialResistAfterPen, damage.SpecialDamage);
+			}
+		}
+
+		public float PhysicalDamageAfterArmor(float Armor, float damage){
+			//Damage multiplier = 100 / (100 + Armor) if Armor ≥ 0
+			//Damage multiplier = 2 − [100 / (100 − Armor)] if Armor ≤ 0
+			float damageMultiplier;
+			if(Armor >= 0){
+				damageMultiplier = 100 / (100 + Armor);
+			}else{
+				damageMultiplier = 2 - (100 / 100 - Armor);
+			}
+
+			return damage*damageMultiplier;
+		}
 		/*public void Kill(){
 			isDead = true;
 			spawnTime = Time.time + 10;
