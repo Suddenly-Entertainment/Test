@@ -10,7 +10,7 @@ namespace SuddenlyEntertainment
 	public class UnitStats
 	{
 		public event onLevels onLevel;
-		public event EventHandler onDeath;
+		public event EventHandler<OnUnitDeathEventArgs> onDeath;
 		public Stat _Level = new Stat();
 		public Stat _moveSpeed = new Stat();
 		public Stat _attackDamage = new Stat();
@@ -24,12 +24,15 @@ namespace SuddenlyEntertainment
 		public double _Expierence;
 		public double _totalExpierence;
 		public double[] _expierenceCurve;
-		public Stat _expierenceOnDeath;
+		public Stat _expierenceOnDeath = new Stat();
 
-		public Stat _goldOnDeath;
+
+		public Stat _goldOnDeath = new Stat();
+
 
 		public double _Gold;
-		public Stat _goldGeneration;
+
+		public Stat _goldGeneration = new Stat();
 
 		public int Level {
 			get {
@@ -104,7 +107,7 @@ namespace SuddenlyEntertainment
 				if(value <= 0) {
 					_currentHealth = 0;
 					if(onDeath != null)
-						onDeath(this, EventArgs.Empty);
+						onDeath(this, new OnUnitDeathEventArgs());
 				}else if(value > MaxHealth) {
 					_currentHealth = MaxHealth;
 				} else {
@@ -167,7 +170,7 @@ namespace SuddenlyEntertainment
 				return _healthRegeneration.GetCurrent (Level);
 			}
 			set {
-				_healthRegeneration = value;
+				_healthRegeneration.Bonus = value;
 			}
 		}
 
@@ -186,7 +189,14 @@ namespace SuddenlyEntertainment
 
 		public UnitStats ()
 		{
-			
+			_maxHealth.Base = 1000;
+			CurrentHealth = 1000;
+
+			_Expierence = 0;
+			_totalExpierence = 0;
+			_expierenceCurve = new double[]{20,40,60,80,100,200,300,400,500,600,800,1000,1200,1400,1600,2000,2400,2800};
+			_expierenceOnDeath.Base = 200;
+			_goldOnDeath.Base = 200;
 		}
 		public string GetString(){
 			string Result = "";

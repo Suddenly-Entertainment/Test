@@ -12,6 +12,8 @@ namespace SuddenlyEntertainment{
 
 		public GameObject PlayerObj; //Do not instatiate on the client
 
+		public GameObject TestCollider;
+
 		// This is called before Start, be careful of what you do here.  Errors abound.
 		void Awake(){
 			DontDestroyOnLoad(this);

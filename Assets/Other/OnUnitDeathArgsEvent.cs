@@ -6,7 +6,7 @@
 // 	Purpose			:	<${Purpose}>
 using System;
 
-namespace AnotherExpieramentalProject
+namespace SuddenlyEntertainment
 {
 	public class OnUnitDeathEventArgs : EventArgs
 	{

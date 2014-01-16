@@ -16,22 +16,33 @@ namespace SuddenlyEntertainment{
 		public UnitStats B_Stats;
 		public UnitStats Stats;
 
-		public float health;
-
-		public float maxHealth;
-
 		public float rotateSpeed;
 
 		public GameObject Cam;
 
+		public bool isDead;
 		// Use this for initialization
 		void Start () {
 			Stats = new UnitStats();
 			Stats._moveSpeed.Base = 10;
+			Stats._moveSpeed.PerLevel = 3;
+			Stats._maxHealth.Base = 1000;	
+			Stats._maxHealth.PerLevel = 120;
+
+			Stats.CurrentHealth = 1000;
+
+			Stats._attackDamage.Base = 120;
+			Stats._attackDamage.PerLevel = 30;
+
+			Stats._expierenceOnDeath.Base = -40;
+
+			Stats._expierenceOnDeath.PerLevel = 60;
+			Stats._expierenceOnDeath.Bonus = 0;
+
+
 			B_Stats = Stats;
 			rotateSpeed = 2.5f;
-			health = 1000;
-			maxHealth = 1000;
+
 		}
 		
 		// Update is called once per frame
@@ -42,7 +53,10 @@ namespace SuddenlyEntertainment{
 
 			}
 		}
-
+		public void CallOnSpawn(){
+			if(onSpawn != null)
+				onSpawn(this, System.EventArgs.Empty);
+		}
 		[RPC]
 		void ClientAxis(string player, Vector3 AxisPress, float rotate){
 			if(Network.isServer){
@@ -59,6 +73,7 @@ namespace SuddenlyEntertainment{
 			if(Attacker == OwnerClient){
 				GameObject Proj = (Network.Instantiate(Projectile, transform.position + new Vector3(0, 2, 0), Quaternion.identity, 0) as GameObject);
 				ProjectileServer PS = (Proj.AddComponent<ProjectileServer>() as ProjectileServer);
+				PS.Damage = (float)Stats.AttackDamage;
 				Rigidbody PSR = Proj.AddComponent<Rigidbody>();
 				PSR.isKinematic = true;
 				PS.Target = Target;
@@ -80,6 +95,8 @@ namespace SuddenlyEntertainment{
 			float CurrentHealth = 0;
 			float Gold = 0;
 			float Expierence = 0;
+
+			bool Dead = false;
 			if(Stream.isReading){
 				Stream.Serialize(ref Pos);
 				transform.position = Pos;
@@ -95,6 +112,9 @@ namespace SuddenlyEntertainment{
 
 				Stream.Serialize(ref Expierence);
 				Stats.Expierence = Expierence;
+
+				Stream.Serialize (ref Dead);
+				isDead = Dead;
 			}else{
 				Pos = transform.position;
 				Stream.Serialize(ref Pos);
@@ -110,6 +130,9 @@ namespace SuddenlyEntertainment{
 
 				Expierence = (float)Stats.Expierence;
 				Stream.Serialize(ref Expierence);
+
+				Dead = isDead;
+				Stream.Serialize(ref Dead);
 			}
 		}
 

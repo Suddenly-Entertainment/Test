@@ -1,21 +1,23 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\XMLFileManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Other\ProjectileServer.cs">
     <Files>
-      <File FileName="Assets\Unit Scripts\Player Scripts\PlayerObjSetup.cs" Line="1" Column="1" />
-      <File FileName="Assets\Setup Scripts\ClientSetupInfo.cs" Line="26" Column="8" />
-      <File FileName="Assets\PropertyLoader.cs" Line="63" Column="37" />
-      <File FileName="Assets\XMLFileManager.cs" Line="11" Column="50" />
-      <File FileName="Assets\Stat Classes\ItemStats.cs" Line="1" Column="1" />
-      <File FileName="Assets\Property Classes\ItemProperties.cs" Line="1" Column="1" />
-      <File FileName="Assets\GameManager.cs" Line="6" Column="2" />
-      <File FileName="Assets\XML\Items\DefaultItem.xml" Line="9" Column="35" />
-      <File FileName="Assets\Setup Scripts\Startup.cs" Line="38" Column="1" />
+      <File FileName="Assets\Stat Classes\UnitStats.cs" Line="190" Column="22" />
+      <File FileName="Assets\Unit Scripts\Player Classes\PlayerScriptServer.cs" Line="62" Column="44" />
+      <File FileName="Assets\Other\OnUnitDeathArgsEvent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Other\ColliderManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Unit Scripts\ExpierenceManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Unit Scripts\Player Classes\PlayerScriptClient.cs" Line="24" Column="14" />
+      <File FileName="Assets\GameManager.cs" Line="17" Column="38" />
+      <File FileName="Assets\Setup Scripts\ServerSetup.cs" Line="105" Column="1" />
+      <File FileName="Assets\XMLFileManager.cs" Line="19" Column="1" />
+      <File FileName="Assets\Other\ProjectileServer.cs" Line="20" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Setup Scripts\Startup.cs" line="38" />
+      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Unit Scripts\Inventory.cs" line="39" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

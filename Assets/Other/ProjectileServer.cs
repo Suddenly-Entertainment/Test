@@ -5,9 +5,12 @@ public class ProjectileServer : MonoBehaviour {
 	public string Target;
 	public float Speed;
 
+		public float Damage;
+
 	// Use this for initialization
 	void Start () {
 		Speed = 1;
+			Damage = 200;
 	}
 	
 	// Update is called once per frame
@@ -18,7 +21,7 @@ public class ProjectileServer : MonoBehaviour {
 	void OnTriggerEnter(Collider collider){
 		if(collider.tag == "Player"){
 			PlayerScriptClient PSC = collider.GetComponent<PlayerScriptClient>();
-				PSC.health -= 100;
+				PSC.Stats.CurrentHealth += -Damage;
 			Network.Destroy(gameObject);
 		}
 

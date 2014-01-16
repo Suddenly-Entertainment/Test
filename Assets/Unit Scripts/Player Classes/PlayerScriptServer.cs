@@ -8,44 +8,71 @@ namespace SuddenlyEntertainment{
 		public PlayerScriptClient PSC;
 		public Inventory Inv;
 
+		public event System.EventHandler<OnUnitDeathEventArgs> onUnitDieNearby;
 
-		bool isDead = false;
-		float spawnTime = 0;
+
+		public float spawnTime = 0;
 		// Use this for initialization
 		void Start () {
 			PSC = GetComponent<PlayerScriptClient>();
 			Inv = GetComponent<Inventory>();
 			Inv.OnBuy += new System.EventHandler(RecalculateStats);
-			PSC.Stats.onDeath += new System.EventHandler(OnDeath);
+			PSC.Stats.onDeath += new System.EventHandler<OnUnitDeathEventArgs>(OnDeath);
 			PSC.onSpawn += new System.EventHandler(OnSpawn);
 			StartCoroutine("Generation");
 		}
 	
 		// Update is called once per frame
 		void Update () {
-			if(isDead){
+			if(PSC.isDead){
 				if(Time.time >= spawnTime){
-					if(PSC.onSpawn != null)
-						PSC.onSpawn(this);
+					PSC.CallOnSpawn();
 				}
 			}else{
 			
 			}
 		}
 
-		public void OnDeath(object sender, System.EventArgs e){
-			isDead = true;
+		public void OnDeath(object sender, OnUnitDeathEventArgs e){
+			PSC.isDead = true;
 			spawnTime = Time.time + 10;
+			ColliderManager CM = transform.GetComponentInChildren<ColliderManager>();
+			var Args = new OnUnitDeathEventArgs();
+
+			Args.Level = PSC.Stats.Level;
+			Args.expierenceGained = PSC.Stats.ExpierenceOnDeath;
+			Args.goldGained = PSC.Stats.GoldOnDeath;
+			Args.UnitName = MainManager.PlayerDict[PSC.OwnerClient].Nickname;
+
+			foreach(Collider c in CM.Colliders){
+				if(c.tag == "Player" && collider != c){
+					PlayerScriptServer PSS = c.GetComponent<PlayerScriptServer>();
+					PSS.UnitDiedNearby(this, Args);
+
+				}
+			}
 		}
+
+
 
 		public void OnSpawn(object sender, System.EventArgs e){
 			PSC.Stats.CurrentHealth = PSC.Stats.MaxHealth;
-			isDead = false;
+			PSC.isDead = false;
 			spawnTime = 0;
+			transform.position = new Vector3(0,1,0);
+			Transform sph = transform.FindChild("Sphere(clone)");
+			sph.position = transform.position;
 		}
 
+		public void UnitDiedNearby(object Obj, OnUnitDeathEventArgs e){
+			PSC.B_Stats.Expierence += e.expierenceGained;
+			PSC.B_Stats.Gold += e.goldGained;
+			RecalculateStats(this, System.EventArgs.Empty);
+			if(onUnitDieNearby != null)
+				onUnitDieNearby(Obj, e);
+		}
 
-		public void Kill(){
+		/*public void Kill(){
 			isDead = true;
 			spawnTime = Time.time + 10;
 			networkView.RPC ("Freeze", RPCMode.Others, PSC.OwnerClient);
@@ -56,7 +83,7 @@ namespace SuddenlyEntertainment{
 			isDead = true;
 			networkView.RPC ("Unfreeze", RPCMode.All, PSC.OwnerClient);
 			networkView.RPC ("SpectateSelf", MainManager.GUIDDict[PSC.OwnerClient]);
-		}
+		}*/
 
 
 		public void RecalculateStats(object sender, System.EventArgs e){
@@ -71,7 +98,7 @@ namespace SuddenlyEntertainment{
 
 			while(true){
 				UnitStats PStats = PSC.Stats;
-				if(!isDead){
+				if(!PSC.isDead){
 					PStats.CurrentHealth += PStats.HealthRegeneration;
 				}
 				PStats.Gold += PStats.GoldGeneration;
