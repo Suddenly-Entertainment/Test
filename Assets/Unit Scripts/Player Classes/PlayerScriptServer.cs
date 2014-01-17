@@ -59,8 +59,6 @@ namespace SuddenlyEntertainment{
 			PSC.isDead = false;
 			spawnTime = 0;
 			transform.position = new Vector3(0,1,0);
-			Transform sph = transform.FindChild("Sphere(clone)");
-			sph.position = transform.position;
 		}
 
 		public void UnitDiedNearby(object Obj, OnUnitDeathEventArgs e){
@@ -73,6 +71,7 @@ namespace SuddenlyEntertainment{
 
 		public void Attacked ( Damage damage )
 		{
+			float TotalDamage = 0;
 			float armorAfterPen, specialResistAfterPen;
 			float PhysicalDamage = 0;
 			float SpecialDamage = 0;
@@ -93,8 +92,14 @@ namespace SuddenlyEntertainment{
 				if(specialResistAfterPen < 0)
 					specialResistAfterPen = 0;
 
-				SpecialDamage = SpecialDamageAfterSpecialResist(specialResistAfterPen, damage.SpecialDamage);
+				SpecialDamage = PhysicalDamageAfterArmor(specialResistAfterPen, damage.SpecialDamage);
 			}
+
+			TotalDamage = PhysicalDamage + SpecialDamage + damage.TrueDamage;
+			if(PSC.Stats.CurrentHealth - TotalDamage <= 0){
+				PSC.Killer = damage.Attacker;
+			}
+			PSC.Stats.CurrentHealth -= TotalDamage;
 		}
 
 		public float PhysicalDamageAfterArmor(float Armor, float damage){
@@ -124,10 +129,9 @@ namespace SuddenlyEntertainment{
 
 
 		public void RecalculateStats(object sender, System.EventArgs e){
-			UnitStats stats = PSC.B_Stats;
 			UnitStats ItemStatChanges = Inv.GetTotalStatChange();
 
-			PSC.Stats = stats + ItemStatChanges;
+			PSC.Stats = UnitStats.Add(PSC.Stats, ItemStatChanges);
 			SendStatsToClient(PSC.Stats);
 		}
 

@@ -53,6 +53,7 @@ namespace SuddenlyEntertainment
 		}
 		public void SetupPassives (bool Unique)
 		{
+			/*
 			if (Unique) {
 				foreach(PassiveProperties Passive in Properties.UniquePassives){
 					//TODO: Code this.
@@ -61,7 +62,7 @@ namespace SuddenlyEntertainment
 				foreach(PassiveProperties Passive in Properties.Passives){
 					//TODO: Code this.
 				}
-			}
+			}*/
 		}
 		public void AddStatChanges(ref UnitStats Stats){
 			//TODO: Something here.

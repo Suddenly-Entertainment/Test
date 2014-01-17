@@ -1,24 +1,29 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Other\ProjectileServer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Unit Scripts\Player Classes\PlayerScriptServer.cs">
     <Files>
-      <File FileName="Assets\Stat Classes\UnitStats.cs" Line="190" Column="22" />
-      <File FileName="Assets\Unit Scripts\Player Classes\PlayerScriptServer.cs" Line="62" Column="44" />
+      <File FileName="Assets\Unit Scripts\Player Classes\PlayerScriptServer.cs" Line="102" Column="43" />
+      <File FileName="Assets\Stat Classes\UnitStats.cs" Line="293" Column="27" />
       <File FileName="Assets\Other\OnUnitDeathArgsEvent.cs" Line="1" Column="1" />
       <File FileName="Assets\Other\ColliderManager.cs" Line="1" Column="1" />
       <File FileName="Assets\Unit Scripts\ExpierenceManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Unit Scripts\Player Classes\PlayerScriptClient.cs" Line="24" Column="14" />
-      <File FileName="Assets\GameManager.cs" Line="17" Column="38" />
-      <File FileName="Assets\Setup Scripts\ServerSetup.cs" Line="105" Column="1" />
-      <File FileName="Assets\XMLFileManager.cs" Line="19" Column="1" />
-      <File FileName="Assets\Other\ProjectileServer.cs" Line="20" Column="4" />
+      <File FileName="Assets\Unit Scripts\Player Classes\PlayerScriptClient.cs" Line="106" Column="1" />
+      <File FileName="Assets\GameManager.cs" Line="25" Column="23" />
+      <File FileName="Assets\Setup Scripts\ServerSetup.cs" Line="113" Column="60" />
+      <File FileName="Assets\XMLFileManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Other\ProjectileServer.cs" Line="1" Column="1" />
+      <File FileName="Assets\Other\Damage.cs" Line="1" Column="1" />
+      <File FileName="Assets\Other\Item.cs" Line="1" Column="1" />
+      <File FileName="Assets\Unit Scripts\Player Classes\PlayerGUI.cs" Line="19" Column="6" />
+      <File FileName="Assets\Setup Scripts\Startup.cs" Line="38" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Setup Scripts\Startup.cs" line="38" />
       <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Unit Scripts\Inventory.cs" line="39" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="Assets\Unit Scripts\Player Classes\PlayerScriptClient.cs" line="106" offsetX="700" offsetY="1785" expression="transform" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

@@ -14,12 +14,15 @@ namespace SuddenlyEntertainment{
 
 		public GameObject TestCollider;
 
+		public bool AttackRange;
+
 		// This is called before Start, be careful of what you do here.  Errors abound.
 		void Awake(){
 			DontDestroyOnLoad(this);
 			MainManager.GM = gameObject;
 			Debug.Log (System.IO.Directory.GetCurrentDirectory());
 			XMLFileManager.SetupItems();
+			AttackRange = true;
 		}
 		// Use this for initialization
 		void Start () {

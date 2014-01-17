@@ -111,9 +111,6 @@ namespace SuddenlyEntertainment{
 				PlayerObjs.Add((playerobj as GameObject));
 				(playerobj as GameObject).networkView.RPC ("SetPlayer", RPCMode.All, clientInfo.Key, clientInfo.Value.Nickname);
 				clientInfo.Value.PlayerObj = (playerobj as GameObject);
-				GameObject sph = (Instantiate(GetComponent<GameManager>().TestCollider) as GameObject);
-				sph.transform.position = (playerobj as GameObject).transform.position;
-				sph.transform.parent = (playerobj as GameObject).transform;
 
 
 				networkView.RPC ("CreateCamera", MainManager.GUIDDict[clientInfo.Key]);

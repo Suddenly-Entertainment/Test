@@ -5,11 +5,13 @@
 //
 // 	Purpose			:	<${Purpose}>
 using System;
+using UnityEngine;
 
 namespace SuddenlyEntertainment
 {
 	public class Damage
 	{
+		public GameObject Attacker;
 		public string AttackerName;
 		public string AttackerTag;
 		public Teams AttackerTeam;

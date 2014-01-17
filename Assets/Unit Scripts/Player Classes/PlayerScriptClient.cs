@@ -19,35 +19,21 @@ namespace SuddenlyEntertainment{
 		public float rotateSpeed;
 
 		public GameObject Cam;
+		public GameObject Killer;
 
 		public bool isDead;
+		public float nextAttack;
 		// Use this for initialization
 		void Start () {
 			Stats = new UnitStats();
-			Stats._moveSpeed.Base = 10;
-			Stats._moveSpeed.PerLevel = 3;
-			Stats._maxHealth.Base = 1000;	
-			Stats._maxHealth.PerLevel = 120;
-
-			Stats.CurrentHealth = 1000;
-
-			Stats._attackDamage.Base = 120;
-			Stats._attackDamage.PerLevel = 30;
-
-			Stats._expierenceOnDeath.Base = -40;
-
-			Stats._expierenceOnDeath.PerLevel = 60;
-			Stats._expierenceOnDeath.Bonus = 0;
-
-
-			B_Stats = Stats;
 			rotateSpeed = 2.5f;
-
+			nextAttack = 0;
 		}
 		
 		// Update is called once per frame
 		void Update () {
 			if(Network.isClient){
+				if(txtMesh != null)txtMesh.text = beginTxt + hpTxt;
 				Vector3 AxisPress = new Vector3(Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));
 				networkView.RPC ("ClientAxis", RPCMode.Server, Network.player.guid, AxisPress, Input.GetAxis("Rotate"));
 
@@ -69,11 +55,23 @@ namespace SuddenlyEntertainment{
 
 		[RPC]
 		public void BasicAttack(string Attacker, string Target){
-			if(Attacker == Target || Network.isClient)return;
+			if(Attacker == Target || Network.isClient || Time.time < nextAttack)return;
 			if(Attacker == OwnerClient){
-				GameObject Proj = (Network.Instantiate(Projectile, transform.position + new Vector3(0, 2, 0), Quaternion.identity, 0) as GameObject);
+				GameObject TargetGO = MainManager.PlayerDict[Target].PlayerObj;
+				if(MainManager.GM.GetComponent<GameManager>().AttackRange){
+					Collider col = TargetGO.collider;
+					Ray ray = new Ray(transform.position, col.transform.position);
+					RaycastHit hitInfo;
+					if(!col.Raycast(ray, out hitInfo, (float)Stats.AttackRange))return;
+				}
+				Vector3 LookPos = TargetGO.transform.position;
+				LookPos.y = transform.position.y;
+				transform.LookAt(LookPos);
+				nextAttack = Time.time + (1/(float)Stats.AttackSpeed);
+
+				GameObject Proj = (Network.Instantiate(Projectile, transform.TransformPoint(Vector3.forward), Quaternion.identity, 0) as GameObject);
 				ProjectileServer PS = (Proj.AddComponent<ProjectileServer>() as ProjectileServer);
-				PS.Damage = (float)Stats.AttackDamage;
+				PS.damage = setupBasicAttackDamage();
 				Rigidbody PSR = Proj.AddComponent<Rigidbody>();
 				PSR.isKinematic = true;
 				PS.Target = Target;
@@ -81,10 +79,34 @@ namespace SuddenlyEntertainment{
 			}
 		}
 
+		private Damage setupBasicAttackDamage(){
+			Damage BAD = new Damage();
+			BAD.Attacker = gameObject;
+			BAD.AttackerName = MainManager.PlayerDict[OwnerClient].Nickname;
+			BAD.AttackerTag = "Player";
+			BAD.AttackerTeam = MainManager.PlayerDict[OwnerClient].Team;
+			BAD.AttackerGUID = OwnerClient;
+			BAD.isPlayer = true;
+
+			BAD.TrueDamage = 1;
+			BAD.PhysicalDamage = (float)Stats.AttackDamage;
+			BAD.ArmorPenFlat = (float)Stats.ArmorPenFlat;
+			BAD.ArmorPenPercent = (float)Stats.ArmorPenPercent;
+
+			return BAD;
+		}
+		public TextMesh txtMesh;
+		public string beginTxt;
+		public string hpTxt;
+
 		[RPC]
 		public void SetPlayer(string player, string nickname){
 			OwnerClient = player;
 			gameObject.name = nickname;
+			txtMesh = transform.FindChild("New Text").GetComponent<TextMesh>();
+			beginTxt = nickname + "\n";
+			hpTxt = Stats.CurrentHealth + " / " + Stats.MaxHealth + "\n";
+			txtMesh.text = beginTxt + hpTxt;
 			MainManager.PlayerDict[player].PlayerObj = gameObject;
 		}
 
@@ -140,6 +162,7 @@ namespace SuddenlyEntertainment{
 		public void RecieveStats(string Serial){
 			if(Network.isClient){
 				Stats = fastJSON.JSON.Instance.ToObject<UnitStats>(Serial);
+				hpTxt = Stats.CurrentHealth + " / " + Stats.MaxHealth + "\n";
 			}
 		}
 

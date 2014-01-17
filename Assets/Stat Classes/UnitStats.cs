@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
-
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SuddenlyEntertainment
 {
@@ -253,8 +254,8 @@ namespace SuddenlyEntertainment
 			double Hold = Value;
 			_totalExpierence += Value - _Expierence;
 
-			while(Hold - _expierenceCurve[Level] >= 0){
-				double levelDiff = Value - _expierenceCurve[Level];
+			while(Hold - ExpierenceCurve[Level] >= 0){
+				double levelDiff = Value - ExpierenceCurve[Level];
 
 				Hold = levelDiff;
 				++Level;
@@ -282,8 +283,15 @@ namespace SuddenlyEntertainment
 			_maxLevel = 18;
 			_Level.Base = 1;
 			_moveSpeed.Base = 20;
+		
 			_attackDamage.Base = 80;
 			_attackDamage.PerLevel = 10;
+
+			_attackSpeed.Base = 1;
+			_attackSpeed.PerLevel = _attackSpeed.SetPerLevelToPercentOfBase(0.05);
+
+			_attackRange.Base = 20;
+
 			_maxHealth.Base = 500;
 			_maxHealth.PerLevel = 50;
 			_healthRegeneration.Base = 2.4;
@@ -302,10 +310,39 @@ namespace SuddenlyEntertainment
 
 
 		}
+		public static UnitStats Add(UnitStats u1, UnitStats u2){
+			//TODO Add a way for them to add more then just the bonus together.
+			UnitStats Return = new UnitStats();
+			List<FieldInfo> Fields = GetListOfFields(Return);
+
+			foreach(FieldInfo field in Fields){
+				if(field.GetType() == typeof(Stat)){
+					double u1val = (field.GetValue(u1) as Stat).Bonus;
+					double u2val = (field.GetValue(u2) as Stat).Bonus;
+					Stat returnVal = (field.GetValue (Return) as Stat);
+					returnVal.Bonus = u1val + u2val;
+					field.SetValue(Return, returnVal);
+				}
+			}
+
+			return Return;
+		}
+		private static List<FieldInfo> GetListOfFields(object atype){
+			if (atype == null) return new List<FieldInfo>();
+			Type t = atype.GetType();
+			FieldInfo[] props = t.GetFields();
+			var dict = new List<FieldInfo>();
+			foreach (FieldInfo prp in props)
+			{
+				//object value = prp.GetValue(atype);
+				dict.Add(prp);
+			}
+			return dict;
+		}
 		public string GetString(){
 			string Result = "";
-
-
+			
+			
 			if(_moveSpeed){
 				Result += MoveSpeed + " Move Speed\n";
 			}

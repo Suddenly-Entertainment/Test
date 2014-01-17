@@ -10,7 +10,6 @@ public class ProjectileServer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Speed = 1;
-			Damage = 200;
 	}
 	
 	// Update is called once per frame
