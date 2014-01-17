@@ -6,7 +6,7 @@ namespace SuddenlyEntertainment
 	/// A class to store stats!
 	/// </summary>
 	[System.Serializable]
-	public class Stat
+	public struct Stat
 	{
 		/// <summary>
 		/// The name of the stat.
@@ -16,29 +16,22 @@ namespace SuddenlyEntertainment
 		/// <summary>
 		/// This is the base amount for this stat, when the level = 0;
 		/// </summary>
-		public double Base;
+		public float Base;
 
 		/// <summary>
 		/// This is for the linear bonus to this stat given for every level.
 		/// </summary>
-		public double PerLevel;
+		public float PerLevel;
 
 		/// <summary>
 		/// This is the bonus to the stat gotten through other means other than level.
 		/// </summary>
-		public double Bonus;
+		public float Bonus;
 
 		/// <summary>
-		/// Gets the current (total) value of the stat.
-		/// NOTE:  This is without level calculation (We don't know the level) add the level to the param
+		/// The penalty to the stats.
 		/// </summary>
-		/// <returns>
-		/// The Current Value of the Stat of type <see cref="{T}">.
-		/// </returns>
-		public virtual double GetCurrent ()
-		{
-			return Base + Bonus;
-		}
+		public float Penalty;
 
 		/// <summary>
 		/// Gets the current (total) value of the stat.
@@ -49,9 +42,9 @@ namespace SuddenlyEntertainment
 		/// <param name='Level'>
 		/// The Unit's Level.  This is necessary because individual stats do not hold level.  So to calculate it, the stat needs the level added.
 		/// </param>
-		public virtual double GetCurrent (int Level)
+		public virtual float GetCurrent (int Level = 0)
 		{	
-			return Base + Bonus + CurrentLevelBonus(Level);
+			return Base + Bonus - Penalty + CurrentLevelBonus(Level);
 		}
 		/// <summary>
 		/// Gets the Stat without bonus added to it.
@@ -62,9 +55,9 @@ namespace SuddenlyEntertainment
 		/// <param name='Level'>
 		/// Level.
 		/// </param>
-		public virtual double GetWithoutBonus (int Level)
+		public virtual float GetWithoutBonus (int Level)
 		{
-			return Base + (PerLevel * Level);
+			return Base + CurrentLevelBonus(Level);
 		}
 
 		/// <summary>
@@ -76,7 +69,7 @@ namespace SuddenlyEntertainment
 		/// <param name='Level'>
 		/// Level.
 		/// </param>
-		public virtual double CurrentLevelBonus (int Level)
+		public virtual float CurrentLevelBonus (int Level)
 		{
 			return PerLevel * Level;
 		}
@@ -87,6 +80,7 @@ namespace SuddenlyEntertainment
 			Result.Base = c1.Base + c2.Base;
 			Result.PerLevel = c1.PerLevel + c2.PerLevel;
 			Result.Bonus = c1.Bonus + c2.Bonus;
+			Result.Penalty = c1.Penalty + c2.Penalty;
 			return Result;
 		}
 
@@ -96,6 +90,7 @@ namespace SuddenlyEntertainment
 			Result.Base = c1.Base - c2.Base;
 			Result.PerLevel = c1.PerLevel - c2.PerLevel;
 			Result.Bonus = c1.Bonus - c2.Bonus;
+			Result.Penalty = c1.Penalty - c2.Penalty;
 			return Result;
 		}
 
@@ -126,44 +121,93 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double SetBonusToPercentOfBase (double Percent)
+		public float SetBonusToPercentOfBase (float Percent)
 		{
-			double bonus = Base * Percent;
+			float bonus = Base * Percent;
 			Bonus = bonus;
 			return Bonus;
 		}
-		public double SetPerLevelToPercentOfBase (double Percent)
+
+		public float SetBonusToPercentOfBase (float Percent)
 		{
-			double perlevel = Base * Percent;
+			float penalty = Base * Percent;
+			Penalty = penalty;
+			return penalty;
+		}
+
+		public float SetPerLevelToPercentOfBase (float Percent)
+		{
+			float perlevel = Base * Percent;
 			PerLevel = perlevel;
 			return PerLevel;
 		}
-		public double AddPercentOfBaseToBonus (double Percent)
+		/// <summary>
+		/// Adds the percent of base to bonus.
+		/// </summary>
+		/// <returns>
+		/// The new bonus.
+		/// </returns>
+		/// <param name='Percent'>
+		/// Percent
+		/// </param>
+		public float AddPercentOfBaseToBonus (float Percent)
 		{
-			double bonus = Base * Percent;
+			float bonus = Base * Percent;
 			Bonus += bonus;
 			return Bonus;
 		}
-		public double AddPercentOfBaseToPerLevel (double Percent)
+
+		public float AddPercentOfBaseToPenalty (float Percent)
 		{
-			double perlevel = Base * Percent;
+			float penalty = Base * Percent;
+			penalty += penalty;
+			return penalty;
+		}
+		public float AddPercentOfBaseToPerLevel (float Percent)
+		{
+			float perlevel = Base * Percent;
 			PerLevel += perlevel;
 			return PerLevel;
 		}
-		public Stat ()
+		/*public Stat ()
 		{
 			Name = "";
 			Base = 0;
 			PerLevel = 0;
 			Bonus = 0;
+		}*/
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SuddenlyEntertainment.Stat"/> class.
+		/// </summary>
+		/// <param name='name'>
+		/// Name.
+		/// </param>
+		/// <param name='baseV'>
+		/// The Base Value.
+		/// </param>
+		/// <param name='perLevel'>
+		/// The value added Per level.
+		/// </param>
+		/// <param name='bonus'>
+		/// The Bonus Value.
+		/// </param>
+		/// <param name='penalty'>
+		/// The Penalty value. 
+		/// Note:  This value is SUBTRACTED from the rest to get current, so a positive value DECREASES the total.
+		/// </param>
+		public Stat(string name = "", int baseV = 0, int perLevel = 0, int bonus = 0, int penalty = 0){
+			Name = name;
+			Base = baseV;
+			PerLevel = perLevel;
+			Bonus = bonus;
+			Penalty = penalty;
 		}
 
-
-		public Stat(string name){
-			Name = name;
-			Base = 0;
-			PerLevel = 0;
-			Bonus = 0;
+		public string getNiceString(int Level = 0){
+			string Return = "";
+			Return = Name + ": " + GetCurrent(Level: Level);
+			return Return;
 		}
 	}
 }

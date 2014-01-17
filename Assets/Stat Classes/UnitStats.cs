@@ -2,6 +2,8 @@ using System;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+
 
 namespace SuddenlyEntertainment
 {
@@ -23,7 +25,7 @@ namespace SuddenlyEntertainment
 
 		private Stat _maxHealth = new Stat("Maximum Health");
 		private Stat _healthRegeneration = new Stat("Health Regeneration");
-		private double _currentHealth;
+		private float _currentHealth;
 
 		private Stat _Armor = new Stat("Armor");
 		private Stat _specialResist = new Stat("Special Resist");
@@ -34,16 +36,16 @@ namespace SuddenlyEntertainment
 		private Stat _specialResistPenFlat = new Stat("Special Resist Penetration Flat");
 		private Stat _specialResistPenPercent = new Stat("Special Resist Penetration Percent");
 
-		private double _Expierence;
-		private double _totalExpierence;
-		public  double[] ExpierenceCurve;
+		private float _Expierence;
+		private float _totalExpierence;
+		public  float[] ExpierenceCurve;
 		private Stat _expierenceOnDeath = new Stat("Expierence Granted On Death");
 
 
 		private Stat _goldOnDeath = new Stat("Gold Granted On Death");
 
 
-		private double _Gold;
+		private float _Gold;
 
 		private Stat _goldGeneration = new Stat("Gold Generation");
 
@@ -53,7 +55,7 @@ namespace SuddenlyEntertainment
 			}
 			set {
 				if(value <= _maxLevel - 1)
-				_Level.Bonus = (double)value;
+				_Level.Bonus = (float)value;
 
 				if(onLevel != null)
 					onLevel(this, Level);
@@ -61,7 +63,7 @@ namespace SuddenlyEntertainment
 		}
 
 
-		public double MoveSpeed {
+		public float MoveSpeed {
 			get {
 				return _moveSpeed.GetCurrent ();
 			}
@@ -70,7 +72,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double B_MoveSpeed {
+		public float B_MoveSpeed {
 			get {
 				return _moveSpeed.Base;
 			}
@@ -80,7 +82,7 @@ namespace SuddenlyEntertainment
 		}
 
 
-		public double AttackDamage {
+		public float AttackDamage {
 			get {
 				return _attackDamage.GetCurrent(Level);
 			}
@@ -89,7 +91,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double AttackSpeed {
+		public float AttackSpeed {
 			get {
 				return _attackSpeed.GetCurrent (Level);
 			}
@@ -98,7 +100,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double AttackRange {
+		public float AttackRange {
 			get {
 				return _attackRange.GetCurrent (Level);
 			}
@@ -107,7 +109,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double MaxHealth {
+		public float MaxHealth {
 			get{
 				return _maxHealth.GetCurrent(Level);
 			}
@@ -116,7 +118,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double CurrentHealth {
+		public float CurrentHealth {
 			get{ return _currentHealth;}
 			set{
 				if(value <= 0) {
@@ -131,7 +133,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double Expierence {
+		public float Expierence {
 			get {
 				return _Expierence;
 			}
@@ -141,7 +143,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double GoldGeneration {
+		public float GoldGeneration {
 			get{
 				return _goldGeneration.GetCurrent(Level);
 			}
@@ -150,7 +152,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double GoldOnDeath {
+		public float GoldOnDeath {
 			get {
 				return _goldOnDeath.GetCurrent (Level);
 			}
@@ -159,7 +161,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double ExpierenceOnDeath {
+		public float ExpierenceOnDeath {
 			get {
 				return _expierenceOnDeath.GetCurrent (Level);
 			}
@@ -168,7 +170,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double Gold{
+		public float Gold{
 			get{
 				return _Gold;
 			}
@@ -180,7 +182,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double HealthRegeneration {
+		public float HealthRegeneration {
 			get {
 				return _healthRegeneration.GetCurrent (Level);
 			}
@@ -189,7 +191,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double Armor {
+		public float Armor {
 			get {
 				return _Armor.GetCurrent (Level);
 			}
@@ -198,7 +200,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double SpecialResist {
+		public float SpecialResist {
 			get {
 				return _specialResist.GetCurrent (Level);
 			}
@@ -207,7 +209,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double ArmorPenFlat {
+		public float ArmorPenFlat {
 			get {
 				return _armorPenFlat.GetCurrent (Level);
 			}
@@ -216,7 +218,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double ArmorPenPercent {
+		public float ArmorPenPercent {
 			get {
 				return _armorPenPercent.GetCurrent (Level);
 			}
@@ -225,7 +227,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double SpecialResistPenFlat {
+		public float SpecialResistPenFlat {
 			get {
 				return _specialResistPenFlat.GetCurrent (Level);
 			}
@@ -234,7 +236,7 @@ namespace SuddenlyEntertainment
 			}
 		}
 
-		public double SpecialResistPenPercent {
+		public float SpecialResistPenPercent {
 			get {
 				return _specialResistPenPercent.GetCurrent (Level);
 			}
@@ -249,13 +251,13 @@ namespace SuddenlyEntertainment
 		}
 
 
-		private double CheckAndSetLevel(double Value){
+		private float CheckAndSetLevel(float Value){
 			if(Level == MaxLevel)return 0;
-			double Hold = Value;
+			float Hold = Value;
 			_totalExpierence += Value - _Expierence;
 
 			while(Hold - ExpierenceCurve[Level] >= 0){
-				double levelDiff = Value - ExpierenceCurve[Level];
+				float levelDiff = Value - ExpierenceCurve[Level];
 
 				Hold = levelDiff;
 				++Level;
@@ -268,47 +270,53 @@ namespace SuddenlyEntertainment
 		}
 		
 
-		public UnitStats ()
+		public UnitStats( bool SetDefaultUnit = false )
 		{
-			_maxHealth.Base = 1000;
-			CurrentHealth = 1000;
-
 			_Expierence = 0;
 			_totalExpierence = 0;
-			ExpierenceCurve = new double[]{0, 280,380,480,580,680,780,880,980,1080,1180,1280,1380,1480,1580,1680,1780,1880};
-			_expierenceOnDeath.Base = 200;
-			_goldOnDeath.Base = 200;
-
-			//
-			_maxLevel = 18;
 			_Level.Base = 1;
-			_moveSpeed.Base = 20;
-		
-			_attackDamage.Base = 80;
-			_attackDamage.PerLevel = 10;
-
-			_attackSpeed.Base = 1;
-			_attackSpeed.PerLevel = _attackSpeed.SetPerLevelToPercentOfBase(0.05);
-
-			_attackRange.Base = 20;
-
-			_maxHealth.Base = 500;
-			_maxHealth.PerLevel = 50;
-			_healthRegeneration.Base = 2.4;
-			_healthRegeneration.PerLevel = .3;
-			_currentHealth = _maxHealth.GetCurrent();
-
-			_Armor.Base = 30;
-			_Armor.PerLevel = 3;
-
-			_specialResist.Base = 15;
-			_specialResist.PerLevel = 1;
-
+			_maxLevel = 18;
 			_Gold = 0;
+			ExpierenceCurve = new float[_maxLevel];
 
-			_goldGeneration.Base = 1.6;
+			if(SetDefaultUnit) {
+				_maxHealth.Base = 1000;
+				CurrentHealth = 1000;
 
 
+				ExpierenceCurve = new float[]{0, 280,380,480,580,680,780,880,980,1080,1180,1280,1380,1480,1580,1680,1780,1880};
+				_expierenceOnDeath.Base = 200;
+				_goldOnDeath.Base = 200;
+
+				//
+
+				_moveSpeed.Base = 20;
+		
+				_attackDamage.Base = 80;
+				_attackDamage.PerLevel = 10;
+
+				_attackSpeed.Base = 1;
+				_attackSpeed.PerLevel = _attackSpeed.SetPerLevelToPercentOfBase (0.05);
+
+				_attackRange.Base = 20;
+
+				_maxHealth.Base = 500;
+				_maxHealth.PerLevel = 50;
+				_healthRegeneration.Base = 2.4;
+				_healthRegeneration.PerLevel = .3;
+				_currentHealth = _maxHealth.GetCurrent ();
+
+				_Armor.Base = 30;
+				_Armor.PerLevel = 3;
+
+				_specialResist.Base = 15;
+				_specialResist.PerLevel = 1;
+
+
+
+				_goldGeneration.Base = 1.6;
+
+			}
 		}
 		public static UnitStats Add(UnitStats u1, UnitStats u2){
 			//TODO Add a way for them to add more then just the bonus together.
@@ -317,8 +325,8 @@ namespace SuddenlyEntertainment
 
 			foreach(FieldInfo field in Fields){
 				if(field.GetType() == typeof(Stat)){
-					double u1val = (field.GetValue(u1) as Stat).Bonus;
-					double u2val = (field.GetValue(u2) as Stat).Bonus;
+					float u1val = (field.GetValue(u1) as Stat).Bonus;
+					float u2val = (field.GetValue(u2) as Stat).Bonus;
 					Stat returnVal = (field.GetValue (Return) as Stat);
 					returnVal.Bonus = u1val + u2val;
 					field.SetValue(Return, returnVal);
@@ -339,6 +347,49 @@ namespace SuddenlyEntertainment
 			}
 			return dict;
 		}
+		private static List<PropertyInfo> GetListOfProperties(object atype){
+			if (atype == null) return new List<PropertyInfo>();
+			Type t = atype.GetType();
+			PropertyInfo[] props = t.GetProperties();
+			var dict = new List<PropertyInfo>();
+			foreach (PropertyInfo prp in props)
+			{
+				//object value = prp.GetValue(atype);
+				dict.Add(prp);
+			}
+			return dict;
+		}
+		public string GetNiceString(bool GetUnchangedValues = true){
+			var fieldlist = GetListOfFields(atype: UnitStats);
+			string Return = "";
+			if(GetUnchangedValues){
+				foreach (var item in fieldlist) {
+					if(item.GetValue(this) is Stat){
+						Return += (item.GetValue(this) as Stat).getNiceString(Level);
+					}
+				}
+			}else{
+				foreach (var item in fieldlist) {
+					if(item.GetValue(obj: this) is Stat){
+						Stat itemVal = (item.GetValue(obj: this) as Stat);
+						switch(item.Name){
+							case "_Level":
+								if(itemVal.Base != 1){
+									Return += itemVal.getNiceString(Level);
+								}
+								break;
+							default:
+								if(itemVal != new Stat(name: itemVal.Name)){
+									Return += itemVal.getNiceString(Level);
+								}
+								break;
+						}
+					}
+				}
+			}
+		}
+
+		public void UnitySerializeChanged
 		public string GetString(){
 			string Result = "";
 			
@@ -404,6 +455,52 @@ namespace SuddenlyEntertainment
 				return true;
 			} else {
 				return false;
+			}
+		}
+
+		public static void StreamSend(BitStream stream, UnitStats u1, UnitStats u2){
+			var fieldList = GetListOfFields(u1);
+
+			foreach (var item in fieldList) {
+				if(item.GetType() is Stat){
+					Stat s1 = (item.GetValue(u1) as Stat);
+					Stat s2 = (item.GetValue(u2) as Stat);
+					var statFieldList = GetListOfFields(s1);
+					foreach (var stat in statFieldList) {
+						float v1 = (float)stat.GetValue(s1);
+						float v2 = (float)stat.GetValue(s2);
+						if(!v1.Equals(v2)){
+							stream.Serialize(ref v2);
+						}
+					}
+				}else{
+						float v1 = (float)item.GetValue(u1);
+						float v2 = (float)item.GetValue(u2);
+						if(!v1.Equals(v2)){
+							stream.Serialize(ref v2);
+						}
+				}
+
+			}
+		}
+
+		public static void StreamRecieve ( BitStream stream, UnitStats stats )
+		{
+			var fieldList = GetListOfFields (stats);
+			foreach (var item in fieldList) {
+				if(item.GetType () is Stat) {
+					Stat s1 = (item.GetValue(stats) as Stat);
+					var statFieldList = GetListOfFields(s1);
+					foreach (var stat in statFieldList) {
+						float v2 = (float)stat.GetValue(s1);
+						stream.Serialize(ref v2);
+						stat.SetValue(s1, v2);
+					}
+				}else{
+					float v2 = (item.GetValue(stats) as float);
+					stream.Serialize(ref v2);
+					item.SetValue(stats, v2);
+				}
 			}
 		}
 

@@ -65,11 +65,11 @@ namespace SuddenlyEntertainment{
 
 		[RPC]
 		public void SyncPlayerDict(string Serial){
-			MainManager.PlayerDict = fastJSON.JSON.Instance.ToObject<Dictionary<string, ClientSetupInfo> >(Serial);
+			MainManager.PlayerDict = fastJSON.JSON.Instance.ToObject<Dictionary<string, ClientSetupInfo> >(MainManager.Decompress(Serial));
 		}
 		[RPC]
 		public void SyncItems(string Serial){
-			XMLFileManager.Items = fastJSON.JSON.Instance.ToObject<Dictionary<string, ItemProperties> >(Serial);
+			XMLFileManager.Items = fastJSON.JSON.Instance.ToObject<Dictionary<string, ItemProperties> >(MainManager.Decompress(Serial));
 		}
 	}
 }

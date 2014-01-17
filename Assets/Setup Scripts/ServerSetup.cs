@@ -101,8 +101,8 @@ namespace SuddenlyEntertainment{
 			//PlayerObj2.GetComponent<PlayerObjSetup>().OwnerClient = clientInfo.Key;
 			//PlayerObj2.AddComponent<PlayerScriptClient>();
 			//PlayerObj2.networkView.observed = PlayerObj.GetComponent<PlayerScriptClient>();
-			networkView.RPC ("SyncPlayerDict", RPCMode.OthersBuffered, fastJSON.JSON.Instance.ToJSON(MainManager.PlayerDict));
-			networkView.RPC ("SyncItems", RPCMode.OthersBuffered, fastJSON.JSON.Instance.ToJSON(XMLFileManager.Items));
+			networkView.RPC ("SyncPlayerDict", RPCMode.OthersBuffered, MainManager.Compress(fastJSON.JSON.Instance.ToJSON(MainManager.PlayerDict)));
+			networkView.RPC ("SyncItems", RPCMode.OthersBuffered, MainManager.Compress(fastJSON.JSON.Instance.ToJSON(XMLFileManager.Items)));
 			foreach(KeyValuePair<string, ClientSetupInfo> clientInfo in MainManager.PlayerDict){
 				Debug.Log (JSON.Instance.Beautify(JSON.Instance.ToJSON(clientInfo)));
 

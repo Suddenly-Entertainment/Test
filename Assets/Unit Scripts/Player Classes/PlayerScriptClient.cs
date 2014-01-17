@@ -14,6 +14,7 @@ namespace SuddenlyEntertainment{
 
 		public GameObject Projectile;
 		public UnitStats B_Stats;
+
 		public UnitStats Stats;
 
 		public float rotateSpeed;
@@ -25,7 +26,9 @@ namespace SuddenlyEntertainment{
 		public float nextAttack;
 		// Use this for initialization
 		void Start () {
-			Stats = new UnitStats();
+			Stats = new UnitStats(true);
+			B_Stats = Stats;
+
 			rotateSpeed = 2.5f;
 			nextAttack = 0;
 		}
@@ -126,14 +129,16 @@ namespace SuddenlyEntertainment{
 				Stream.Serialize(ref Rot);
 				transform.rotation = Rot;
 
-				Stream.Serialize(ref CurrentHealth);
+				/*Stream.Serialize(ref CurrentHealth);
 				Stats.CurrentHealth = CurrentHealth;
 
 				Stream.Serialize(ref Gold);
 				Stats.Gold = Gold;
 
 				Stream.Serialize(ref Expierence);
-				Stats.Expierence = Expierence;
+				Stats.Expierence = Expierence;*/
+
+				UnitStats.StreamRecieve(stream: Stream, stats: Stats);
 
 				Stream.Serialize (ref Dead);
 				isDead = Dead;
@@ -144,17 +149,20 @@ namespace SuddenlyEntertainment{
 				Rot = transform.rotation;
 				Stream.Serialize(ref Rot);
 
-				CurrentHealth = (float)Stats.CurrentHealth;
+				/*CurrentHealth = (float)Stats.CurrentHealth;
 				Stream.Serialize(ref CurrentHealth);
 
 				Gold = (float)Stats.Gold;
 				Stream.Serialize(ref Gold);
 
 				Expierence = (float)Stats.Expierence;
-				Stream.Serialize(ref Expierence);
+				Stream.Serialize(ref Expierence);*/
 
 				Dead = isDead;
 				Stream.Serialize(ref Dead);
+
+				UnitStats.StreamSend(stream: Stream, u1: B_Stats, u2: Stats);
+				B_Stats = Stats;
 			}
 		}
 

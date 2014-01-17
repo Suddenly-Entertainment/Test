@@ -132,7 +132,7 @@ namespace SuddenlyEntertainment{
 			UnitStats ItemStatChanges = Inv.GetTotalStatChange();
 
 			PSC.Stats = UnitStats.Add(PSC.Stats, ItemStatChanges);
-			SendStatsToClient(PSC.Stats);
+			//SendStatsToClient(PSC.Stats);
 		}
 
 		private IEnumerator Generation(){
