@@ -476,10 +476,12 @@ namespace SuddenlyEntertainment
 					Stat s2 = (item.GetValue(u2) as Stat);
 					var statFieldList = GetListOfFields(s1);
 					foreach (var stat in statFieldList) {
+						if(stat.GetType() = typeof(float){
 						float v1 = (float)stat.GetValue(s1);
 						float v2 = (float)stat.GetValue(s2);
 						if(!v1.Equals(v2)){
 							stream.Serialize(ref v2);
+						}
 						}
 					}
 				}else if(item.GetValue(u1).GetType() == typeof(float)){
