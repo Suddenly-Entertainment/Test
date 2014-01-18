@@ -1,19 +1,44 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Unit Scripts\Player Classes\PlayerGUI.cs">
     <Files>
-      <File FileName="Assets\Unit Scripts\Player Classes\PlayerGUI.cs" Line="21" Column="13" />
+      <File FileName="Assets\Unit Scripts\Player Classes\PlayerGUI.cs" Line="25" Column="1" />
       <File FileName="Assets\Stat Classes\UnitStats.cs" Line="1" Column="1" />
-      <File FileName="Assets\Unit Scripts\Player Classes\PlayerScriptClient.cs" Line="144" Column="5" />
+      <File FileName="Assets\Unit Scripts\Player Classes\PlayerScriptClient.cs" Line="166" Column="48" />
       <File FileName="Assets\Setup Scripts\ServerSetup.cs" Line="1" Column="1" />
       <File FileName="Assets\Setup Scripts\ClientSetup.cs" Line="1" Column="1" />
       <File FileName="Assets\GameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Unit Scripts\Player Classes\PlayerScriptServer.cs" Line="141" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Assembly-CSharp" expanded="True">
+            <Node name="Stat Classes" expanded="True" />
+            <Node name="Unit Scripts" expanded="True">
+              <Node name="Player Classes" expanded="True">
+                <Node name="PlayerGUI.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>Stats</Value>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Unit Scripts\Inventory.cs" line="39" />
       <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Stat Classes\UnitStats.cs" line="485" />
+      <Breakpoint hitAction="PrintExpression" traceExpression="{Stats}" file="C:\Users\Robo\Documents\GitHub\Test\Assets\Unit Scripts\Player Classes\PlayerScriptClient.cs" line="166" />
+      <Breakpoint file="C:\Users\Robo\Documents\GitHub\Test\Assets\Unit Scripts\Player Classes\PlayerGUI.cs" line="25" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>

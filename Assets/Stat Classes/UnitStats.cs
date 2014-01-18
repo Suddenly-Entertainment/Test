@@ -16,38 +16,38 @@ namespace SuddenlyEntertainment
 	{
 		public event onLevels onLevel;
 		public event EventHandler<OnUnitDeathEventArgs> onDeath;
-		private Stat _Level = new Stat("Unit Level");
-		private int _maxLevel;
-		private Stat _moveSpeed = new Stat("Movement Speed");
-		private Stat _attackDamage = new Stat("Basic Attack Damage");
-		private Stat _attackSpeed = new Stat("Basic Attack Speed");
-		private Stat _attackRange = new Stat("Basic Attack Range");
+		public Stat _Level = new Stat("Unit Level");
+		public int _maxLevel;
+		public Stat _moveSpeed = new Stat("Movement Speed");
+		public Stat _attackDamage = new Stat("Basic Attack Damage");
+		public Stat _attackSpeed = new Stat("Basic Attack Speed");
+		public Stat _attackRange = new Stat("Basic Attack Range");
 
-		private Stat _maxHealth = new Stat("Maximum Health");
-		private Stat _healthRegeneration = new Stat("Health Regeneration");
-		private float _currentHealth;
+		public Stat _maxHealth = new Stat("Maximum Health");
+		public Stat _healthRegeneration = new Stat("Health Regeneration");
+		public float _currentHealth;
 
-		private Stat _Armor = new Stat("Armor");
-		private Stat _specialResist = new Stat("Special Resist");
+		public Stat _Armor = new Stat("Armor");
+		public Stat _specialResist = new Stat("Special Resist");
 
-		private Stat _armorPenFlat = new Stat("Armor Penetration Flat");
-		private Stat _armorPenPercent = new Stat("Armor Penetration Percent");
+		public Stat _armorPenFlat = new Stat("Armor Penetration Flat");
+		public Stat _armorPenPercent = new Stat("Armor Penetration Percent");
 
-		private Stat _specialResistPenFlat = new Stat("Special Resist Penetration Flat");
-		private Stat _specialResistPenPercent = new Stat("Special Resist Penetration Percent");
+		public Stat _specialResistPenFlat = new Stat("Special Resist Penetration Flat");
+		public Stat _specialResistPenPercent = new Stat("Special Resist Penetration Percent");
 
-		private float _Expierence;
-		private float _totalExpierence;
+		public float _Expierence;
+		public float _totalExpierence;
 		public  float[] ExpierenceCurve;
-		private Stat _expierenceOnDeath = new Stat("Expierence Granted On Death");
+		public Stat _expierenceOnDeath = new Stat("Expierence Granted On Death");
 
 
-		private Stat _goldOnDeath = new Stat("Gold Granted On Death");
+		public Stat _goldOnDeath = new Stat("Gold Granted On Death");
 
 
-		private float _Gold;
+		public float _Gold;
 
-		private Stat _goldGeneration = new Stat("Gold Generation");
+		public Stat _goldGeneration = new Stat("Gold Generation");
 
 		public int Level {
 			get {
@@ -251,7 +251,7 @@ namespace SuddenlyEntertainment
 		}
 
 
-		private float CheckAndSetLevel(float Value){
+		public float CheckAndSetLevel(float Value){
 			if(Level == MaxLevel)return 0;
 			float Hold = Value;
 			_totalExpierence += Value - _Expierence;
@@ -343,9 +343,10 @@ namespace SuddenlyEntertainment
 
 			return Return;
 		}
-		private static List<FieldInfo> GetListOfFields(object atype){
+		public static List<FieldInfo> GetListOfFields(object atype){
 			if (atype == null) return new List<FieldInfo>();
 			Type t = atype.GetType();
+			var flb = BindingFlags.Instance & BindingFlags.NonPublic;
 			FieldInfo[] props = t.GetFields();
 			var dict = new List<FieldInfo>();
 			foreach (FieldInfo prp in props)
@@ -355,7 +356,7 @@ namespace SuddenlyEntertainment
 			}
 			return dict;
 		}
-		private static List<PropertyInfo> GetListOfProperties(object atype){
+		public static List<PropertyInfo> GetListOfProperties(object atype){
 			if (atype == null) return new List<PropertyInfo>();
 			Type t = atype.GetType();
 			PropertyInfo[] props = t.GetProperties();
@@ -368,7 +369,7 @@ namespace SuddenlyEntertainment
 			return dict;
 		}
 		public string GetNiceString(bool GetUnchangedValues){
-			var fieldlist = GetListOfFields(typeof(UnitStats));
+			var fieldlist = GetListOfFields(this);
 			string Return = "";
 			if(GetUnchangedValues){
 				foreach (var item in fieldlist) {
@@ -500,9 +501,11 @@ namespace SuddenlyEntertainment
 					Stat s1 = (item.GetValue(stats) as Stat);
 					var statFieldList = GetListOfFields(s1);
 					foreach (var stat in statFieldList) {
-						float v2 = (float)stat.GetValue(s1);
-						stream.Serialize(ref v2);
-						stat.SetValue(s1, v2);
+						if(stat.GetType() == typeof(float)){
+							float v2 = (float)stat.GetValue(s1);
+							stream.Serialize(ref v2);
+							stat.SetValue(s1, v2);
+						}
 					}
 				}else if(item.GetValue(stats).GetType() == typeof(float)){
 					float v2 = (float)(item.GetValue(stats));

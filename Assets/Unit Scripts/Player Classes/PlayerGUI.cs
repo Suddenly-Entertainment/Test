@@ -19,22 +19,9 @@ namespace SuddenlyEntertainment
 		}
 		public Vector2 scrollPosition;
 		void OnGUI(){
-			GUILayout.BeginArea (new Rect (0, Screen.height-50, Screen.width, 50));
-			scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-			GUILayout.BeginVertical ();
-
-			GUILayout.BeginHorizontal ();
-
-			GUILayout.Label(PSC.Stats.GetNiceString(true));
-			GUILayout.FlexibleSpace ();
-			GUILayout.EndHorizontal ();
-
-
-			GUILayout.FlexibleSpace ();
-			GUILayout.EndVertical ();
-
-			GUILayout.EndScrollView();
-			GUILayout.FlexibleSpace ();
+			GUILayout.BeginArea (new Rect (0, 50, Screen.width, 50));
+			string LOLK = PSC.Stats.GetNiceString(true);
+			GUILayout.Label(LOLK);
 			GUILayout.EndArea ();
 		}
 	}
