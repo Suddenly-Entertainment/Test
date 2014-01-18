@@ -6,7 +6,7 @@ namespace SuddenlyEntertainment
 	/// A class to store stats!
 	/// </summary>
 	[System.Serializable]
-	public struct Stat
+	public class Stat
 	{
 		/// <summary>
 		/// The name of the stat.
@@ -33,6 +33,11 @@ namespace SuddenlyEntertainment
 		/// </summary>
 		public float Penalty;
 
+		public virtual float GetCurrent()
+		{
+			return Base + Bonus - Penalty;
+		}
+
 		/// <summary>
 		/// Gets the current (total) value of the stat.
 		/// </summary>
@@ -42,7 +47,7 @@ namespace SuddenlyEntertainment
 		/// <param name='Level'>
 		/// The Unit's Level.  This is necessary because individual stats do not hold level.  So to calculate it, the stat needs the level added.
 		/// </param>
-		public virtual float GetCurrent (int Level = 0)
+		public virtual float GetCurrent (int Level)
 		{	
 			return Base + Bonus - Penalty + CurrentLevelBonus(Level);
 		}
@@ -128,7 +133,7 @@ namespace SuddenlyEntertainment
 			return Bonus;
 		}
 
-		public float SetBonusToPercentOfBase (float Percent)
+		public float SetPenaltyToPercentOfBase (float Percent)
 		{
 			float penalty = Base * Percent;
 			Penalty = penalty;
@@ -169,14 +174,42 @@ namespace SuddenlyEntertainment
 			PerLevel += perlevel;
 			return PerLevel;
 		}
-		/*public Stat ()
+		public Stat ()
 		{
 			Name = "";
 			Base = 0;
 			PerLevel = 0;
 			Bonus = 0;
-		}*/
-
+			Penalty = 0;
+		}
+		public Stat(string name){
+			Name = name;
+			Base = 0;
+			PerLevel = 0;
+			Bonus = 0;
+			Penalty = 0;
+		}
+		public Stat(string name, float baseV){
+			Name = name;
+			Base = baseV;
+			PerLevel = 0;
+			Bonus = 0;
+			Penalty = 0;
+		}
+		public Stat(string name, float baseV, float perLevel){
+			Name = name;
+			Base = baseV;
+			PerLevel = perLevel;
+			Bonus = 0;
+			Penalty = 0;
+		}
+		public Stat(string name, float baseV, float perLevel, float bonus){
+			Name = name;
+			Base = baseV;
+			PerLevel = perLevel;
+			Bonus = bonus;
+			Penalty = 0;
+		}
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SuddenlyEntertainment.Stat"/> class.
 		/// </summary>
@@ -196,17 +229,21 @@ namespace SuddenlyEntertainment
 		/// The Penalty value. 
 		/// Note:  This value is SUBTRACTED from the rest to get current, so a positive value DECREASES the total.
 		/// </param>
-		public Stat(string name = "", int baseV = 0, int perLevel = 0, int bonus = 0, int penalty = 0){
+		public Stat(string name, float baseV, float perLevel, float bonus, float penalty){
 			Name = name;
 			Base = baseV;
 			PerLevel = perLevel;
 			Bonus = bonus;
 			Penalty = penalty;
 		}
-
-		public string getNiceString(int Level = 0){
+		public string getNiceString(){
 			string Return = "";
-			Return = Name + ": " + GetCurrent(Level: Level);
+			Return = Name + ": " + GetCurrent();
+			return Return;
+		}
+		public string getNiceString(int Level){
+			string Return = "";
+			Return = Name + ": " + GetCurrent(Level);
 			return Return;
 		}
 	}

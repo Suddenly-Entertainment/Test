@@ -11,8 +11,8 @@ namespace SuddenlyEntertainment
 	public class OnUnitDeathEventArgs : EventArgs
 	{
 		public string UnitName;
-		public double goldGained;
-		public double expierenceGained;
+		public float goldGained;
+		public float expierenceGained;
 		public int Level;
 	}
 }

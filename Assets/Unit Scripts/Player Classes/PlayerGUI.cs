@@ -18,9 +18,9 @@ namespace SuddenlyEntertainment
 
 		}
 		public Vector2 scrollPosition;
-		void OnGui(){
+		void OnGUI(){
 			GUILayout.BeginArea (new Rect (0, Screen.height-50, Screen.width, 50));
-			scrollPosition = GUILayout.BeginScrollView(scrollPosition: scrollPosition);
+			scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 			GUILayout.BeginVertical ();
 
 			GUILayout.BeginHorizontal ();

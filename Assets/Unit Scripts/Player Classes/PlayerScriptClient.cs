@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace SuddenlyEntertainment{
+
 	public class PlayerScriptClient : MonoBehaviour {
 
 		public event EventHandler onSpawn;
@@ -106,6 +107,7 @@ namespace SuddenlyEntertainment{
 		public void SetPlayer(string player, string nickname){
 			OwnerClient = player;
 			gameObject.name = nickname;
+			gameObject.AddComponent<PlayerGUI>();
 			txtMesh = transform.FindChild("New Text").GetComponent<TextMesh>();
 			beginTxt = nickname + "\n";
 			hpTxt = Stats.CurrentHealth + " / " + Stats.MaxHealth + "\n";
@@ -117,9 +119,9 @@ namespace SuddenlyEntertainment{
 			Vector3 Pos = Vector3.zero;
 			Quaternion Rot = Quaternion.identity;
 
-			float CurrentHealth = 0;
-			float Gold = 0;
-			float Expierence = 0;
+			//float CurrentHealth = 0;
+			//float Gold = 0;
+			//float Expierence = 0;
 
 			bool Dead = false;
 			if(Stream.isReading){
@@ -138,7 +140,7 @@ namespace SuddenlyEntertainment{
 				Stream.Serialize(ref Expierence);
 				Stats.Expierence = Expierence;*/
 
-				UnitStats.StreamRecieve(stream: Stream, stats: Stats);
+				UnitStats.StreamRecieve(Stream, Stats);
 
 				Stream.Serialize (ref Dead);
 				isDead = Dead;
@@ -161,7 +163,7 @@ namespace SuddenlyEntertainment{
 				Dead = isDead;
 				Stream.Serialize(ref Dead);
 
-				UnitStats.StreamSend(stream: Stream, u1: B_Stats, u2: Stats);
+				UnitStats.StreamSend(Stream, B_Stats, Stats);
 				B_Stats = Stats;
 			}
 		}

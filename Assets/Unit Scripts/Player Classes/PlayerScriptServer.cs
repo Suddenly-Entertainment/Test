@@ -50,8 +50,8 @@ namespace SuddenlyEntertainment{
 				}
 			}
 		}
-		public double CalcExpGivenOnDeath(int Level){
-			return PSC.Stats.ExpierenceCurve[Level] * 0.75;
+		public float CalcExpGivenOnDeath(int Level){
+			return PSC.Stats.ExpierenceCurve[Level] * 0.75f;
 		}
 
 		public void OnSpawn(object sender, System.EventArgs e){

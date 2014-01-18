@@ -269,8 +269,16 @@ namespace SuddenlyEntertainment
 			return Hold;
 		}
 		
-
-		public UnitStats( bool SetDefaultUnit = false )
+		public UnitStats()
+		{
+			_Expierence = 0;
+			_totalExpierence = 0;
+			_Level.Base = 1;
+			_maxLevel = 18;
+			_Gold = 0;
+			ExpierenceCurve = new float[_maxLevel];
+		}
+		public UnitStats(bool SetDefaultUnit)
 		{
 			_Expierence = 0;
 			_totalExpierence = 0;
@@ -280,46 +288,46 @@ namespace SuddenlyEntertainment
 			ExpierenceCurve = new float[_maxLevel];
 
 			if(SetDefaultUnit) {
-				_maxHealth.Base = 1000;
-				CurrentHealth = 1000;
+				_maxHealth.Base = 1000f;
+				CurrentHealth = 1000f;
 
 
 				ExpierenceCurve = new float[]{0, 280,380,480,580,680,780,880,980,1080,1180,1280,1380,1480,1580,1680,1780,1880};
-				_expierenceOnDeath.Base = 200;
-				_goldOnDeath.Base = 200;
+				_expierenceOnDeath.Base = 200f;
+				_goldOnDeath.Base = 200f;
 
 				//
 
-				_moveSpeed.Base = 20;
+				_moveSpeed.Base = 20f;
 		
-				_attackDamage.Base = 80;
-				_attackDamage.PerLevel = 10;
+				_attackDamage.Base = 80f;
+				_attackDamage.PerLevel = 10f;
 
-				_attackSpeed.Base = 1;
-				_attackSpeed.PerLevel = _attackSpeed.SetPerLevelToPercentOfBase (0.05);
+				_attackSpeed.Base = 1f;
+				_attackSpeed.PerLevel = _attackSpeed.SetPerLevelToPercentOfBase (0.05f);
 
-				_attackRange.Base = 20;
+				_attackRange.Base = 20f;
 
-				_maxHealth.Base = 500;
-				_maxHealth.PerLevel = 50;
-				_healthRegeneration.Base = 2.4;
-				_healthRegeneration.PerLevel = .3;
+				_maxHealth.Base = 500f;
+				_maxHealth.PerLevel = 50f;
+				_healthRegeneration.Base = 2.4f;
+				_healthRegeneration.PerLevel = .3f;
 				_currentHealth = _maxHealth.GetCurrent ();
 
-				_Armor.Base = 30;
-				_Armor.PerLevel = 3;
+				_Armor.Base = 30f;
+				_Armor.PerLevel = 3f;
 
-				_specialResist.Base = 15;
-				_specialResist.PerLevel = 1;
+				_specialResist.Base = 15f;
+				_specialResist.PerLevel = 1f;
 
 
 
-				_goldGeneration.Base = 1.6;
+				_goldGeneration.Base = 1.6f;
 
 			}
 		}
 		public static UnitStats Add(UnitStats u1, UnitStats u2){
-			//TODO Add a way for them to add more then just the bonus together.
+			//TODO: Add a way for them to add more then just the bonus together.
 			UnitStats Return = new UnitStats();
 			List<FieldInfo> Fields = GetListOfFields(Return);
 
@@ -359,8 +367,8 @@ namespace SuddenlyEntertainment
 			}
 			return dict;
 		}
-		public string GetNiceString(bool GetUnchangedValues = true){
-			var fieldlist = GetListOfFields(atype: UnitStats);
+		public string GetNiceString(bool GetUnchangedValues){
+			var fieldlist = GetListOfFields(typeof(UnitStats));
 			string Return = "";
 			if(GetUnchangedValues){
 				foreach (var item in fieldlist) {
@@ -370,8 +378,8 @@ namespace SuddenlyEntertainment
 				}
 			}else{
 				foreach (var item in fieldlist) {
-					if(item.GetValue(obj: this) is Stat){
-						Stat itemVal = (item.GetValue(obj: this) as Stat);
+					if(item.GetValue(this) is Stat){
+						Stat itemVal = (item.GetValue(this) as Stat);
 						switch(item.Name){
 							case "_Level":
 								if(itemVal.Base != 1){
@@ -379,7 +387,7 @@ namespace SuddenlyEntertainment
 								}
 								break;
 							default:
-								if(itemVal != new Stat(name: itemVal.Name)){
+								if(itemVal != new Stat(itemVal.Name)){
 									Return += itemVal.getNiceString(Level);
 								}
 								break;
@@ -387,9 +395,9 @@ namespace SuddenlyEntertainment
 					}
 				}
 			}
+			return Return;
 		}
 
-		public void UnitySerializeChanged
 		public string GetString(){
 			string Result = "";
 			
@@ -462,7 +470,7 @@ namespace SuddenlyEntertainment
 			var fieldList = GetListOfFields(u1);
 
 			foreach (var item in fieldList) {
-				if(item.GetType() is Stat){
+				if(item.GetValue(u1).GetType() == typeof(Stat)){
 					Stat s1 = (item.GetValue(u1) as Stat);
 					Stat s2 = (item.GetValue(u2) as Stat);
 					var statFieldList = GetListOfFields(s1);
@@ -473,7 +481,7 @@ namespace SuddenlyEntertainment
 							stream.Serialize(ref v2);
 						}
 					}
-				}else{
+				}else if(item.GetValue(u1).GetType() == typeof(float)){
 						float v1 = (float)item.GetValue(u1);
 						float v2 = (float)item.GetValue(u2);
 						if(!v1.Equals(v2)){
@@ -488,7 +496,7 @@ namespace SuddenlyEntertainment
 		{
 			var fieldList = GetListOfFields (stats);
 			foreach (var item in fieldList) {
-				if(item.GetType () is Stat) {
+				if(item.GetValue(stats).GetType () == typeof(Stat)) {
 					Stat s1 = (item.GetValue(stats) as Stat);
 					var statFieldList = GetListOfFields(s1);
 					foreach (var stat in statFieldList) {
@@ -496,8 +504,8 @@ namespace SuddenlyEntertainment
 						stream.Serialize(ref v2);
 						stat.SetValue(s1, v2);
 					}
-				}else{
-					float v2 = (item.GetValue(stats) as float);
+				}else if(item.GetValue(stats).GetType() == typeof(float)){
+					float v2 = (float)(item.GetValue(stats));
 					stream.Serialize(ref v2);
 					item.SetValue(stats, v2);
 				}

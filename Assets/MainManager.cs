@@ -30,7 +30,7 @@ namespace SuddenlyEntertainment{
 
 		public static string Compress(string s)
 		{
-		    var bytes = Encoding.Unicode.GetBytes(s);
+		    /*var bytes = Encoding.Unicode.GetBytes(s);
 		    using (var msi = new MemoryStream(bytes))
 		    using (var mso = new MemoryStream())
 		    {
@@ -39,12 +39,14 @@ namespace SuddenlyEntertainment{
 		            msi.CopyTo(gs);
 		        }
 		        return Convert.ToBase64String(mso.ToArray());
-		    }
+		    }*/
+			//TODO: Create good string to string compression, this one doesn't work cause unity doesn't support .Net 4
+			return s;
 		}
 		 
 		public static string Decompress(string s)
 		{
-		    var bytes = Convert.FromBase64String(s);
+		    /*var bytes = Convert.FromBase64String(s);
 		    using (var msi = new MemoryStream(bytes))
 		    using (var mso = new MemoryStream())
 		    {
@@ -53,7 +55,8 @@ namespace SuddenlyEntertainment{
 		            gs.CopyTo(mso);
 		        }
 		        return Encoding.Unicode.GetString(mso.ToArray());
-		    }
+		    }*/
+			return s;
 		}
 	}
 }
