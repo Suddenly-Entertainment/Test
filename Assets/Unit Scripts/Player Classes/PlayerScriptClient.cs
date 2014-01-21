@@ -40,7 +40,35 @@ namespace SuddenlyEntertainment{
 				if(txtMesh != null)txtMesh.text = beginTxt + hpTxt;
 				Vector3 AxisPress = new Vector3(Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));
 				networkView.RPC ("ClientAxis", RPCMode.Server, Network.player.guid, AxisPress, Input.GetAxis("Rotate"));
+				int Ability = 0;
+				if(Input.GetButtonUp ("Ability1"))
+					Ability = 1;
+				else if(Input.GetButtonUp ("Ability2"))
+					Ability = 2;
+				else if(Input.GetButtonUp ("Ability3"))
+					Ability = 3;
+				else if(Input.GetButtonUp ("Ability4"))
+					Ability = 4;
 
+				if(Ability != 0)
+					networkView.RPC ("UseAbility", RPCMode.Server, Network.player.guid, Ability);
+
+			}
+		}
+
+		[RPC]
+		public void UseAbility(string guid, int Ability){
+			switch(Ability){
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				default:
+					break;
 			}
 		}
 		public void CallOnSpawn(){
@@ -51,8 +79,10 @@ namespace SuddenlyEntertainment{
 		void ClientAxis(string player, Vector3 AxisPress, float rotate){
 			if(Network.isServer){
 				if(MainManager.PlayerDict[player].PlayerObj == gameObject){
-					gameObject.GetComponent<CharacterController>().SimpleMove(transform.TransformDirection(AxisPress * (float)Stats.MoveSpeed));
-					transform.Rotate(new Vector3(0, rotateSpeed*rotate,0));
+					if(!isDead){
+						gameObject.GetComponent<CharacterController>().SimpleMove(transform.TransformDirection((AxisPress) * ((float)Stats.MoveSpeed*Time.deltaTime)));
+						transform.Rotate(new Vector3(0, (rotateSpeed*Time.deltaTime)*rotate,0));
+					}
 				}
 			}
 		}
@@ -176,32 +206,30 @@ namespace SuddenlyEntertainment{
 			}
 		}
 
-		[RPC]
-		public void Freeze(string guid){
-			Cam.transform.parent = null;
-			GetComponent<MeshRenderer>().enabled = false;
-		}
-		[RPC]
-		public void Unfreeze(string guid){
-			Cam.transform.parent = transform;
-			GetComponent<MeshRenderer>().enabled = true;
-		}
 
 		[RPC]
-		public void SpectateOther(){
+		public void SpectateOther ()
+		{
 			GameObject spec = gameObject;
-			foreach(KeyValuePair< string, ClientSetupInfo > clientInfo in MainManager.PlayerDict){
-				if(clientInfo.Key != OwnerClient){
+			foreach (KeyValuePair< string, ClientSetupInfo > clientInfo in MainManager.PlayerDict) {
+				if(clientInfo.Key != OwnerClient && !clientInfo.Value.PlayerObj.GetComponent<PlayerScriptClient> ().isDead) {
 					spec = clientInfo.Value.PlayerObj;
 				}
 			}
-			Cam.transform.position = spec.transform.position + new Vector3(-5, 2, 0);
-			Cam.transform.parent = spec.transform;
+			if(spec != gameObject) {
+				Cam.transform.position = spec.transform.position;
+				Cam.transform.parent = spec.transform;
+				Cam.transform.position += new Vector3(-5, 2, 0);
+				Cam.transform.LookAt(spec.transform);
+			}
 		}
 		[RPC]
 		public void SpectateSelf(){
-			Cam.transform.position = transform.position + new Vector3(-5, 2, 0);
+
+			Cam.transform.position = transform.position;
 			Cam.transform.parent = transform;
+			Cam.transform.position += new Vector3(-5, 2, 0);
+			Cam.transform.LookAt(transform);
 		}
 	}
 }
