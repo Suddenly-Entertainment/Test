@@ -476,32 +476,6 @@ namespace SuddenlyEntertainment
 			return Return;
 		}
 
-		public static bool operator false (UnitStats c1)
-		{
-			if ((!c1._attackDamage) && (!c1._Level) && (!c1._moveSpeed) && (!c1._attackRange) && (!c1._attackSpeed)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public static bool operator true (UnitStats c1)
-		{
-			if (c1._attackDamage) {
-				return true;
-			} else if (c1._Level) {
-				return true;
-			} else if (c1._moveSpeed) {
-				return true;
-			} else if (c1._attackRange) {
-				return true;
-			} else if (c1._attackSpeed) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
 		public static void StreamSend(BitStream stream, UnitStats u1, UnitStats u2){
 			var fieldList = GetListOfFields(u1);
 
