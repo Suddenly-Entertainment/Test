@@ -2,11 +2,12 @@ using System;
 
 namespace SuddenlyEntertainment
 {
+	/// <summary>
+	/// Item properties.
+	/// </summary>
 	[System.Serializable]
-	public class ItemProperties
+	public class ItemProperties : Properties
 	{
-		public string Name;
-
 		public double Cost;
 
 		public string[] BuildsOutOf;
@@ -27,10 +28,12 @@ namespace SuddenlyEntertainment
 
 
 		public AbilityProperties ActiveProperties;
-
+		/// <summary>
+			/// Initializes a new instance of the <see cref="SuddenlyEntertainment.ItemProperties"/> class.
+		/// </summary>
 		public ItemProperties ()
 		{
-			Name = "TestName";
+			Name = "Item Properties";
 
 			Cost = 360;
 
@@ -49,22 +52,6 @@ namespace SuddenlyEntertainment
 
 
 			ActiveProperties = new AbilityProperties();
-		}
-	}
-
-	public class ProjectileProperties
-	{
-		public bool Targeted;
-		public float Range;
-		public float Damage;
-		public UnitType[] collideTags;
-
-		public ProjectileProperties()
-		{
-			Targeted = true;
-			Range = 600;
-			Damage = 100;
-			collideTags = new UnitType[]{UnitType.Nonstructure};
 		}
 	}
 }
