@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 namespace SuddenlyEntertainment{
@@ -20,7 +20,7 @@ namespace SuddenlyEntertainment{
 		// Update is called once per frame
 		void Update () {
 			if(GetComponent<PlayerScriptClient>().OwnerClient == Network.player.guid){
-				if(Input.GetAxis("ShopButton") == 1){
+				if(Input.GetButtonDown("ShopButton")){
 					ShopScreen = !ShopScreen;			
 				}
 			}
@@ -48,7 +48,7 @@ namespace SuddenlyEntertainment{
 
 				foreach(Item item in Inv){
 					if(item == null)continue;
-					GUILayout.Label(new GUIContent(item.Name, item.Properties.StatChanges.GetString()));
+					GUILayout.Label(new GUIContent(item.Name, item.properties.StatChanges.GetString()));
 
 				}
 
@@ -90,7 +90,7 @@ namespace SuddenlyEntertainment{
 
 			foreach(Item item in Inv){
 				if(item == null)continue;
-				Result += item.Properties.StatChanges;
+				Result = UnitStats.Add(Result, item.properties.StatChanges);
 			}
 
 			return Result;
