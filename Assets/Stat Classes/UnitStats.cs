@@ -460,20 +460,28 @@ namespace SuddenlyEntertainment
 		}
 		public static UnitStats operator +(UnitStats c1, UnitStats c2) 
 		{
-			UnitStats Return = new UnitStats();
+			/*UnitStats Return = new UnitStats();
 			Return._attackDamage = c1._attackDamage + c2._attackDamage;
 			Return._Level = c1._Level + c2._Level;
 			Return._moveSpeed = c1._moveSpeed + c2._moveSpeed;
-			return Return;
+			return Return;*/
+
+			throw new NotImplementedException();
+
+			//TODO: Rewrite this with better modularity.
 		}
 
 		public static UnitStats operator -(UnitStats c1, UnitStats c2)
 		{
-			UnitStats Return = new UnitStats();
+			/*UnitStats Return = new UnitStats();
 			Return._attackDamage = c1._attackDamage - c2._attackDamage;
 			Return._Level = c1._Level - c2._Level;
 			Return._moveSpeed = c1._moveSpeed - c2._moveSpeed;
-			return Return;
+			return Return;*/
+
+			throw new NotImplementedException();
+			
+			//TODO: Rewrite this with better modularity.
 		}
 
 		public static void StreamSend(BitStream stream, UnitStats u1, UnitStats u2){
