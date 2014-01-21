@@ -46,7 +46,7 @@ namespace SuddenlyEntertainment
 		      } 
 		      writer.Write(_data); 
 		      writer.Close(); 
-			Debug.Log("File written: "+ FilePath); 
+			//Debug.Log("File written: "+ FilePath); 
 		   }
 
 		  public static byte[] StringToUTF8ByteArray(string pXmlString) 
@@ -70,7 +70,7 @@ namespace SuddenlyEntertainment
 			string _info = r.ReadToEnd(); 
 		    r.Close(); 
 		      
-		    Debug.Log("File Read: "+ FilePath); 
+		    //Debug.Log("File Read: "+ FilePath); 
 			  return _info; 
 		   } 
 	}
