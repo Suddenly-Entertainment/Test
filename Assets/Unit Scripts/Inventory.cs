@@ -35,7 +35,7 @@ namespace SuddenlyEntertainment{
 				GUILayout.BeginHorizontal();
 
 				foreach(KeyValuePair<string, ItemProperties> item in XMLFileManager.Items){
-					if(GUILayout.Button(new GUIContent(item.Value.Name + ": "+ item.Value.Cost+"g", item.Value.StatChanges.GetString()))){
+					if(GUILayout.Button(new GUIContent(item.Value.Name + ": "+ item.Value.Cost+"g", item.Value.StatChanges.GetNiceString(false)))){
 						networkView.RPC ("RequestPurchase", RPCMode.Server, item.Value.Name);
 					}
 				}
@@ -48,7 +48,7 @@ namespace SuddenlyEntertainment{
 
 				foreach(Item item in Inv){
 					if(item == null)continue;
-					GUILayout.Label(new GUIContent(item.Name, item.properties.StatChanges.GetString()));
+					GUILayout.Label(new GUIContent(item.Name, item.properties.StatChanges.GetNiceString(false)));
 
 				}
 
