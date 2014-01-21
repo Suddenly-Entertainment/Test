@@ -5,19 +5,24 @@
 //
 // 	Purpose			:	<${Purpose}>
 using System;
+using UnityEngine;
 
 namespace SuddenlyEntertainment
 {
-	public class ChampionProperties
+	/// <summary>
+	/// Champion properties.
+	/// </summary>
+	public class ChampionProperties : UnitProperties
 	{
-		public UnitStats Stats;
-
-		public string Passive;
+		public string[] Effects;
 		public string[] AbilityNames;
 
-
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SuddenlyEntertainment.ChampionProperties"/> class.
+		/// </summary>
 		public ChampionProperties()
 		{
+
 		}
 	}
 }
