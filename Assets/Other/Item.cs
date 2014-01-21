@@ -3,15 +3,17 @@ using System;
 namespace SuddenlyEntertainment
 {
 	public delegate void UpSet();
-	public delegate void StatChangers(ref UnitStats Stats);
+	public delegate UnitStats StatChangers(UnitStats Stats);
 
 	public delegate void Collision(Collision collision);
 	public delegate void Triggers(int collider);
-
+	/// <summary>
+	/// Item.
+	/// </summary>
 	[System.Serializable]
 	public class Item
 	{
-		public ItemProperties Properties;
+		public ItemProperties properties;
 
 		public double Cost;
 
@@ -31,21 +33,21 @@ namespace SuddenlyEntertainment
 
 		public Item (ItemProperties Props)
 		{
-			Properties = Props;
+			properties = Props;
 
-			Name = Properties.Name;
-			Cost = Properties.Cost;
+			Name = properties.Name;
+			Cost = properties.Cost;
 
 			SetupDelegates();
 		}
 
 		public void SetupDelegates ()
 		{
-			if (Properties.hasStatChanges) Changes += new StatChangers(AddStatChanges);
+			if (properties.hasStatChanges) Changes += new StatChangers(AddStatChanges);
 
-			if(Properties.hasPassive) SetupPassives(false);
+			if(properties.hasPassive) SetupPassives(false);
 
-			if(Properties.hasUniquePassive) SetupPassives(true);
+			if(properties.hasUniquePassive) SetupPassives(true);
 
 
 
@@ -64,9 +66,10 @@ namespace SuddenlyEntertainment
 				}
 			}*/
 		}
-		public void AddStatChanges(ref UnitStats Stats){
-			//TODO: Something here.
-			Stats += Properties.StatChanges;
+		public UnitStats AddStatChanges(UnitStats Stats){
+			//TODO: Add some checks.
+			return UnitStats.Add(Stats, properties.StatChanges);
+
 		}
 
 
