@@ -410,6 +410,11 @@ namespace SuddenlyEntertainment
 				foreach (var item in fieldlist) {
 					if(item.GetValue(this) is Stat){
 						Return += (item.GetValue(this) as Stat).getNiceString(Level);
+					}else if(item.GetValue(this) is float){
+						float val = (float)item.GetValue(this);
+						string namePart = item.Name.Remove(0,1);
+						Return += namePart + ": "+ val + "\n";
+
 					}
 				}
 			}else{
