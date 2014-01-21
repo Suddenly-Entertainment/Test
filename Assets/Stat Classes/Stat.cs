@@ -238,12 +238,12 @@ namespace SuddenlyEntertainment
 		}
 		public string getNiceString(){
 			string Return = "";
-			Return = Name + ": " + GetCurrent();
+			Return = Name + ": " + GetCurrent() + "\n";
 			return Return;
 		}
 		public string getNiceString(int Level){
 			string Return = "";
-			Return = Name + ": " + GetCurrent(Level);
+			Return = Name + ": " + GetCurrent(Level) + "\n";
 			return Return;
 		}
 	}
