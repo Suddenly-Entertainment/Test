@@ -19,7 +19,7 @@ namespace SuddenlyEntertainment
 		}
 		public Vector2 scrollPosition;
 		void OnGUI(){
-			GUILayout.BeginArea (new Rect (0, 50, Screen.width, 50));
+			GUILayout.BeginArea (new Rect (0, Screen.height-100, Screen.width, 100));
 			string LOLK = PSC.Stats.GetNiceString(true);
 			GUILayout.Label(LOLK);
 			GUILayout.EndArea ();
