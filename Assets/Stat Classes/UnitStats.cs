@@ -434,30 +434,6 @@ namespace SuddenlyEntertainment
 			return Return;
 		}
 
-		public string GetString(){
-			string Result = "";
-			
-			
-			if(_moveSpeed){
-				Result += MoveSpeed + " Move Speed\n";
-			}
-			if(_attackDamage){
-				Result += AttackDamage + " Attack Damage\n";
-			}
-			if(_attackSpeed){
-				Result += AttackSpeed + " Attack Speed\n";
-			}
-
-			if(_attackRange){
-				Result += AttackRange + " Attack Range\n";
-			}
-
-			if(_Level){
-				Result += Level + " Level(s)\n";
-			}
-
-			return Result;
-		}
 		public static UnitStats operator +(UnitStats c1, UnitStats c2) 
 		{
 			/*UnitStats Return = new UnitStats();
