@@ -49,6 +49,15 @@ namespace SuddenlyEntertainment
 
 		public Stat _goldGeneration = new Stat("Gold Generation");
 
+		public Stat _lifeSteal = new Stat("Life Steal");
+		public Stat _spellVamp = new Stat("Spell Vamp");
+
+		public Stat _cooldownReduction = new Stat("Cooldown Reduction");
+
+		public Stat _criticalStrikeChance = new Stat("Critical Strike Chance");
+
+		public Stat _evadeChance = new Stat("Evade Chance");
+
 		public int Level {
 			get {
 				return (int)_Level.GetCurrent();
@@ -249,7 +258,33 @@ namespace SuddenlyEntertainment
 			get{ return _maxLevel; }
 			set{ _maxLevel = value;}
 		}
+	
+		public float LifeSteal {
+			get {
+				return _lifeSteal.GetCurrent(Level);
+			}
+			set{
+				_lifeSteal.Bonus = value;
+			}
+		}
 
+		public float SpellVamp{
+			get{
+				return _spellVamp.GetCurrent(Level);
+			}
+			set{
+				_spellVamp.Bonus = value;
+			}
+		}
+
+		public float CooldownReduction{
+			get{
+				return _cooldownReduction.GetCurrent(Level);
+			}
+			set{
+				_cooldownReduction.Bonus = value;
+			}
+		}
 
 		public float CheckAndSetLevel(float Value){
 			if(Level == MaxLevel)return 0;
@@ -268,7 +303,7 @@ namespace SuddenlyEntertainment
 			}
 			return Hold;
 		}
-		
+
 		public UnitStats()
 		{
 			_Expierence = 0;
