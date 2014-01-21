@@ -21,7 +21,7 @@ namespace SuddenlyEntertainment{
 			DontDestroyOnLoad(this);
 			MainManager.GM = gameObject;
 			Debug.Log (System.IO.Directory.GetCurrentDirectory());
-			XMLFileManager.SetupItems();
+			XMLFileManager.Setup();
 			AttackRange = true;
 		}
 		// Use this for initialization
