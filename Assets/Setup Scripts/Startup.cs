@@ -90,10 +90,14 @@ namespace SuddenlyEntertainment{
 				GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
 
+			if(GUILayout.Button ("Go back")){
+				Menu = "Start";	
+			}
 			//Start Server
 			if(GUILayout.Button ("Start server")){
 				serverSetup.StartServer();
 			}
+
 			GUILayout.FlexibleSpace();
 			GUILayout.EndVertical();
 		}
@@ -126,6 +130,10 @@ namespace SuddenlyEntertainment{
 			//Setting up toolbar for team selection
 			clientInfo.Team = (Teams)(GUILayout.Toolbar((int)clientInfo.Team, System.Enum.GetNames(typeof(Teams))));
 			TestTeam = clientInfo.Team;
+
+			if(GUILayout.Button ("Go back")){
+				Menu = "Start";	
+			}
 			//Start Server
 			if(GUILayout.Button ("Join server") && clientInfo.Team != Teams.NA){
 				clientSetup.JoinServer(clientInfo);

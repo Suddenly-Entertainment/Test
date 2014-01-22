@@ -7,6 +7,8 @@ namespace SuddenlyEntertainment{
 
 	public class PlayerScriptClient : MonoBehaviour {
 
+		public GameObject YasuoW;
+
 		public event EventHandler onSpawn;
 
 		public Vector3 AxisPress;
@@ -30,10 +32,12 @@ namespace SuddenlyEntertainment{
 			Stats = new UnitStats(true);
 			B_Stats = Stats;
 
-			rotateSpeed = 2.5f;
+			rotateSpeed = 50f;
 			nextAttack = 0;
+			coolDownTimer = 0;
+			charge = 1f;
 		}
-		
+		public float charge;
 		// Update is called once per frame
 		void Update () {
 			if(Network.isClient){
@@ -41,6 +45,9 @@ namespace SuddenlyEntertainment{
 				Vector3 AxisPress = new Vector3(Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));
 				networkView.RPC ("ClientAxis", RPCMode.Server, Network.player.guid, AxisPress, Input.GetAxis("Rotate"));
 				int Ability = 0;
+				if(Input.GetButton("Ability1")){
+					charge += 0.5f;
+				}
 				if(Input.GetButtonUp ("Ability1"))
 					Ability = 1;
 				else if(Input.GetButtonUp ("Ability2"))
@@ -50,16 +57,26 @@ namespace SuddenlyEntertainment{
 				else if(Input.GetButtonUp ("Ability4"))
 					Ability = 4;
 
-				if(Ability != 0)
-					networkView.RPC ("UseAbility", RPCMode.Server, Network.player.guid, Ability);
+				if(Ability != 0){
+					networkView.RPC ("UseAbility", RPCMode.Server, Network.player.guid, Ability, charge);
+					charge = 1f;
+				}
 
 			}
 		}
-
+		public float coolDownTimer;
 		[RPC]
-		public void UseAbility(string guid, int Ability){
+		public void UseAbility(string guid, int Ability, float Charge){
+			if(MainManager.PlayerDict[guid].PlayerObj == gameObject){
 			switch(Ability){
 				case 1:
+				if(Time.time >= coolDownTimer){
+					coolDownTimer = Time.time + 5;
+					GameObject foo = (Network.Instantiate(YasuoW, transform.TransformPoint(new Vector3(0, 0, 5)), transform.rotation, 0) as GameObject);
+						foo.transform.localScale = new Vector3(foo.transform.localScale.x * Charge, foo.transform.localScale.y, foo.transform.localScale.z);
+					foo.AddComponent<BoxCollider>().isTrigger = true;
+					foo.AddComponent<YasuoWScript>();
+				}
 					break;
 				case 2:
 					break;
@@ -69,6 +86,7 @@ namespace SuddenlyEntertainment{
 					break;
 				default:
 					break;
+			}
 			}
 		}
 		public void CallOnSpawn(){

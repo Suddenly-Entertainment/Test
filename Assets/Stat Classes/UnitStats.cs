@@ -185,6 +185,7 @@ namespace SuddenlyEntertainment
 			}
 			set {
 				if(value < 0) {
+					_Gold = 0;
 					return;
 				}
 				_Gold = value;
@@ -333,7 +334,7 @@ namespace SuddenlyEntertainment
 
 				//
 
-				_moveSpeed.Base = 20f;
+				_moveSpeed.Base = 500f;
 		
 				_attackDamage.Base = 80f;
 				_attackDamage.PerLevel = 10f;

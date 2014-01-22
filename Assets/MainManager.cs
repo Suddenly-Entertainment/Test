@@ -58,5 +58,13 @@ namespace SuddenlyEntertainment{
 		    }*/
 			return s;
 		}
+
+		public static void Reset(){
+			Network.Disconnect();
+			MasterServer.UnregisterHost();
+
+			Application.LoadLevel(0);
+			//TODO: The rest.
+		}
 	}
 }
